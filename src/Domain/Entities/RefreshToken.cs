@@ -6,42 +6,29 @@
     /// </summary>
     public class RefreshToken
     {
-        private Guid tokenId;
-        private string token;
-        private Guid userId;
-        private DateTime createdAt;
-        private DateTime expiresAt;
-        private bool isRevoked;
+        public Guid Id { get; init; } = Guid.NewGuid();
+        public string Token { get; init; }
+        public Guid UserId { get; init; }
+        public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime ExpiresAt { get; init; }
+        public bool IsRevoked { get; private set; }
 
         private RefreshToken() { } 
 
         public RefreshToken(string token, Guid userId, DateTime expiresAt)
         {
-            if (string.IsNullOrWhiteSpace(token))
-                throw new ArgumentException("Token cannot be empty.", nameof(token));
-            tokenId = Guid.NewGuid();
-            this.token = token;
-            this.userId = userId;
-            createdAt = DateTime.UtcNow;
-            this.expiresAt = expiresAt;
-            isRevoked = false;
+            Token = token;
+            UserId = userId;
+            ExpiresAt = expiresAt;
         }
-
-        public Guid Id { get { return tokenId; } }
-        public string Token { get { return token; } }
-        public Guid UserId { get { return userId; } }
-        public DateTime CreatedAt { get { return createdAt; } }
-        public DateTime ExpiresAt { get { return expiresAt; } }
-        public bool IsRevoked { get { return isRevoked; } }
-
 
         public void Revoke()
         {
-            if (isRevoked)
+            if (IsRevoked)
             {
                 throw new InvalidOperationException("Token is already revoked.");
             }
-            isRevoked = true;
+            IsRevoked = true;
         }
     }
 }
