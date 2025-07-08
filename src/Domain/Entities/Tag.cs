@@ -13,16 +13,11 @@ namespace Domain.Entities;
 public class Tag
 {
     public Guid tagId { get; init; } = Guid.NewGuid();
-    public string tagName { get; private set; }
+    public string tagName { get; set; }
     public IReadOnlyList<Book> Books { get => BooksList.AsReadOnly(); }
     private readonly List<Book> BooksList = new();
 
     private Tag() { }
-
-    public Tag(Guid tagId, string tagName)
-    {
-        this.tagName = tagName;
-    }
 
 }
 

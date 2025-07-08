@@ -5,10 +5,10 @@ namespace Domain.Entities;
 public class Book
 {
     public Guid Id { get; init; } = Guid.NewGuid();
-    public string Title { get; private set; }
-    public string Author { get; private set; }
-    public string? Description { get; private set; }
-    public string? CoverImageUrl { get; private set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public string? Description { get; set; }
+    public string? CoverImageUrl { get; set; }
     public Guid CreatedByUserId { get; init; }
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
     public IReadOnlyList<Tag> Tags { get => TagsList.AsReadOnly(); }
@@ -16,13 +16,5 @@ public class Book
 
     private Book() { }
 
-    public Book(string title, string author, Guid createdByUserId, string? description = null, string? coverImageUrl = null)
-    {
-        Title = title;
-        Author = author;
-        Description = description;
-        CoverImageUrl = coverImageUrl;
-        CreatedByUserId = createdByUserId;
-    }
 }
 
