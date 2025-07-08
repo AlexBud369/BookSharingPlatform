@@ -14,7 +14,5 @@ public class Book
     public IReadOnlyList<Tag> Tags { get => TagsList.AsReadOnly(); }
     private readonly List<Tag> TagsList = new();
 
-    private Book() { }
-
 }
 
