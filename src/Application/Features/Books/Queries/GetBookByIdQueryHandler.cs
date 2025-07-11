@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Book;
+using Application.Common.Exceptions;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -7,7 +8,7 @@ using System;
 
 namespace Application.Features.Books.Queries;
 
-public class GetBookByIdHandler : IRequestHandler<GetBookByIdQuery, BookDto>
+public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, BookDto>
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
@@ -24,8 +25,8 @@ public class GetBookByIdHandler : IRequestHandler<GetBookByIdQuery, BookDto>
             .Include(b => b.Tags)
             .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
         if (book == null)
-        { 
-            throw new KeyNotFoundException($"Book with ID {request.Id} not found.");
+        {
+            throw new BookNotFoundException(request.Id);
         }
         return _mapper.Map<BookDto>(book);
     }
