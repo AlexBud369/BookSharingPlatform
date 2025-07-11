@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Book;
+using Application.Common.Exceptions;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Data;
@@ -21,6 +22,13 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookD
 
     public async Task<BookDto> Handler(CreateBookCommand request, CancellationToken cancellationToken)
     {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+        if (user == null)
+        { 
+            throw new UserNotFoundException(request.UserId);
+        }
+
         var book = _mapper.Map<Book>(request.Book);
         book.CreatedByUser = request.UserId;
 
