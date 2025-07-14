@@ -20,7 +20,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookD
         _mapper = mapper;
     }
 
-    public async Task<BookDto> Handler(CreateBookCommand request, CancellationToken cancellationToken)
+    public async Task<BookDto> Handle(CreateBookCommand request, CancellationToken cancellationToken)
     {
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
@@ -30,7 +30,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookD
         }
 
         var book = _mapper.Map<Book>(request.Book);
-        book.CreatedByUser = request.UserId;
+        book.CreatedByUserId = request.UserId;
 
         if (request.Book.Tags != null)
         {

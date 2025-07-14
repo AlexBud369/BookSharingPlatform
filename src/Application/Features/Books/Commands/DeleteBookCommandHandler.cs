@@ -36,7 +36,7 @@ public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand>
         var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
         if (book.CreatedByUserId != request.UserId && !isAdmin)
         {
-            throw new UnauthorizedAccessException("Only the book owner can delete it");
+            throw new UnauthorizedAccessException("Only the book owner or an admin can delete it");
         }
 
         _context.Books.Remove(book);
