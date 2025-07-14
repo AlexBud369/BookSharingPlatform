@@ -19,6 +19,18 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserDto>
 
     public async Task<UserDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
+        var existingUser = await _userManager.FindByEmailAsync(request.Email);
+        if (existingUser != null)
+        {
+            throw new InvalidOperationException("Email is already registered");
+        }
+
+        var existingUserName = await _userManager.FindByNameAsync(request.UserName);
+        if (existingUserName != null)
+        {
+            throw new InvalidOperationException("Username is already taken");
+        }
+
         var user = new ApplicationUser
         {
             Email = request.Email,
@@ -32,6 +44,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserDto>
             throw new UnauthorizedAccessException($"Registration failed: {errors}");
         }
 
+        await _userManager.AddToRoleAsync(user, "User");
         return _mapper.Map<UserDto>(user);
     }
 }
