@@ -13,32 +13,28 @@ public static class Guard
 
     public static void AgainstNull<T>(T value, string paramName, string resourceKey, params object[] args)
     {
-        if (value == null)
-        {
+        if (value == null) {
             throw new ApplicationException(string.Format(_localizer![resourceKey], args));
         }
     }
 
     public static void AgainstEmptyString(string value, string paramName, string resourceKey, params object[] args)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
+        if (string.IsNullOrWhiteSpace(value)) {
             throw new ApplicationException(string.Format(_localizer![resourceKey], args));
         }
     }
 
     public static void AgainstUnauthorized(bool condition, string resourceKey)
     {
-        if (!condition)
-        {
+        if (!condition) {
             throw new ApplicationException(_localizer![resourceKey]);
         }
     }
 
     public static void AgainstNonAdmin(bool isAdmin, string resourceKey)
     {
-        if (!isAdmin)
-        {
+        if (!isAdmin) {
             throw new ApplicationException(_localizer![resourceKey]);
         }
     }
