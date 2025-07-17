@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Domain.Entities;
+using Domain.Constants;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -17,8 +19,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
 
         builder.Entity<Book>()
             .HasMany(b => b.Tags)
-            .WithMany(t => t.Books)
-            .UsingEntity(j => j.ToTable("BookTags"));
+            .WithMany(t => t.Books);
 
         builder.Entity<Book>()
             .HasOne(b => b.CreatedByUser)
@@ -28,17 +29,36 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
         builder.Entity<Book>()
             .Property(b => b.Title)
             .IsRequired()
-            .HasMaxLength(200);
+            .HasMaxLength(DomainConstants.Book.TitleMaxLength);
 
         builder.Entity<Book>()
             .Property(b => b.Author)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(DomainConstants.Book.AuthorMaxLength);
+
+        builder.Entity<Book>()
+           .Property(b => b.CoverImageUrl)
+           .IsRequired(false);
 
         builder.Entity<Tag>()
-            .Property(t => t.tagName)
+            .Property(t => t.TagName)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(DomainConstants.Tag.NameMaxLength);
+
+        builder.Entity<ApplicationUser>()
+            .Property(u => u.IsBlocked)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Entity<ApplicationUser>()
+            .Property(u => u.CreatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("GETUTCDATE()");
+
+        builder.Entity<RefreshToken>()
+            .HasOne(rt => rt.User)
+            .WithMany(u => u.RefreshTokens)
+            .HasForeignKey(rt => rt.UserId);
     }
 }
-}
+
