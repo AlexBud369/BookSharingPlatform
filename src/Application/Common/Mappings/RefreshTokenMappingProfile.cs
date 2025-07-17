@@ -10,6 +10,8 @@ public class RefreshTokenMappingProfile : Profile
     {
         CreateMap<RefreshToken, RefreshTokenDto>();
         CreateMap<RefreshTokenDto, RefreshToken>()
-            .ConvertUsing(src => new RefreshToken(src.Token, src.UserId, src.ExpiresAt));
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.User, opt => opt.Ignore());
     }
 }

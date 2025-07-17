@@ -10,9 +10,12 @@ public class TagMappingProfile : Profile
     {
         CreateMap<Tag, TagDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.tagId))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.tagName));
+            .ForMember(dest => dest.TagName, opt => opt.MapFrom(src => src.TagName))
+            .ForMember(dest => dest.BookIds, opt => opt.MapFrom(src => src.Books.Select(b => b.Id)));
 
         CreateMap<TagCreateDto, Tag>()
-            .ConvertUsing(src => new Tag(Guid.NewGuid(), src.Name));
+            .ForMember(dest => dest.TagName, opt => opt.MapFrom(src => src.TagName))
+            .ForMember(dest => dest.TagId, opt => opt.Ignore())
+            .ForMember(dest => dest.BooksList, opt => opt.Ignore());
     }
 }
