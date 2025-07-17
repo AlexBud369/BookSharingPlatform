@@ -14,4 +14,5 @@ public class UserDto
     public string Role { get; set; }
     public bool IsBlocked { get; set; }
     public DateTime CreatedAt { get; set; }
+    public IEnumerable<Guid> BookIds { get; set; }
 }
