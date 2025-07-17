@@ -9,5 +9,6 @@ namespace Application.DTOs.Tag;
 public class TagDto
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string TagName { get; set; }
+    public IEnumerable<Guid> BookIds { get; set; }
 }

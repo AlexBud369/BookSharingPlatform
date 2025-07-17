@@ -8,5 +8,5 @@ namespace Application.DTOs.Tag;
 
 public class TagCreateDto
 {
-    public string Name { get; set; }
+    public string TagName { get; set; }
 }
