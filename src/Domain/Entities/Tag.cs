@@ -12,8 +12,8 @@ namespace Domain.Entities;
 /// </summary>
 public class Tag
 {
-    public Guid tagId { get; init; } = Guid.NewGuid();
-    public string tagName { get; set; }
+    public Guid TagId { get; init; } = Guid.NewGuid();
+    public string TagName { get; set; }
     public IReadOnlyList<Book> Books { get => BooksList.AsReadOnly(); }
     private readonly List<Book> BooksList = new();
 
