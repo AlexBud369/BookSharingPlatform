@@ -1,11 +1,14 @@
-﻿using Application.DTOs.Book;
-using Application.Common.Exceptions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Application.Common;
+using Application.DTOs.Book;
+using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
+using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Books.Commands;
 
@@ -13,38 +16,35 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookD
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly ITagService _tagService;
 
-    public CreateBookCommandHandler(AppDbContext context, IMapper mapper)
+    public CreateBookCommandHandler(
+        AppDbContext context,
+        IMapper mapper,
+         IStringLocalizer<SharedResource> localizer,
+        ITagService tagService)
     {
         _context = context;
         _mapper = mapper;
+        _localizer = localizer;
+        _tagService = tagService;
+        Guard.Initialize(_localizer);
     }
 
     public async Task<BookDto> Handle(CreateBookCommand request, CancellationToken cancellationToken)
     {
+        Guard.AgainstNull(request.Book, nameof(request.Book), "BookDataRequired");
+        Guard.AgainstEmptyString(request.Book.Title, nameof(request.Book.Title), "EmptyString", nameof(request.Book.Title));
+
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
-        if (user == null)
-        { 
-            throw new UserNotFoundException(request.UserId);
-        }
+        Guard.AgainstNull(user, nameof(request.UserId), "UserNotFound", request.UserId.ToString());
 
         var book = _mapper.Map<Book>(request.Book);
         book.CreatedByUserId = request.UserId;
 
-        if (request.Book.Tags != null)
-        {
-            var tagNames = request.Book.Tags.ToList();
-
-            var existingTags = await _context.Tags
-                .Where(t => tagNames.Contains(t.tagName))
-                .ToListAsync(cancellationToken);
-            book.TagsList.AddRange(existingTags);
-
-            var newTagNames = tagNames.Except(existingTags.Select(t => t.tagName)).ToList();
-
-            book.TagsList.AddRange(newTagNames.Select(name => new Tag { tagName = name }));
-        }
+        await _tagService.AddTagsToBookAsync(book, request.Book.Tags, cancellationToken);
 
         _context.Books.Add(book);
         await _context.SaveChangesAsync(cancellationToken);
