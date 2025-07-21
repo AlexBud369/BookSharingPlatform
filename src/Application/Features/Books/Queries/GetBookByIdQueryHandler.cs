@@ -1,33 +1,32 @@
-﻿using Application.DTOs.Book;
-using Application.Common.Exceptions;
-using AutoMapper;
-using Domain.Entities;
-using Domain.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.DTOs.Book;
+using Application.Services;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Common;
+using Application.DTOs.Book;
+using Application.Interfaces;
 using MediatR;
-using System;
+using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Books.Queries;
 
 public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, BookDto>
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IBookQueryService _bookQueryService;
 
-    public GetBookByIdQueryHandler(AppDbContext context, IMapper mapper)
+    public GetBookByIdQueryHandler(
+        IStringLocalizer<SharedResource> localizer,
+        IBookQueryService bookQueryService)
     {
-        _context = context;
-        _mapper = mapper;
+        _localizer = localizer;
+        _bookQueryService = bookQueryService;
+        Guard.Initialize(_localizer);
     }
 
     public async Task<BookDto> Handle(GetBookByIdQuery request, CancellationToken cancellationToken)
     {
-        var book = await _context.Books
-            .Include(b => b.Tags)
-            .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
-        if (book == null)
-        {
-            throw new BookNotFoundException(request.Id);
-        }
-        return _mapper.Map<BookDto>(book);
+        return await _bookQueryService.GetBookByIdAsync(request.Id, cancellationToken);
     }
 }
