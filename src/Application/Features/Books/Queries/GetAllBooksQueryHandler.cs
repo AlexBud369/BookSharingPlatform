@@ -1,42 +1,37 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Application.Common;
 using Application.DTOs.Book;
-using Domain.Entities;
-using Infrastructure.Data;
+using Application.Interfaces;
+using Application.Services;
+using MediatR;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Features.Books.Queries;
 
 public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, IEnumerable<BookDto>>
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IBookQueryService _bookQueryService;
 
-    public GetAllBooksQueryHandler(AppDbContext context, IMapper mapper)
+    public GetAllBooksQueryHandler(
+        IStringLocalizer<SharedResource> localizer,
+        IBookQueryService bookQueryService)
     {
-        _context = context;
-        _mapper = mapper;
+        _localizer = localizer;
+        _bookQueryService = bookQueryService;
+        Guard.Initialize(_localizer);
     }
 
     public async Task<IEnumerable<BookDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.Books.AsQueryable();
-
-        if (!string.IsNullOrEmpty(request.SearchTerm))
-        {
-            query = query.Where(b => b.Title.Contains(request.SearchTerm) || b.Author.Contains(request.SearchTerm));
-        }
-
-        if (!string.IsNullOrEmpty(request.Tag))
-        {
-            query = query.Where(b => b.Tags.Any(t => t.tagName == request.Tag));
-        }
-
-        var books = await query
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToListAsync(cancellationToken);
-
-        return _mapper.Map<IEnumerable<BookDto>>(books);
+        return await _bookQueryService.GetBooksAsync(
+             request.PageNumber,
+             request.PageSize,
+             request.SearchTerm,
+             request.Tag,
+             cancellationToken);
     }
 }
