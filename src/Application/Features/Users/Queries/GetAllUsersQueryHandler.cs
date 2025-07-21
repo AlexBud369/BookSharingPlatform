@@ -1,46 +1,36 @@
-﻿using Application.Common.Exceptions;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Common;
 using Application.DTOs.User;
-using AutoMapper;
-using Domain.Entities;
-using Infrastructure.Data;
+using Application.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Users.Queries;
 
 public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<UserDto>>
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IUserQueryService _userQueryService;
 
-    public GetAllUsersQueryHandler(AppDbContext context, IMapper mapper)
+
+    public GetAllUsersQueryHandler(
+        IStringLocalizer<SharedResource> localizer,
+        IUserQueryService userQueryService)
     {
-        _context = context;
-        _mapper = mapper;
+        _localizer = localizer;
+        _userQueryService = userQueryService;
+        Guard.Initialize(_localizer);
     }
     public async Task<IEnumerable<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.Users.AsQueryable();
-
-        if (!string.IsNullOrEmpty(request.Email))
-        {
-            query = query.Where(u => u.Email.Contains(request.Email));
-        }
-        if (!string.IsNullOrEmpty(request.UserName))
-        {
-            query = query.Where(u => u.UserName.Contains(request.UserName));
-        }
-        if (request.IsBlocked.HasValue)
-        {
-            query = query.Where(u => u.IsBlocked == request.IsBlocked.Value);
-        }
-
-        var users = await query
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToListAsync(cancellationToken);
-
-        return _mapper.Map<IEnumerable<UserDto>>(users);
+        return await _userQueryService.GetUsersAsync(
+            request.PageNumber,
+            request.PageSize,
+            request.Email,
+            request.UserName,
+            request.IsBlocked,
+            cancellationToken);
     }
 }
