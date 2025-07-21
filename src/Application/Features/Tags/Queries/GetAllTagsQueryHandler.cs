@@ -1,34 +1,33 @@
-﻿using Application.DTOs.Tag;
-using AutoMapper;
-using Infrastructure.Data;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Common;
+using Application.DTOs.Tag;
+using Application.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Tags.Queries;
 
 public class GetAllTagsQueryHandler : IRequestHandler<GetAllTagsQuery, IEnumerable<TagDto>>
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly ITagQueryService _tagQueryService;
 
-    public GetAllTagsQueryHandler(AppDbContext context, IMapper mapper)
+    public GetAllTagsQueryHandler(
+        IStringLocalizer<SharedResource> localizer,
+        ITagQueryService tagQueryService)
     {
-        _context = context;
-        _mapper = mapper;
+        _localizer = localizer;
+        _tagQueryService = tagQueryService;
+        Guard.Initialize(_localizer);
     }
     public async Task<IEnumerable<TagDto>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.Tags.AsQueryable();
-
-        if (!string.IsNullOrEmpty(request.TagName))
-            query = query.Where(t => t.tagName.Contains(request.TagName));
-
-        var tags = await query
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToListAsync(cancellationToken);
-
-        return _mapper.Map<IEnumerable<TagDto>>(tags);
+        return await _tagQueryService.GetTagsAsync(
+           request.PageNumber,
+           request.PageSize,
+           request.TagName,
+           cancellationToken);
     }
 }
