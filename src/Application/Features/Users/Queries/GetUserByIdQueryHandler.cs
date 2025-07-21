@@ -1,34 +1,30 @@
-﻿using Application.Common.Exceptions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Application.Common;
 using Application.DTOs.User;
-using AutoMapper;
-using Infrastructure.Data;
+using Application.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Users.Queries;
 
 public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IUserQueryService _userQueryService;
 
-    public GetUserByIdQueryHandler(AppDbContext context, IMapper mapper)
+
+    public GetUserByIdQueryHandler(
+        IStringLocalizer<SharedResource> localizer,
+        IUserQueryService userQueryService)
     {
-        _context = context;
-        _mapper = mapper;
+        _localizer = localizer;
+        _userQueryService = userQueryService;
+        Guard.Initialize(_localizer);
     }
 
     public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
-
-        if (user == null)
-        {
-            throw new UserNotFoundException(request.Id);
-        }
-
-        return _mapper.Map<UserDto>(user);
+        return await _userQueryService.GetUserByIdAsync(request.Id, cancellationToken);
     }
 }
