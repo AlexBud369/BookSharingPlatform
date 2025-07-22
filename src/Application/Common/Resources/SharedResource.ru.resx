@@ -70,9 +70,177 @@
 	<data name="EmptyString" xml:space="preserve">
 		<value>Поле {0} не может быть пустым</value>
 		<comment>Ошибка для пустого поля</comment>
-	 </data>
+	</data>
 	<data name="MaxLength" xml:space="preserve">
 		<value>Поле {0} не должно превышать {1} символов</value>
 		<comment>Ошибка при превышении максимальной длины поля</comment>
+	</data>
+	<data name="EmailRequired" xml:space="preserve">
+		<value>Email обязателен</value>
+		<comment>Ошибка, если email пустой</comment>
+	</data>
+	<data name="InvalidEmailFormat" xml:space="preserve">
+		<value>Неверный формат email</value>
+		<comment>Ошибка для неверного формата email</comment>
+	</data>
+	<data name="EmailTooLong" xml:space="preserve">
+		<value>Email не должен превышать 100 символов</value>
+		<comment>Ошибка при превышении максимальной длины email</comment>
+	</data>
+	<data name="PasswordRequired" xml:space="preserve">
+		<value>Пароль обязателен</value>
+		<comment>Ошибка, если пароль пустой</comment>
+	</data>
+	<data name="PasswordTooShort" xml:space="preserve">
+		<value>Пароль должен содержать не менее 6 символов</value>
+		<comment>Ошибка, если пароль слишком короткий</comment>
+	</data>
+	<data name="PasswordRequiresUppercase" xml:space="preserve">
+		<value>Пароль должен содержать хотя бы одну заглавную букву</value>
+		<comment>Ошибка, если в пароле нет заглавной буквы</comment>
+	</data>
+	<data name="PasswordRequiresNumber" xml:space="preserve">
+		<value>Пароль должен содержать хотя бы одну цифру</value>
+		<comment>Ошибка, если в пароле нет цифры</comment>
+	</data>
+	<data name="UsernameRequired" xml:space="preserve">
+		<value>Имя пользователя обязательно</value>
+		<comment>Ошибка, если имя пользователя пустое</comment>
+	</data>
+	<data name="UsernameTooLong" xml:space="preserve">
+		<value>Имя пользователя не должно превышать 50 символов</value>
+		<comment>Ошибка при превышении максимальной длины имени пользователя</comment>
+	</data>
+	<data name="InvalidUsernameFormat" xml:space="preserve">
+		<value>Имя пользователя может содержать только буквы, цифры и подчеркивания</value>
+		<comment>Ошибка для неверного формата имени пользователя</comment>
+	</data>
+	<data name="UserIdRequired" xml:space="preserve">
+		<value>ID пользователя обязателен</value>
+		<comment>Ошибка, если ID пользователя пустой</comment>
+	</data>
+	<data name="BookDataRequired" xml:space="preserve">
+		<value>Данные книги обязательны</value>
+		<comment>Ошибка, если данные книги null</comment>
+	</data>
+	<data name="TitleRequired" xml:space="preserve">
+		<value>Название книги обязательно</value>
+		<comment>Ошибка, если название книги пустое</comment>
+	</data>
+	<data name="TitleTooLong" xml:space="preserve">
+		<value>Название книги не должно превышать 200 символов</value>
+		<comment>Ошибка при превышении максимальной длины названия книги</comment>
+	</data>
+	<data name="AuthorRequired" xml:space="preserve">
+		<value>Автор обязателен</value>
+		<comment>Ошибка, если автор пустой</comment>
+	</data>
+	<data name="AuthorTooLong" xml:space="preserve">
+		<value>Имя автора не должно превышать 100 символов</value>
+		<comment>Ошибка при превышении максимальной длины имени автора</comment>
+	</data>
+	<data name="DescriptionTooLong" xml:space="preserve">
+		<value>Описание не должно превышать 1500 символов</value>
+		<comment>Ошибка при превышении максимальной длины описания</comment>
+	</data>
+	<data name="TagsRequired" xml:space="preserve">
+		<value>Теги не могут быть null</value>
+		<comment>Ошибка, если теги null</comment>
+	</data>
+	<data name="InvalidTagIds" xml:space="preserve">
+		<value>Все ID тегов должны быть действительными GUID</value>
+		<comment>Ошибка для недействительных ID тегов</comment>
+	</data>
+	<data name="BookIdRequired" xml:space="preserve">
+		<value>ID книги обязателен</value>
+		<comment>Ошибка, если ID книги пустой</comment>
+	</data>
+	<data name="FilterRequired" xml:space="preserve">
+		<value>Фильтр обязателен</value>
+		<comment>Ошибка, если фильтр null</comment>
+	</data>
+	<data name="InvalidPageNumber" xml:space="preserve">
+		<value>Номер страницы должен быть больше или равен 1</value>
+		<comment>Ошибка для недействительного номера страницы</comment>
+	</data>
+	<data name="InvalidPageSize" xml:space="preserve">
+		<value>Размер страницы должен быть от 1 до 100</value>
+		<comment>Ошибка для недействительного размера страницы</comment>
+	</data>
+	<data name="SearchQueryTooLong" xml:space="preserve">
+		<value>Поисковый запрос не должен превышать 200 символов</value>
+		<comment>Ошибка при превышении максимальной длины поискового запроса</comment>
+	</data>
+	<data name="InvalidSortBy" xml:space="preserve">
+		<value>SortBy должен быть 'title' или 'createdAt'</value>
+		<comment>Ошибка для недействительного значения сортировки</comment>
+	</data>
+	<data name="AtLeastOneFieldRequired" xml:space="preserve">
+		<value>Должно быть указано хотя бы одно поле для обновления</value>
+		<comment>Ошибка, если не указано ни одно поле для обновления</comment>
+	</data>
+	<data name="CoverImageUrlRequired" xml:space="preserve">
+		<value>URL обложки обязателен</value>
+		<comment>Ошибка, если URL обложки пустой</comment>
+	</data>
+	<data name="CoverImageUrlTooLong" xml:space="preserve">
+		<value>URL обложки не должен превышать 500 символов</value>
+		<comment>Ошибка при превышении максимальной длины URL обложки</comment>
+	</data>
+	<data name="InvalidCoverImageUrl" xml:space="preserve">
+		<value>URL обложки должен быть действительным</value>
+		<comment>Ошибка для недействительного формата URL обложки</comment>
+	</data>
+	<data name="TagNameRequired" xml:space="preserve">
+		<value>Имя тега обязательно</value>
+		<comment>Ошибка, если имя тега пустое</comment>
+	</data>
+	<data name="TagNameTooLong" xml:space="preserve">
+		<value>Имя тега не должно превышать 50 символов</value>
+		<comment>Ошибка при превышении максимальной длины имени тега</comment>
+	</data>
+	<data name="LocalizerRequired" xml:space="preserve">
+		<value>Локализатор обязателен</value>
+		<comment>Ошибка, если локализатор null</comment>
+	</data>
+	<data name="DbContextRequired" xml:space="preserve">
+		<value>Контекст базы данных обязателен</value>
+		<comment>Ошибка, если контекст базы данных null</comment>
+	</data>
+	<data name="MapperRequired" xml:space="preserve">
+		<value>Маппер обязателен</value>
+		<comment>Ошибка, если маппер null</comment>
+	</data>
+	<data name="BookQueryServiceRequired" xml:space="preserve">
+		<value>Сервис запросов книг обязателен</value>
+		<comment>Ошибка, если сервис запросов книг null</comment>
+	</data>
+	<data name="TagIdRequired" xml:space="preserve">
+		<value>ID тега обязателен</value>
+		<comment>Ошибка, если ID тега пустой</comment>
+	</data>
+	<data name="InvalidTagNameFormat" xml:space="preserve">
+		<value>Имя тега может содержать только буквы, цифры, пробелы и дефисы</value>
+		<comment>Ошибка для недействительного формата имени тега</comment>
+	</data>
+	<data name="AdminIdRequired" xml:space="preserve">
+		<value>ID администратора обязателен</value>
+		<comment>Ошибка, если ID администратора пустой</comment>
+	</data>
+	<data name="RoleRequired" xml:space="preserve">
+		<value>Роль обязательна</value>
+		<comment>Ошибка, если роль пустая</comment>
+	</data>
+	<data name="InvalidRole" xml:space="preserve">
+		<value>Роль должна быть либо 'User', либо 'Admin'</value>
+		<comment>Ошибка для недействительного значения роли</comment>
+	</data>
+	<data name="RefreshTokenRequired" xml:space="preserve">
+		<value>Refresh-токен обязателен</value>
+		<comment>Ошибка, если refresh-токен пустой</comment>
+	</data>
+	<data name="RefreshTokenTooLong" xml:space="preserve">
+		<value>Refresh-токен не должен превышать 500 символов</value>
+		<comment>Ошибка при превышении максимальной длины refresh-токена</comment>
 	</data>
 </root>

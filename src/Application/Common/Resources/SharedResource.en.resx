@@ -75,4 +75,172 @@
 		<value>The {0} field must not exceed {1} characters</value>
 		<comment>Error for field exceeding max length</comment>
 	</data>
+	<data name="EmailRequired" xml:space="preserve">
+		<value>Email is required</value>
+		<comment>Error when email is empty</comment>
+	</data>
+	<data name="InvalidEmailFormat" xml:space="preserve">
+		<value>Invalid email format</value>
+		<comment>Error for invalid email format</comment>
+	</data>
+	<data name="EmailTooLong" xml:space="preserve">
+		<value>Email must not exceed 100 characters</value>
+		<comment>Error for email exceeding max length</comment>
+	</data>
+	<data name="PasswordRequired" xml:space="preserve">
+		<value>Password is required</value>
+		<comment>Error when password is empty</comment>
+	</data>
+	<data name="PasswordTooShort" xml:space="preserve">
+		<value>Password must be at least 6 characters long</value>
+		<comment>Error for password being too short</comment>
+	</data>
+	<data name="PasswordRequiresUppercase" xml:space="preserve">
+		<value>Password must contain at least one uppercase letter</value>
+		<comment>Error for password missing uppercase letter</comment>
+	</data>
+	<data name="PasswordRequiresNumber" xml:space="preserve">
+		<value>Password must contain at least one number</value>
+		<comment>Error for password missing number</comment>
+	</data>
+	<data name="UsernameRequired" xml:space="preserve">
+		<value>Username is required</value>
+		<comment>Error when username is empty</comment>
+	</data>
+	<data name="UsernameTooLong" xml:space="preserve">
+		<value>Username must not exceed 50 characters</value>
+		<comment>Error for username exceeding max length</comment>
+	</data>
+	<data name="InvalidUsernameFormat" xml:space="preserve">
+		<value>Username can only contain letters, numbers, and underscores</value>
+		<comment>Error for invalid username format</comment>
+	</data>
+	<data name="UserIdRequired" xml:space="preserve">
+		<value>User ID is required</value>
+		<comment>Error when user ID is empty</comment>
+	</data>
+	<data name="BookDataRequired" xml:space="preserve">
+		<value>Book data is required</value>
+		<comment>Error when book data is null</comment>
+	</data>
+	<data name="TitleRequired" xml:space="preserve">
+		<value>Title is required</value>
+		<comment>Error when book title is empty</comment>
+	</data>
+	<data name="TitleTooLong" xml:space="preserve">
+		<value>Title must not exceed 200 characters</value>
+		<comment>Error for book title exceeding max length</comment>
+	</data>
+	<data name="AuthorRequired" xml:space="preserve">
+		<value>Author is required</value>
+		<comment>Error when book author is empty</comment>
+	</data>
+	<data name="AuthorTooLong" xml:space="preserve">
+		<value>Author must not exceed 100 characters</value>
+		<comment>Error for book author exceeding max length</comment>
+	</data>
+	<data name="DescriptionTooLong" xml:space="preserve">
+		<value>Description must not exceed 1500 characters</value>
+		<comment>Error for book description exceeding max length</comment>
+	</data>
+	<data name="TagsRequired" xml:space="preserve">
+		<value>Tags cannot be null</value>
+		<comment>Error when book tags are null</comment>
+	</data>
+	<data name="InvalidTagIds" xml:space="preserve">
+		<value>All tag IDs must be valid GUIDs</value>
+		<comment>Error for invalid tag IDs</comment>
+	</data>
+	<data name="BookIdRequired" xml:space="preserve">
+		<value>Book ID is required</value>
+		<comment>Error when book ID is empty</comment>
+	</data>
+	<data name="FilterRequired" xml:space="preserve">
+		<value>Filter is required</value>
+		<comment>Error when filter is null</comment>
+	</data>
+	<data name="InvalidPageNumber" xml:space="preserve">
+		<value>Page number must be greater than or equal to 1</value>
+		<comment>Error for invalid page number</comment>
+	</data>
+	<data name="InvalidPageSize" xml:space="preserve">
+		<value>Page size must be between 1 and 100</value>
+		<comment>Error for invalid page size</comment>
+	</data>
+	<data name="SearchQueryTooLong" xml:space="preserve">
+		<value>Search query must not exceed 200 characters</value>
+		<comment>Error for search query exceeding max length</comment>
+	</data>
+	<data name="InvalidSortBy" xml:space="preserve">
+		<value>SortBy must be 'title' or 'createdAt'</value>
+		<comment>Error for invalid sort by value</comment>
+	</data>
+	<data name="AtLeastOneFieldRequired" xml:space="preserve">
+		<value>At least one field must be provided for update</value>
+		<comment>Error when no fields are provided for update</comment>
+	</data>
+	<data name="CoverImageUrlRequired" xml:space="preserve">
+		<value>Cover image URL is required</value>
+		<comment>Error when cover image URL is empty</comment>
+	</data>
+	<data name="CoverImageUrlTooLong" xml:space="preserve">
+		<value>Cover image URL must not exceed 500 characters</value>
+		<comment>Error for cover image URL exceeding max length</comment>
+	</data>
+	<data name="InvalidCoverImageUrl" xml:space="preserve">
+		<value>Cover image URL must be a valid URL</value>
+		<comment>Error for invalid cover image URL format</comment>
+	</data>
+	<data name="TagNameRequired" xml:space="preserve">
+		<value>Tag name is required</value>
+		<comment>Error when tag name is empty</comment>
+	</data>
+	<data name="TagNameTooLong" xml:space="preserve">
+		<value>Tag name must not exceed 50 characters</value>
+		<comment>Error for tag name exceeding max length</comment>
+	</data>
+	<data name="LocalizerRequired" xml:space="preserve">
+		<value>Localizer is required</value>
+		<comment>Error when localizer is null</comment>
+	</data>
+	<data name="DbContextRequired" xml:space="preserve">
+		<value>Database context is required</value>
+		<comment>Error when database context is null</comment>
+	</data>
+	<data name="MapperRequired" xml:space="preserve">
+		<value>Mapper is required</value>
+		<comment>Error when mapper is null</comment>
+	</data>
+	<data name="BookQueryServiceRequired" xml:space="preserve">
+		<value>Book query service is required</value>
+		<comment>Error when book query service is null</comment>
+	</data>
+	<data name="TagIdRequired" xml:space="preserve">
+		<value>Tag ID is required</value>
+		<comment>Error when tag ID is empty</comment>
+	</data>
+	<data name="InvalidTagNameFormat" xml:space="preserve">
+		<value>Tag name can only contain letters, numbers, spaces, and hyphens</value>
+		<comment>Error for invalid tag name format</comment>
+	</data>
+	<data name="AdminIdRequired" xml:space="preserve">
+		<value>Admin ID is required</value>
+		<comment>Error when admin ID is empty</comment>
+	</data>
+	<data name="RoleRequired" xml:space="preserve">
+		<value>Role is required</value>
+		<comment>Error when role is empty</comment>
+	</data>
+	<data name="InvalidRole" xml:space="preserve">
+		<value>Role must be either 'User' or 'Admin'</value>
+		<comment>Error for invalid role value</comment>
+	</data>
+	<data name="RefreshTokenRequired" xml:space="preserve">
+		<value>Refresh token is required</value>
+		<comment>Error when refresh token is empty</comment>
+	</data>
+	<data name="RefreshTokenTooLong" xml:space="preserve">
+		<value>Refresh token must not exceed 500 characters</value>
+		<comment>Error for refresh token exceeding max length</comment>
+	</data>
 </root>
