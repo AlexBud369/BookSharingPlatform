@@ -1,27 +1,34 @@
-﻿using FluentValidation;
+﻿using Domain.Constants;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Application.Features.Auth.Commands;
 
 namespace Application.Validators.Auth;
 
 public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
-    public RegisterCommandValidator()
+    public RegisterCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format")
-            .MaximumLength(100).WithMessage("Email must not exceed 100 characters");
+            .NotEmpty().WithMessage(localizer["EmailRequired"])
+            .EmailAddress().WithMessage(localizer["InvalidEmailFormat"])
+            .MaximumLength(DomainConstants.User.EmailMaxLength)
+            .WithMessage(localizer["EmailTooLong"]);
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long")
-            .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter")
-            .Matches(@"[0-9]").WithMessage("Password must contain at least one number");
+            .NotEmpty().WithMessage(localizer["PasswordRequired"])
+            .MinimumLength(DomainConstants.User.PasswordMinLength)
+            .WithMessage(localizer["PasswordTooShort"])
+            .Matches(@"[A-Z]")
+            .WithMessage(localizer["PasswordRequiresUppercase"])
+            .Matches(@"[0-9]")
+            .WithMessage(localizer["PasswordRequiresNumber"]);
 
         RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("Username is required")
-            .MaximumLength(50).WithMessage("Username must not exceed 50 characters")
+            .NotEmpty().WithMessage(localizer["UsernameRequired"])
+            .MaximumLength(50omainConstants.User.UsernameMaxLength)
+            .WithMessage(ocalizer["UsernameTooLong"])
             .Matches(@"^[a-zA-Z0-9_]+$")
-            .WithMessage("Username can only contain letters, numbers, and underscores");
+            .WithMessage(localizer["InvalidUsernameFormat"]);
     }
 }

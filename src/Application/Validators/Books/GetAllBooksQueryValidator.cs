@@ -1,34 +1,35 @@
-﻿using FluentValidation;
+﻿using Domain.Constants;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Application.Features.Books.Queries;
+
 
 namespace Application.Validators.Books;
 
 public class GetAllBooksQueryValidator : AbstractValidator<GetAllBooksQuery>
 {
-    public GetAllBooksQueryValidator()
+    public GetAllBooksQueryValidator(IStringLocalizer<SharedResource> localizer)
     {
-        RuleFor(x => x.PageNumber)
-            .GreaterThan(0).WithMessage("Page number must be greater than 0");
+        RuleFor(x => x.Filter)
+           .NotNull().WithMessage(localizer["FilterRequired"]);
 
-        RuleFor(x => x.PageSize)
-            .InclusiveBetween(1, 100).WithMessage("Page size must be between 1 and 100");
+        RuleFor(x => x.Filter.PageNumber)
+            .GreaterThanOrEqualTo(DomainConstants.Book.DefaultPageNumber).WithMessage(localizer["InvalidPageNumber"]);
 
-        RuleFor(x => x.Title)
-            .MaximumLength(200).WithMessage("Title must not exceed 200 characters")
-            .When(x => !string.IsNullOrEmpty(x.Title));
+        RuleFor(x => x.Filter.PageSize)
+            .InclusiveBetween(1, DomainConstants.Book.MaxPageSize).WithMessage(localizer["InvalidPageSize"]);
 
-        RuleFor(x => x.Author)
-            .MaximumLength(100).WithMessage("Author must not exceed 100 characters")
-            .When(x => !string.IsNullOrEmpty(x.Author));
+        RuleFor(x => x.Filter.SearchQuery)
+            .MaximumLength(DomainConstants.Book.TitleMaxLength).WithMessage(localizer["SearchQueryTooLong"])
+            .When(x => !string.IsNullOrEmpty(x.Filter.SearchQuery));
 
-        RuleFor(x => x.TagNames)
-            .Must(tags => tags.All(tag => !string.IsNullOrEmpty(tag)))
-            .WithMessage("All tag names must be non-empty")
-            .When(x => x.TagNames != null);
+        RuleFor(x => x.Filter.TagIds)
+            .Must(tags => tags == null || tags.All(id => id != Guid.Empty)).WithMessage(localizer["InvalidTagIds"])
+            .When(x => x.Filter.TagIds != null);
 
-        RuleFor(x => x.SortBy)
-            .Must(x => x == null || x == "CreatedAt" || x == "Title")
-            .WithMessage("SortBy must be 'CreatedAt' or 'Title'")
-            .When(x => !string.IsNullOrEmpty(x.SortBy));
+        RuleFor(x => x.Filter.SortBy)
+            .Must(x => x == null || x == DomainConstants.Book.SortByCreatedAt || x == DomainConstants.Book.SortByTitle)
+            .WithMessage(localizer["InvalidSortBy"])
+            .When(x => !string.IsNullOrEmpty(x.Filter.SortBy));
     }
 }

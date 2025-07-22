@@ -1,22 +1,23 @@
-﻿using FluentValidation;
+﻿using Domain.Constants;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Application.Features.Tags.Queries;
 
 namespace Application.Validators.Tags;
 
 public class GetAllTagsQueryValidator : AbstractValidator<GetAllTagsQuery>
 {
-    public GetAllTagsQueryValidator()
+    public GetAllTagsQueryValidator(IStringLocalizer<SharedResource> localizer)
     {
         RuleFor(x => x.PageNumber)
-            .GreaterThan(0).WithMessage("Page number must be greater than 0");
+           .GreaterThanOrEqualTo(DomainConstants.Book.DefaultPageNumber).WithMessage(localizer["InvalidPageNumber"]);
 
         RuleFor(x => x.PageSize)
-            .InclusiveBetween(1, 100).WithMessage("Page size must be between 1 and 100");
+            .InclusiveBetween(1, DomainConstants.Book.MaxPageSize).WithMessage(localizer["InvalidPageSize"]);
 
         RuleFor(x => x.TagName)
-            .MaximumLength(50).WithMessage("Tag name must not exceed 50 characters")
-            .Matches(@"^[a-zA-Z0-9\s-]*$")
-            .WithMessage("Tag name can only contain letters, numbers, spaces, and hyphens")
+            .MaximumLength(DomainConstants.Tag.NameMaxLength).WithMessage(localizer["TagNameTooLong"])
+            .Matches(@"^[a-zA-Z0-9\s-]*$").WithMessage(localizer["InvalidTagNameFormat"])
             .When(x => !string.IsNullOrEmpty(x.TagName));
     }
 }

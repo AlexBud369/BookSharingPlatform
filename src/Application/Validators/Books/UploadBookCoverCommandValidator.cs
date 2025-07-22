@@ -1,21 +1,24 @@
-﻿using FluentValidation;
+﻿using Domain.Constants;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Application.Features.Books.Commands;
+
 
 namespace Application.Validators.Books;
 
 public class UploadBookCoverCommandValidator : AbstractValidator<UploadBookCoverCommand>
 {
-    public UploadBookCoverCommandValidator()
+    public UploadBookCoverCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Book ID is required");
+            .NotEmpty().WithMessage(localizer["BookIdRequired"]);
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("User ID is required");
+            .NotEmpty().WithMessage(localizer["UserIdRequired"]);
 
         RuleFor(x => x.CoverImageUrl)
-            .NotEmpty().WithMessage("Cover image URL is required")
-            .MaximumLength(500).WithMessage("Cover image URL must not exceed 500 characters")
-            .Matches(@"^https?://").WithMessage("Cover image URL must be a valid URL");
+            .NotEmpty().WithMessage(localizer["CoverImageUrlRequired"])
+            .MaximumLength(DomainConstants.BookCover.UrlMaxLength).WithMessage(localizer["CoverImageUrlTooLong"])
+            .Matches(@"^https?://").WithMessage(localizer["InvalidCoverImageUrl"]);
     }
 }

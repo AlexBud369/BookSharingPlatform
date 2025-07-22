@@ -5,12 +5,12 @@ namespace Application.Validators.Books;
 
 public class DeleteBookCommandValidator : AbstractValidator<DeleteBookCommand>
 {
-    public DeleteBookCommandValidator()
+    public DeleteBookCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Book ID is required");
+            .NotEmpty().WithMessage(localizer["BookIdRequired"]);
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("User ID is required");
+            .NotEmpty().WithMessage(localizer["UserIdRequired"]);
     }
 }

@@ -1,48 +1,49 @@
-﻿using FluentValidation;
-using Application.DTOs.Book;
+﻿using Domain.Constants;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
+using Application.Features.Books.Commands;
 
 namespace Application.Validators.Books;
 
 public class UpdateBookCommandValidator : AbstractValidator<BookUpdateDto>
 {
-    public UpdateBookCommandValidator()
+    public UpdateBookCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        RuleFor(b => b.Id)
-            .NotEmpty().WithMessage("Book ID is required");
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage(localizer["BookIdRequired"]);
 
-        RuleFor(b => b.UserId)
-            .NotEmpty().WithMessage("User ID is required");
+        RuleFor(x => x.UserId)
+            .NotEmpty().WithMessage(localizer["UserIdRequired"]);
 
-        RuleFor(b => b.Book)
-            .NotNull().WithMessage("Book data is required");
+        RuleFor(x => x.Book)
+            .NotNull().WithMessage(localizer["BookDataRequired"]);
 
-        RuleFor(b => b.Book)
-            .Must(dto => dto.Title != null || dto.Author != null 
-                  || dto.Description != null || dto.Tags != null)
-            .WithMessage("At least one field must be provided for update")
-            .When(b => b.Book != null);
+        RuleFor(x => x.Book)
+            .Must(dto => dto.Title != null || dto.Author != null || dto.Description != null ||
+                         dto.CoverImageUrl != null || dto.Tags != null)
+            .WithMessage(localizer["AtLeastOneFieldRequired"])
+            .When(x => x.Book != null);
 
-        RuleFor(b => b.Book.Title)
-            .NotEmpty().WithMessage("Title cannot be empty")
-            .MaximumLength(200).WithMessage("Title must not exceed 200 characters")
-            .When(b => b.Book != null && b.Book.Title != null);
+        RuleFor(x => x.Book.Title)
+            .NotEmpty().WithMessage(localizer["TitleRequired"])
+            .MaximumLength(DomainConstants.Book.TitleMaxLength).WithMessage(localizer["TitleTooLong"])
+            .When(x => x.Book != null && x.Book.Title != null);
 
-        RuleFor(b => b.Book.Author)
-            .NotEmpty().WithMessage("Author cannot be empty")
-            .MaximumLength(100).WithMessage("Author must not exceed 100 characters")
-            .When(b => b.Book != null && b.Book.Author != null);
+        RuleFor(x => x.Book.Author)
+            .NotEmpty().WithMessage(localizer["AuthorRequired"])
+            .MaximumLength(DomainConstants.Book.AuthorMaxLength).WithMessage(localizer["AuthorTooLong"])
+            .When(x => x.Book != null && x.Book.Author != null);
 
-        RuleFor(b => b.Book.Description)
-            .MaximumLength(1500).WithMessage("Description must not exceed 1500 characters")
-            .When(b => b.Book != null && b.Book.Description != null);
+        RuleFor(x => x.Book.Description)
+            .MaximumLength(DomainConstants.Book.DescriptionMaxLength).WithMessage(localizer["DescriptionTooLong"])
+            .When(x => x.Book != null && x.Book.Description != null);
 
-        RuleFor(b => b.Book.Tags)
-            .Must(tags => tags == null || tags.All(tag => !string.IsNullOrEmpty(tag)))
-            .WithMessage("All tags must be non-empty")
-            .When(b => b.Book != null);
+        RuleFor(x => x.Book.CoverImageUrl)
+            .MaximumLength(DomainConstants.BookCover.UrlMaxLength).WithMessage(localizer["CoverImageUrlTooLong"])
+            .When(x => x.Book != null && x.Book.CoverImageUrl != null);
 
-        RuleForEach(b => b.Book.Tags)
-            .MaximumLength(50).WithMessage("Each tag must not exceed 50 characters")
-            .When(b => b.Book != null && b.Book.Tags != null);
+        RuleFor(x => x.Book.Tags)
+            .Must(tags => tags == null || tags.All(id => id != Guid.Empty)).WithMessage(localizer["InvalidTagIds"])
+            .When(x => x.Book != null && x.Book.Tags != null);
     }
 }

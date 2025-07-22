@@ -1,13 +1,14 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Application.Features.Books.Queries;
 
 namespace Application.Validators.Books;
 
 public class GetBookByIdQueryValidator : AbstractValidator<GetBookByIdQuery>
 {
-    public GetBookByIdQueryValidator()
+    public GetBookByIdQueryValidator(IStringLocalizer<SharedResource> localizer)
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Book ID is required");
+            .NotEmpty().WithMessage(localizer["BookIdRequired"]);
     }
 }

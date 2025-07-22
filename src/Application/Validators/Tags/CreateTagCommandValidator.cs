@@ -1,14 +1,16 @@
-﻿using FluentValidation;
+﻿using Domain.Constants;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Application.Features.Tags.Commands;
 
 namespace Application.Validators.Tags;
 
 public class CreateTagCommandValidator : AbstractValidator<CreateTagCommand>
 {
-    public CreateTagCommandValidator()
+    public CreateTagCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        RuleFor(x => x.tagName)
-            .NotEmpty().WithMessage("Tag name is required")
-            .MaximumLength(50).WithMessage("Tag name must not exceed 50 characters");
+        RuleFor(x => x.TagName)
+             .NotEmpty().WithMessage(localizer["TagNameRequired"])
+             .MaximumLength(DomainConstants.Tag.NameMaxLength).WithMessage(localizer["TagNameTooLong"]);
     }
 }

@@ -1,19 +1,23 @@
-﻿using FluentValidation;
+﻿using Domain.Constants;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
 using Application.Features.Auth.Commands;
 
 namespace Application.Validators.Auth;
 
 public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {
-    public LoginCommandValidator()
+    public LoginCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Invalid email format.")
-            .MaximumLength(100).WithMessage("Email must not exceed 100 characters.");
+            .NotEmpty().WithMessage(localizer["EmailRequired"])
+            .EmailAddress().WithMessage(localizer["InvalidEmailFormat"])
+            .MaximumLength(DomainConstants.User.EmailMaxLength)
+            .WithMessage(localizer["EmailTooLong"]);
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.");
+            .NotEmpty().WithMessage(localizer["PasswordRequired"])
+            .MinimumLength(DomainConstants.User.PasswordMinLength)
+            .WithMessage(localizer["PasswordTooShort"]);
     }
 }
