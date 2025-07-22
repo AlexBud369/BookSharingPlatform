@@ -1,12 +1,14 @@
-﻿using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using Application.DTOs;
 using Application.DTOs.Book;
+using Domain.Constants;
+using MediatR;
 
 namespace Application.Features.Books.Queries;
 
-public class GetAllBooksQuery : IRequest<IEnumerable<BookDto>>
+public class GetAllBooksQuery : IRequest<PagedResponseDto<BookDto>>
 {
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
-    public string? SearchTerm { get; set; }
-    public string? Tag { get; set; }
+    public BookFilterDto Filter { get; set; } = new BookFilterDto();
+
 }
