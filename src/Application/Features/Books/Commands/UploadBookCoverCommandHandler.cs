@@ -47,9 +47,12 @@ public class UploadBookCoverCommandHandler : IRequestHandler<UploadBookCoverComm
         Guard.AgainstNull(book, nameof(request.Id), "BookNotFound", request.Id.ToString());
 
         await _bookAccessService.ValidateBookAccessAsync(book, request.UserId, false, cancellationToken);
-        await _imageService.UpdateBookCoverAsync(book, request.CoverImageUrl, cancellationToken);
+
+        using var stream = request.CoverImage.OpenReadStream();
+        await _imageService.UpdateBookCoverAsync(book, stream, request.CoverImage.FileName, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
+
         return _mapper.Map<BookDto>(book);
     }
 }
