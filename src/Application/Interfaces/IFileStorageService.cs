@@ -13,4 +13,5 @@ public interface IFileStorageService
         Stream fileStream,
         string fileName,
         CancellationToken cancellationToken);
+    Task DeleteFileAsync(string fileName, CancellationToken cancellationToken);
 }
