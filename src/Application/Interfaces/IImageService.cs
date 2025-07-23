@@ -10,5 +10,7 @@ public interface IImageService
         Book book,
         Stream fileStream,
         string fileName,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken,
+         bool deleteOldCover = true);
+    Task DeleteBookCoverAsync(Book book, CancellationToken cancellationToken);
 }
