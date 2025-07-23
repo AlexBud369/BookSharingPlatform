@@ -1,10 +1,11 @@
 ﻿using Azure;
-using Domain.Entities;
 using Domain.Constants;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
+
 public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
     public DbSet<Book> Books { get; set; }
@@ -16,7 +17,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
         builder.Entity<Book>()
             .HasMany(b => b.Tags)
             .WithMany(t => t.Books);
@@ -37,8 +37,9 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
             .HasMaxLength(DomainConstants.Book.AuthorMaxLength);
 
         builder.Entity<Book>()
-           .Property(b => b.CoverImageUrl)
-           .IsRequired(false);
+            .Property(b => b.CoverImageUrl)
+            .IsRequired(false)
+            .HasMaxLength(DomainConstants.BookCover.UrlMaxLength);
 
         builder.Entity<Tag>()
             .Property(t => t.TagName)
@@ -61,4 +62,3 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
             .HasForeignKey(rt => rt.UserId);
     }
 }
-
