@@ -243,4 +243,40 @@
 		<value>Refresh-токен не должен превышать 500 символов</value>
 		<comment>Ошибка при превышении максимальной длины refresh-токена</comment>
 	</data>
+	<data name="FileStreamRequired" xml:space="preserve">
+		<value>Поток файла обязателен</value>
+		<comment>Ошибка, когда поток файла отсутствует</comment>
+	</data>
+	<data name="FileNameRequired" xml:space="preserve">
+		<value>Имя файла обязательно</value>
+		<comment>Ошибка, когда имя файла пустое</comment>
+	</data>
+	<data name="InvalidExtensionError" xml:space="preserve">
+		<value>Недопустимое расширение файла {0}. Допустимые: {1}</value>
+		<comment>Ошибка для недопустимого расширения файла</comment>
+	</data>
+	<data name="BucketNotFound" xml:space="preserve">
+		<value>Бакет {0} не существует</value>
+		<comment>Ошибка, когда бакет не существует</comment>
+	</data>
+	<data name="SupabaseUrlRequired" xml:space="preserve">
+		<value>URL Supabase обязателен</value>
+		<comment>Ошибка, когда URL Supabase пуст</comment>
+	</data>
+	<data name="SupabasePublicKeyRequired" xml:space="preserve">
+		<value>Публичный ключ Supabase обязателен</value>
+		<comment>Ошибка, когда публичный ключ Supabase пуст</comment>
+	</data>
+	<data name="SupabaseSecretKeyRequired" xml:space="preserve">
+		<value>Секретный ключ Supabase обязателен</value>
+		<comment>Ошибка, когда секретный ключ Supabase пуст</comment>
+	</data>
+	<data name="SupabaseBucketNameRequired" xml:space="preserve">
+		<value>Имя бакета Supabase обязательно</value>
+		<comment>Ошибка, когда имя бакета Supabase пусто</comment>
+	</data>
+	<data name="SupabasePublicUrlRequired" xml:space="preserve">
+		<value>Публичный URL Supabase обязателен</value>
+		<comment>Ошибка, когда публичный URL Supabase пуст</comment>
+	</data>
 </root>

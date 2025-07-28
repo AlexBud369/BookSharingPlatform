@@ -243,4 +243,40 @@
 		<value>Refresh token must not exceed 500 characters</value>
 		<comment>Error for refresh token exceeding max length</comment>
 	</data>
+	<data name="FileStreamRequired" xml:space="preserve">
+		<value>File stream is required</value>
+		<comment>Error when file stream is null</comment>
+	</data>
+	<data name="FileNameRequired" xml:space="preserve">
+		<value>File name is required</value>
+		<comment>Error when file name is empty</comment>
+	</data>
+	<data name="InvalidExtensionError" xml:space="preserve">
+		<value>Invalid file extension {0}. Allowed: {1}</value>
+		<comment>Error for invalid file extension</comment>
+	</data>
+	<data name="BucketNotFound" xml:space="preserve">
+		<value>Bucket {0} does not exist</value>
+		<comment>Error when bucket does not exist</comment>
+	</data>
+	<data name="SupabaseUrlRequired" xml:space="preserve">
+		<value>Supabase URL is required</value>
+		<comment>Error when Supabase URL is empty</comment>
+	</data>
+	<data name="SupabasePublicKeyRequired" xml:space="preserve">
+		<value>Supabase public key is required</value>
+		<comment>Error when Supabase public key is empty</comment>
+	</data>
+	<data name="SupabaseSecretKeyRequired" xml:space="preserve">
+		<value>Supabase secret key is required</value>
+		<comment>Error when Supabase secret key is empty</comment>
+	</data>
+	<data name="SupabaseBucketNameRequired" xml:space="preserve">
+		<value>Supabase bucket name is required</value>
+		<comment>Error when Supabase bucket name is empty</comment>
+	</data>
+	<data name="SupabasePublicUrlRequired" xml:space="preserve">
+		<value>Supabase public URL is required</value>
+		<comment>Error when Supabase public URL is empty</comment>
+	</data>
 </root>
