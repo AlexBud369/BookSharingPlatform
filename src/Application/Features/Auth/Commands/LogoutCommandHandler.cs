@@ -5,18 +5,25 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands;
 
 public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
 {
     private readonly AppDbContext _context;
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public LogoutCommandHandler(AppDbContext context, IStringLocalizer<SharedResource> localizer)
+    public LogoutCommandHandler(AppDbContext context, IStringLocalizer<SharedResources> localizer)
     {
+        Guard.AgainstNull(
+            context, 
+            nameof(context), 
+            localizer.GetString(SharedResources.DbContextRequired));
+        Guard.AgainstNull(
+            localizer, 
+            nameof(localizer),
+            localizer.GetString(SharedResources.LocalizerRequired));
+
         _context = context;
         _localizer = localizer;
         Guard.Initialize(_localizer);
@@ -26,11 +33,14 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
     {
         var refreshToken = await _context.RefreshTokens
             .FirstOrDefaultAsync(
-            rt => rt.UserId == request.UserId
-            && rt.Token == request.RefreshToken
-            && !rt.IsRevoked, cancellationToken);
+                rt => rt.UserId == request.UserId
+                && rt.Token == request.RefreshToken
+                && !rt.IsRevoked, cancellationToken);
 
-        Guard.AgainstNull(refreshToken, nameof(request.RefreshToken), "RefreshTokenNotFound");
+        Guard.AgainstNull(
+            refreshToken,
+            nameof(request.RefreshToken),
+            _localizer.GetString(SharedResources.RefreshTokenNotFound));
 
         refreshToken.IsRevoked = true;
         await _context.SaveChangesAsync(cancellationToken);
