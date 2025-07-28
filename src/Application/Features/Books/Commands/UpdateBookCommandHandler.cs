@@ -17,17 +17,23 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, BookD
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly ITagService _tagService;
     private readonly IBookAccessService _bookService;
 
     public UpdateBookCommandHandler(
         AppDbContext context,
         IMapper mapper,
-        IStringLocalizer<SharedResource> localizer,
+        IStringLocalizer<SharedResources> localizer,
         ITagService tagService,
         IBookAccessService bookService)
     {
+        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
+        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
+        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
+        Guard.AgainstNull(tagService, nameof(tagService), localizer.GetString(SharedResources.TagServiceRequired));
+        Guard.AgainstNull(bookService, nameof(bookService), localizer.GetString(SharedResources.BookAccessServiceRequired));
+
         _context = context;
         _mapper = mapper;
         _localizer = localizer;
@@ -38,22 +44,24 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, BookD
 
     public async Task<BookDto> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
-        Guard.AgainstNull(request.Book, nameof(request.Book), "BookDataRequired");
-        Guard.AgainstEmptyString(request.Book.Title, nameof(request.Book.Title), "EmptyString", nameof(request.Book.Title));
+        Guard.AgainstEmptyGuid(request.Id, nameof(request.Id), _localizer.GetString(SharedResources.BookIdRequired));
+        Guard.AgainstEmptyGuid(request.UserId, nameof(request.UserId), _localizer.GetString(SharedResources.UserIdRequired));
+        Guard.AgainstNull(request.Book, nameof(request.Book), _localizer.GetString(SharedResources.BookDataRequired));
+        Guard.AgainstEmptyString(request.Book.Title, nameof(request.Book.Title), _localizer.GetString(SharedResources.EmptyString));
 
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
-        Guard.AgainstNull(user, nameof(request.UserId), "UserNotFound", request.UserId.ToString());
+        Guard.AgainstNull(user, nameof(request.UserId), _localizer.GetString(SharedResources.UserNotFound), request.UserId.ToString());
 
         var book = await _context.Books
             .Include(b => b.Tags)
             .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
-        Guard.AgainstNull(book, nameof(request.Id), "BookNotFound", request.Id.ToString());
+        Guard.AgainstNull(book, nameof(request.Id), _localizer.GetString(SharedResources.BookNotFound), request.Id.ToString());
 
-        await _bookAccessService.ValidateBookAccessAsync(book, request.UserId, false, cancellationToken);
+        await _bookService.ValidateBookAccessAsync(book, request.UserId, false, cancellationToken);
 
         _mapper.Map(request.Book, book);
-        book.TagsList.Clear();
+        book.Tags.Clear();
         await _tagService.AddTagsToBookAsync(book, request.Book.Tags, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);

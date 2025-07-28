@@ -17,17 +17,23 @@ public class UploadBookCoverCommandHandler : IRequestHandler<UploadBookCoverComm
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly IBookAccessService _bookAccessService;
     private readonly IImageService _imageService;
 
     public UploadBookCoverCommandHandler(
-        AppDbContext context, 
+        AppDbContext context,
         IMapper mapper,
-        IStringLocalizer<SharedResource> localizer,
+        IStringLocalizer<SharedResources> localizer,
         IBookAccessService bookAccessService,
         IImageService imageService)
     {
+        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
+        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
+        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
+        Guard.AgainstNull(bookAccessService, nameof(bookAccessService), localizer.GetString(SharedResources.BookAccessServiceRequired));
+        Guard.AgainstNull(imageService, nameof(imageService), localizer.GetString(SharedResources.ImageServiceRequired));
+
         _context = context;
         _mapper = mapper;
         _localizer = localizer;
@@ -38,13 +44,17 @@ public class UploadBookCoverCommandHandler : IRequestHandler<UploadBookCoverComm
 
     public async Task<BookDto> Handle(UploadBookCoverCommand request, CancellationToken cancellationToken)
     {
+        Guard.AgainstEmptyGuid(request.Id, nameof(request.Id), _localizer.GetString(SharedResources.BookIdRequired));
+        Guard.AgainstEmptyGuid(request.UserId, nameof(request.UserId), _localizer.GetString(SharedResources.UserIdRequired));
+        Guard.AgainstNull(request.CoverImage, nameof(request.CoverImage), _localizer.GetString(SharedResources.FileStreamRequired));
+
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
-        Guard.AgainstNull(user, nameof(request.UserId), "UserNotFound", request.UserId.ToString());
+        Guard.AgainstNull(user, nameof(request.UserId), _localizer.GetString(SharedResources.UserNotFound), request.UserId.ToString());
 
         var book = await _context.Books
             .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
-        Guard.AgainstNull(book, nameof(request.Id), "BookNotFound", request.Id.ToString());
+        Guard.AgainstNull(book, nameof(request.Id), _localizer.GetString(SharedResources.BookNotFound), request.Id.ToString());
 
         await _bookAccessService.ValidateBookAccessAsync(book, request.UserId, false, cancellationToken);
 
