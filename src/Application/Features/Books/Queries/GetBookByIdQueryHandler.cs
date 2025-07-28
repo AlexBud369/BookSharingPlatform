@@ -1,25 +1,31 @@
-﻿using Application.Common.Exceptions;
-using Application.DTOs.Book;
-using Application.Services;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Common;
+﻿using Application.Common;
 using Application.DTOs.Book;
 using Application.Interfaces;
+using Application.Services;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using System;
 
 namespace Application.Features.Books.Queries;
 
 public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, BookDto>
 {
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly IBookQueryService _bookQueryService;
 
     public GetBookByIdQueryHandler(
-        IStringLocalizer<SharedResource> localizer,
+        IStringLocalizer<SharedResources> localizer,
         IBookQueryService bookQueryService)
     {
+        Guard.AgainstNull(
+            localizer,
+            nameof(localizer),
+            localizer.GetString(SharedResources.LocalizerRequired));
+        Guard.AgainstNull(
+            bookQueryService,
+            nameof(bookQueryService),
+            localizer.GetString(SharedResources.BookQueryServiceRequired));
+
         _localizer = localizer;
         _bookQueryService = bookQueryService;
         Guard.Initialize(_localizer);
@@ -27,6 +33,11 @@ public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, BookDto
 
     public async Task<BookDto> Handle(GetBookByIdQuery request, CancellationToken cancellationToken)
     {
+        Guard.AgainstEmptyGuid(
+            request.Id,
+            nameof(request.Id),
+            _localizer.GetString(SharedResources.BookIdRequired));
+
         return await _bookQueryService.GetBookByIdAsync(request.Id, cancellationToken);
     }
 }

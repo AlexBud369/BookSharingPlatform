@@ -14,24 +14,34 @@ namespace Application.Features.Books.Queries;
 
 public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedResponseDto<BookDto>>
 {
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly IBookQueryService _bookQueryService;
 
     public GetAllBooksQueryHandler(
-        IStringLocalizer<SharedResource> localizer,
-        IBookQueryService bookQueryService)
+       IStringLocalizer<SharedResources> localizer,
+       IBookQueryService bookQueryService)
     {
-        Guard.AgainstNull(localizer, nameof(localizer), "LocalizerRequired");
-        Guard.AgainstNull(bookQueryService, nameof(bookQueryService), "BookQueryServiceRequired");
+        Guard.AgainstNull(
+            localizer,
+            nameof(localizer),
+            localizer.GetString(SharedResources.LocalizerRequired));
+        Guard.AgainstNull(
+            bookQueryService,
+            nameof(bookQueryService),
+            localizer.GetString(SharedResources.BookQueryServiceRequired));
 
         _localizer = localizer;
         _bookQueryService = bookQueryService;
         Guard.Initialize(_localizer);
     }
 
+
     public async Task<PagedResponseDto<BookDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
     {
-        Guard.AgainstNull(request.Filter, nameof(request.Filter), "FilterRequired");
+        Guard.AgainstNull(
+            request.Filter,
+            nameof(request.Filter),
+            _localizer.GetString(SharedResources.FilterRequired));
 
         return await _bookQueryService.GetBooksAsync(
             request.Filter.PageNumber,
