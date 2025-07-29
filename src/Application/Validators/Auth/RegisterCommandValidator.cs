@@ -1,34 +1,33 @@
-﻿using Domain.Constants;
+﻿using Application.Common;
+using Application.Features.Auth.Commands;
+using Domain.Constants;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using Application.Features.Auth.Commands;
+using System;
 
 namespace Application.Validators.Auth;
 
 public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
-    public RegisterCommandValidator(IStringLocalizer<SharedResource> localizer)
+    public RegisterCommandValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage(localizer["EmailRequired"])
-            .EmailAddress().WithMessage(localizer["InvalidEmailFormat"])
+            .NotEmpty().WithMessage(localizer.GetString(SharedResources.EmailRequired))
+            .EmailAddress().WithMessage(localizer.GetString(SharedResources.InvalidEmailFormat))
             .MaximumLength(DomainConstants.User.EmailMaxLength)
-            .WithMessage(localizer["EmailTooLong"]);
+            .WithMessage(localizer.GetString(SharedResources.EmailTooLong));
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage(localizer["PasswordRequired"])
+            .NotEmpty().WithMessage(localizer.GetString(SharedResources.PasswordRequired))
             .MinimumLength(DomainConstants.User.PasswordMinLength)
-            .WithMessage(localizer["PasswordTooShort"])
-            .Matches(@"[A-Z]")
-            .WithMessage(localizer["PasswordRequiresUppercase"])
-            .Matches(@"[0-9]")
-            .WithMessage(localizer["PasswordRequiresNumber"]);
+            .WithMessage(localizer.GetString(SharedResources.PasswordTooShort))
+            .Matches(@"[A-Z]").WithMessage(localizer.GetString(SharedResources.PasswordRequiresUppercase))
+            .Matches(@"[0-9]").WithMessage(localizer.GetString(SharedResources.PasswordRequiresNumber));
 
         RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage(localizer["UsernameRequired"])
-            .MaximumLength(50omainConstants.User.UsernameMaxLength)
-            .WithMessage(ocalizer["UsernameTooLong"])
-            .Matches(@"^[a-zA-Z0-9_]+$")
-            .WithMessage(localizer["InvalidUsernameFormat"]);
+            .NotEmpty().WithMessage(localizer.GetString(SharedResources.UsernameRequired))
+            .MaximumLength(DomainConstants.User.UsernameMaxLength)
+            .WithMessage(localizer.GetString(SharedResources.UsernameTooLong))
+            .Matches(@"^[a-zA-Z0-9_]+$").WithMessage(localizer.GetString(SharedResources.InvalidUsernameFormat));
     }
 }

@@ -1,19 +1,22 @@
-﻿using Domain.Constants;
+﻿using Application.Common;
+using Application.Features.Auth.Commands;
+using Domain.Constants;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using Application.Features.Auth.Commands;
+using System;
 
 namespace Application.Validators.Auth;
 
 public class LogoutCommandValidator : AbstractValidator<LogoutCommand>
 {
-    public LogoutCommandValidator(IStringLocalizer<SharedResource> localizer)
+    public LogoutCommandValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage(localizer["UserIdRequired"]);
+            .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.UserIdRequired));
 
         RuleFor(x => x.RefreshToken)
-            .NotEmpty().WithMessage(localizer["RefreshTokenRequired"])
-            .MaximumLength(DomainConstants.User.RefreshTokenMaxLength).WithMessage(localizer["RefreshTokenTooLong"]);
+            .NotEmpty().WithMessage(localizer.GetString(SharedResources.RefreshTokenRequired))
+            .MaximumLength(DomainConstants.User.RefreshTokenMaxLength)
+            .WithMessage(localizer.GetString(SharedResources.RefreshTokenTooLong));
     }
 }
