@@ -1,23 +1,27 @@
-﻿using Application.Common;
-using Application.Interfaces;
-using Domain.Entities;
-using Microsoft.Extensions.Localization;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common;
+using Application.Interfaces;
+using Domain.Constants;
+using Domain.Entities;
+using Microsoft.Extensions.Localization;
 
 namespace Application.Services;
 
 public class ImageService : IImageService
 {
     private readonly IFileStorageService _storageService;
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
     public ImageService(
         IFileStorageService storageService,
-        IStringLocalizer<SharedResource> localizer)
+        IStringLocalizer<SharedResources> localizer)
     {
+        Guard.AgainstNull(storageService, nameof(storageService), localizer.GetString(SharedResources.FileStorageServiceRequired));
+        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
+
         _storageService = storageService;
         _localizer = localizer;
         Guard.Initialize(_localizer);
@@ -30,13 +34,18 @@ public class ImageService : IImageService
         CancellationToken cancellationToken,
         bool deleteOldCover = true)
     {
-        Guard.AgainstNull(book, nameof(book), "BookNotFound");
-        Guard.AgainstNull(fileStream, nameof(fileStream), "FileStreamRequired");
-        Guard.AgainstEmptyString(fileName, nameof(fileName), "FileNameRequired");
+        Guard.AgainstNull(book, nameof(book), _localizer.GetString(SharedResources.BookNotFound));
+        Guard.AgainstEmptyGuid(book.Id, nameof(book.Id), _localizer.GetString(SharedResources.BookIdRequired));
+        Guard.AgainstNull(fileStream, nameof(fileStream), _localizer.GetString(SharedResources.FileStreamRequired));
+        Guard.AgainstEmptyString(fileName, nameof(fileName), _localizer.GetString(SharedResources.FileNameRequired));
 
-        var uniqueFileName = $"{book.Id}_{Guid.NewGuid()}{Path.GetExtension(fileName).ToLowerInvariant()}";
+        var extension = Path.GetExtension(fileName).ToLowerInvariant();
+        Guard.Against(!DomainConstants.BookCover.AllowedImageExtensions.Contains(extension), nameof(fileName), _localizer.GetString(SharedResources.InvalidFileExtension), string.Join(", ", DomainConstants.BookCover.AllowedImageExtensions));
 
-        if (deleteOldCover && !string.IsNullOrEmpty(book.CoverImageUrl)) {
+        var uniqueFileName = $"{book.Id}_{Guid.NewGuid()}{extension}";
+
+        if (deleteOldCover && !string.IsNullOrEmpty(book.CoverImageUrl))
+        {
             await DeleteBookCoverAsync(book, cancellationToken);
         }
 
@@ -47,8 +56,11 @@ public class ImageService : IImageService
 
     public async Task DeleteBookCoverAsync(Book book, CancellationToken cancellationToken)
     {
-        Guard.AgainstNull(book, nameof(book), "BookNotFound");
-        if (!string.IsNullOrEmpty(book.CoverImageUrl)) {
+        Guard.AgainstNull(book, nameof(book), _localizer.GetString(SharedResources.BookNotFound));
+        Guard.AgainstEmptyGuid(book.Id, nameof(book.Id), _localizer.GetString(SharedResources.BookIdRequired));
+
+        if (!string.IsNullOrEmpty(book.CoverImageUrl))
+        {
             var fileName = Path.GetFileName(new Uri(book.CoverImageUrl).LocalPath);
             await _storageService.DeleteFileAsync(fileName, cancellationToken);
             book.CoverImageUrl = null;

@@ -10,17 +10,23 @@ namespace Application.Services;
 
 public class BookAccessService : IBookAccessService
 {
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public BookAccessService(IStringLocalizer<SharedResource> localizer)
+    public BookAccessService(IStringLocalizer<SharedResources> localizer)
     {
+        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
+
         _localizer = localizer;
         Guard.Initialize(_localizer);
     }
 
     public Task ValidateBookAccessAsync(Book book, Guid userId, bool isAdmin, CancellationToken cancellationToken)
     {
-        Guard.AgainstUnauthorized(book.CreatedByUserId == userId || isAdmin, "UnauthorizedAccess");
+        Guard.AgainstNull(book, nameof(book), _localizer.GetString(SharedResources.BookNotFound));
+        Guard.AgainstEmptyGuid(book.Id, nameof(book.Id), _localizer.GetString(SharedResources.BookIdRequired));
+        Guard.AgainstEmptyGuid(userId, nameof(userId), _localizer.GetString(SharedResources.UserIdRequired));
+        Guard.AgainstUnauthorized(book.CreatedByUserId == userId || isAdmin, _localizer.GetString(SharedResources.UnauthorizedAccess));
+
         return Task.CompletedTask;
     }
 }

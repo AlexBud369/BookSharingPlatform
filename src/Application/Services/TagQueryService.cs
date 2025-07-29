@@ -17,13 +17,17 @@ public class TagQueryService : ITagQueryService
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
     public TagQueryService(
         AppDbContext context,
         IMapper mapper,
-        IStringLocalizer<SharedResource> localizer)
+        IStringLocalizer<SharedResources> localizer)
     {
+        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
+        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
+        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
+
         _context = context;
         _mapper = mapper;
         _localizer = localizer;
@@ -32,13 +36,13 @@ public class TagQueryService : ITagQueryService
 
     public async Task<IEnumerable<TagDto>> GetTagsAsync(int pageNumber, int pageSize, string? tagName, CancellationToken cancellationToken)
     {
-        Guard.Against(pageNumber >= 1, nameof(pageNumber), "InvalidPageNumber");
-        Guard.Against(pageSize >= 1, nameof(pageSize), "InvalidPageSize");
+        Guard.AgainstInvalidPageNumber(pageNumber, nameof(pageNumber), _localizer.GetString(SharedResources.InvalidPageNumber));
+        Guard.AgainstInvalidPageSize(pageSize, nameof(pageSize), _localizer.GetString(SharedResources.InvalidPageSize));
 
         var query = _context.Tags.AsQueryable();
 
         if (!string.IsNullOrEmpty(tagName)) {
-            query = query.Where(t => t.tagName.Contains(tagName));
+            query = query.Where(t => t.TagName.Contains(tagName));
         }
 
         var tags = await query
@@ -51,9 +55,12 @@ public class TagQueryService : ITagQueryService
 
     public async Task<TagDto> GetTagByIdAsync(Guid tagId, CancellationToken cancellationToken)
     {
+        Guard.AgainstEmptyGuid(tagId, nameof(tagId), _localizer.GetString(SharedResources.TagIdRequired));
+
         var tag = await _context.Tags
-            .FirstOrDefaultAsync(t => t.tagId == tagId, cancellationToken);
-        Guard.AgainstNull(tag, nameof(tagId), "TagNotFound", tagId.ToString());
+            .FirstOrDefaultAsync(t => t.TagId == tagId, cancellationToken);
+        Guard.AgainstNull(tag, nameof(tagId), _localizer.GetString(SharedResources.TagNotFound), tagId.ToString());
+        
         return _mapper.Map<TagDto>(tag);
     }
 }
