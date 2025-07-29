@@ -1,17 +1,18 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
+using Application.Common;
 using Application.Features.Users.Commands;
 
 namespace Application.Validators.Users;
 
 public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 {
-    public DeleteUserCommandValidator(IStringLocalizer<SharedResource> localizer)
+    public DeleteUserCommandValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage(localizer["UserIdRequired"]);
+            .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.User.Required.UserIdRequired));
 
         RuleFor(x => x.AdminId)
-            .NotEmpty().WithMessage(localizer["AdminIdRequired"]);
+            .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.User.Required.AdminIdRequired));
     }
 }

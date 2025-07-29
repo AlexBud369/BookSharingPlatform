@@ -1,23 +1,24 @@
 ﻿using Domain.Constants;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+using Application.Common;
 using Application.Features.Users.Commands;
 
 namespace Application.Validators.Users;
 
 public class ChangeRoleCommandValidator : AbstractValidator<ChangeRoleCommand>
 {
-    public ChangeRoleCommandValidator(IStringLocalizer<SharedResource> localizer)
+    public ChangeRoleCommandValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage(localizer["UserIdRequired"]);
+            .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.User.Required.UserIdRequired));
 
         RuleFor(x => x.AdminId)
-            .NotEmpty().WithMessage(localizer["AdminIdRequired"]);
+            .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.User.Required.AdminIdRequired));
 
         RuleFor(x => x.Role)
-            .NotEmpty().WithMessage(localizer["RoleRequired"])
+            .NotEmpty().WithMessage(localizer.GetString(SharedResources.User.Required.RoleRequired))
             .Must(role => role == DomainConstants.User.Roles.User || role == DomainConstants.User.Roles.Admin)
-            .WithMessage(localizer["InvalidRole"]);
+            .WithMessage(localizer.GetString(SharedResources.User.Validation.InvalidRole));
     }
 }
