@@ -1,35 +1,37 @@
-﻿using Domain.Constants;
+﻿using Application.Common;
+using Application.Common.Enums;
+using Application.Features.Books.Queries;
+using Domain.Constants;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using Application.Features.Books.Queries;
-
+using System;
 
 namespace Application.Validators.Books;
 
 public class GetAllBooksQueryValidator : AbstractValidator<GetAllBooksQuery>
 {
-    public GetAllBooksQueryValidator(IStringLocalizer<SharedResource> localizer)
+    public GetAllBooksQueryValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.Filter)
-           .NotNull().WithMessage(localizer["FilterRequired"]);
+            .NotNull().WithMessage(localizer.GetString(SharedResources.Common.Required.FilterRequired));
 
         RuleFor(x => x.Filter.PageNumber)
-            .GreaterThanOrEqualTo(DomainConstants.Book.DefaultPageNumber).WithMessage(localizer["InvalidPageNumber"]);
+            .GreaterThanOrEqualTo(DomainConstants.Book.DefaultPageNumber).WithMessage(localizer.GetString(SharedResources.Common.Validation.InvalidPageNumber));
 
         RuleFor(x => x.Filter.PageSize)
-            .InclusiveBetween(1, DomainConstants.Book.MaxPageSize).WithMessage(localizer["InvalidPageSize"]);
+            .InclusiveBetween(DomainConstants.Book.DefaultPageSize, DomainConstants.Book.MaxPageSize).WithMessage(localizer.GetString(SharedResources.Common.Validation.InvalidPageSize));
 
         RuleFor(x => x.Filter.SearchQuery)
-            .MaximumLength(DomainConstants.Book.TitleMaxLength).WithMessage(localizer["SearchQueryTooLong"])
+            .MaximumLength(DomainConstants.Book.TitleMaxLength).WithMessage(localizer.GetString(SharedResources.Common.Validation.SearchQueryTooLong))
             .When(x => !string.IsNullOrEmpty(x.Filter.SearchQuery));
 
         RuleFor(x => x.Filter.TagIds)
-            .Must(tags => tags == null || tags.All(id => id != Guid.Empty)).WithMessage(localizer["InvalidTagIds"])
+            .Must(tags => tags == null || tags.All(id => id != Guid.Empty)).WithMessage(localizer.GetString(SharedResources.Tag.Validation.InvalidTagIds))
             .When(x => x.Filter.TagIds != null);
 
         RuleFor(x => x.Filter.SortBy)
-            .Must(x => x == null || x == DomainConstants.Book.SortByCreatedAt || x == DomainConstants.Book.SortByTitle)
-            .WithMessage(localizer["InvalidSortBy"])
+            .Must(x => x == null || new[] { "createdAt", "title" }.Contains(x.ToLowerInvariant()))
+            .WithMessage(localizer.GetString(SharedResources.Common.Validation.InvalidSortBy))
             .When(x => !string.IsNullOrEmpty(x.Filter.SortBy));
     }
 }
