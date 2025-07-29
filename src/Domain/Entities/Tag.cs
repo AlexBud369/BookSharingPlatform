@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Domain.Entities;
+
+/// <summary>
+/// The entity of a tag is used to categorize books (genre, language)
+/// </summary>
+public class Tag
+{
+    public Guid TagId { get; init; } = Guid.NewGuid();
+    public string TagName { get; set; }
+    public IReadOnlyList<Book> Books { get => BooksList.AsReadOnly(); }
+    private readonly List<Book> BooksList = new();
+
+}
+
