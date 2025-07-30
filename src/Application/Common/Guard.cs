@@ -4,9 +4,9 @@ namespace Application.Common;
 
 public static class Guard
 {
-    private static IStringLocalizer<SharedResource>? _localizer;
+    private static IStringLocalizer<SharedResources>? _localizer;
 
-    public static void Initialize(IStringLocalizer<SharedResource> localizer)
+    public static void Initialize(IStringLocalizer<SharedResources> localizer)
     {
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
