@@ -403,4 +403,12 @@
 		<value>Failed to delete user</value>
 		<comment>Error when user deletion fails</comment>
 	</data>
+	<data name="FailedToUploadFile" xml:space="preserve">
+    <value>Failed to upload file {0}</value>
+    <comment>Error when file upload fails</comment>
+</data>
+	<data name="FailedToDeleteFile" xml:space="preserve">
+    <value>Failed to delete file {0}</value>
+    <comment>Error when file deletion fails</comment>
+</data>
 </root>

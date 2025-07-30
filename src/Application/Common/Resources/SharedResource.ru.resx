@@ -403,4 +403,12 @@
 		<value>Не удалось удалить пользователя</value>
 		<comment>Ошибка, когда удаление пользователя не удалось</comment>
 	</data>
+	<data name="FailedToUploadFile" xml:space="preserve">
+    <value>Не удалось загрузить файл {0}</value>
+    <comment>Ошибка при неудачной загрузке файла</comment>
+</data>
+	<data name="FailedToDeleteFile" xml:space="preserve">
+    <value>Не удалось удалить файл {0}</value>
+    <comment>Ошибка при неудачном удалении файла</comment>
+</data>
 </root>
