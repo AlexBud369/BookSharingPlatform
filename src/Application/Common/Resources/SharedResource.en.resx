@@ -411,4 +411,8 @@
     <value>Failed to delete file {0}</value>
     <comment>Error when file deletion fails</comment>
 </data>
+	<data name="FailedToGenerateSignedUrl" xml:space="preserve">
+      <value>Failed to generate signed URL for file {0}</value>
+      <comment>Error when generating signed URL fails</comment>
+  </data>
 </root>

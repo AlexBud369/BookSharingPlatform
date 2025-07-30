@@ -93,4 +93,5 @@ public class SharedResources
     public const string FailedToDeleteUser = "FailedToDeleteUser";
     public const string FailedToUploadFile = "FailedToUploadFile";
     public const string FailedToDeleteFile = "FailedToDeleteFile";
+    public const string FailedToGenerateSignedUrl = "FailedToGenerateSignedUrl";
 }

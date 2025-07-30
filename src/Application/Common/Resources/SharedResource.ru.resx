@@ -411,4 +411,7 @@
     <value>Не удалось удалить файл {0}</value>
     <comment>Ошибка при неудачном удалении файла</comment>
 </data>
+	<data name="FailedToGenerateSignedUrl" xml:space="preserve">
+      <value>Не удалось сгенерировать подписанный URL для файла {0}</value>
+      <comment>Ошибка при неудачной генерации подписанного URL</comment>
 </root>
