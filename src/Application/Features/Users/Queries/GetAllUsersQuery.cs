@@ -1,12 +1,13 @@
-﻿using MediatR;
-using Application.DTOs.User;
+﻿using Application.DTOs.User;
+using Domain.Constants;
+using MediatR;
 
 namespace Application.Features.Users.Queries;
 
 public class GetAllUsersQuery : IRequest<IEnumerable<UserDto>>
 {
-    public int PageNumber { get; set; } = 1;
-    public int PageSize { get; set; } = 10;
+    public int PageNumber { get; set; } = DomainConstants.Book.DefaultPageNumber;
+    public int PageSize { get; set; } = DomainConstants.Book.DefaultPageSize;
     public string? Email { get; set; }
     public string? UserName { get; set; }
     public bool? IsBlocked { get; set; }

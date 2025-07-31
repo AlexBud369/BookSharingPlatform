@@ -1,5 +1,6 @@
 ﻿using Application.Common;
-using Application.DTOs.Auth;
+using Application.DTOs;
+using Application.DTOs.User;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
@@ -30,13 +31,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
         AppDbContext context,
         IAuthService authService)
     {
-        Guard.AgainstNull(userManager, nameof(userManager), localizer.GetString(SharedResources.UserManagerRequired));
-        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
-        Guard.AgainstNull(configuration, nameof(configuration), localizer.GetString(SharedResources.ConfigurationRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(authService, nameof(authService), localizer.GetString(SharedResources.AuthServiceRequired));
-
         _userManager = userManager;
         _mapper = mapper;
         _configuration = configuration;
@@ -56,10 +50,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
         Guard.AgainstUnauthorized(!user.IsBlocked, _localizer.GetString(SharedResources.UserBlocked));
 
         var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
-        Guard.Against(!passwordValid, nameof(request.Password), _localizer.GetString(SharedResources.InvalidPassword));
+        Guard.AgainstFalse(!passwordValid, nameof(request.Password), _localizer.GetString(SharedResources.InvalidPassword));
 
         var tokenString = await _authService.GenerateJwtTokenAsync(user, cancellationToken);
-        var refreshToken = await _authService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
+        var refreshToken = await _authService.GenerateRefreshTokenAsync(user.Id.ToString(), cancellationToken);
         _context.RefreshTokens.Add(refreshToken);
         await _context.SaveChangesAsync(cancellationToken);
 

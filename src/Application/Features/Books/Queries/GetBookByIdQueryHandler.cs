@@ -17,15 +17,6 @@ public class GetBookByIdQueryHandler : IRequestHandler<GetBookByIdQuery, BookDto
         IStringLocalizer<SharedResources> localizer,
         IBookQueryService bookQueryService)
     {
-        Guard.AgainstNull(
-            localizer,
-            nameof(localizer),
-            localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(
-            bookQueryService,
-            nameof(bookQueryService),
-            localizer.GetString(SharedResources.BookQueryServiceRequired));
-
         _localizer = localizer;
         _bookQueryService = bookQueryService;
         Guard.Initialize(_localizer);

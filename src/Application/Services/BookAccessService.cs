@@ -14,8 +14,6 @@ public class BookAccessService : IBookAccessService
 
     public BookAccessService(IStringLocalizer<SharedResources> localizer)
     {
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-
         _localizer = localizer;
         Guard.Initialize(_localizer);
     }

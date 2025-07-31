@@ -26,11 +26,6 @@ public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand>
         IStringLocalizer<SharedResources> localizer,
         IBookAccessService bookService)
     {
-        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(userManager, nameof(userManager), localizer.GetString(SharedResources.UserManagerRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(bookService, nameof(bookService), localizer.GetString(SharedResources.BookAccessServiceRequired));
-
         _context = context;
         _userManager = userManager;
         _localizer = localizer;

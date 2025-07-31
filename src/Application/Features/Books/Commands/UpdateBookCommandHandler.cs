@@ -28,12 +28,6 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, BookD
         ITagService tagService,
         IBookAccessService bookService)
     {
-        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(tagService, nameof(tagService), localizer.GetString(SharedResources.TagServiceRequired));
-        Guard.AgainstNull(bookService, nameof(bookService), localizer.GetString(SharedResources.BookAccessServiceRequired));
-
         _context = context;
         _mapper = mapper;
         _localizer = localizer;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Users.Commands;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IStringLocalizer<SharedResources> _localizer;
@@ -19,15 +19,12 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
         UserManager<ApplicationUser> userManager,
         IStringLocalizer<SharedResources> localizer)
     {
-        Guard.AgainstNull(userManager, nameof(userManager), localizer.GetString(SharedResources.UserManagerRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-
         _userManager = userManager;
         _localizer = localizer;
         Guard.Initialize(_localizer);
     }
 
-    public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(request.UserId, nameof(request.UserId), _localizer.GetString(SharedResources.UserIdRequired));
         Guard.AgainstEmptyGuid(request.AdminId, nameof(request.AdminId), _localizer.GetString(SharedResources.AdminIdRequired));
@@ -36,12 +33,14 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
         Guard.AgainstNull(admin, nameof(request.AdminId), _localizer.GetString(SharedResources.UserNotFound), request.AdminId.ToString());
 
         var isAdmin = await _userManager.IsInRoleAsync(admin, UserRole.Admin.ToString());
-        Guard.Against(!isAdmin, nameof(request.AdminId), _localizer.GetString(SharedResources.AdminOnlyAccess));
+        Guard.AgainstFalse(!isAdmin, nameof(request.AdminId), _localizer.GetString(SharedResources.AdminOnlyAccess));
 
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         Guard.AgainstNull(user, nameof(request.UserId), _localizer.GetString(SharedResources.UserNotFound), request.UserId.ToString());
 
         var result = await _userManager.DeleteAsync(user);
-        Guard.Against(!result.Succeeded, nameof(user), _localizer.GetString(SharedResources.FailedToDeleteUser), string.Join(", ", result.Errors.Select(e => e.Description)));
+        Guard.AgainstFalse(!result.Succeeded, nameof(user), _localizer.GetString(SharedResources.FailedToDeleteUser), string.Join(", ", result.Errors.Select(e => e.Description)));
+
+        return Unit.Value;
     }
 }

@@ -28,12 +28,6 @@ public class UploadBookCoverCommandHandler : IRequestHandler<UploadBookCoverComm
         IBookAccessService bookAccessService,
         IImageService imageService)
     {
-        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(bookAccessService, nameof(bookAccessService), localizer.GetString(SharedResources.BookAccessServiceRequired));
-        Guard.AgainstNull(imageService, nameof(imageService), localizer.GetString(SharedResources.ImageServiceRequired));
-
         _context = context;
         _mapper = mapper;
         _localizer = localizer;
