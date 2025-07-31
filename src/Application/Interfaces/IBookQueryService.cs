@@ -4,12 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Application.DTOs.Book;
+using Application.DTOs;
 
 namespace Application.Services;
 
-public interface BookQueryService
+public interface IBookQueryService
 {
-    Task<PagedResultDto<BookDto>> GetBooksAsync(
+    Task<PagedResponseDto<BookDto>> GetBooksAsync(
         int pageNumber,
         int pageSize,
         string? searchTerm,

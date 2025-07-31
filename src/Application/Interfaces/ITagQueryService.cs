@@ -7,7 +7,7 @@ using Application.DTOs.Tag;
 
 namespace Application.Services;
 
-public interface TagQueryService
+public interface ITagQueryService
 {
     Task<IEnumerable<TagDto>> GetTagsAsync(
         int pageNumber,
