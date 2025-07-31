@@ -243,4 +243,175 @@
 		<value>Refresh-токен не должен превышать 500 символов</value>
 		<comment>Ошибка при превышении максимальной длины refresh-токена</comment>
 	</data>
+	<data name="FileStreamRequired" xml:space="preserve">
+		<value>Поток файла обязателен</value>
+		<comment>Ошибка, когда поток файла отсутствует</comment>
+	</data>
+	<data name="FileNameRequired" xml:space="preserve">
+		<value>Имя файла обязательно</value>
+		<comment>Ошибка, когда имя файла пустое</comment>
+	</data>
+	<data name="InvalidExtensionError" xml:space="preserve">
+		<value>Недопустимое расширение файла {0}. Допустимые: {1}</value>
+		<comment>Ошибка для недопустимого расширения файла</comment>
+	</data>
+	<data name="BucketNotFound" xml:space="preserve">
+		<value>Бакет {0} не существует</value>
+		<comment>Ошибка, когда бакет не существует</comment>
+	</data>
+	<data name="SupabaseUrlRequired" xml:space="preserve">
+		<value>URL Supabase обязателен</value>
+		<comment>Ошибка, когда URL Supabase пуст</comment>
+	</data>
+	<data name="SupabasePublicKeyRequired" xml:space="preserve">
+		<value>Публичный ключ Supabase обязателен</value>
+		<comment>Ошибка, когда публичный ключ Supabase пуст</comment>
+	</data>
+	<data name="SupabaseSecretKeyRequired" xml:space="preserve">
+		<value>Секретный ключ Supabase обязателен</value>
+		<comment>Ошибка, когда секретный ключ Supabase пуст</comment>
+	</data>
+	<data name="SupabaseBucketNameRequired" xml:space="preserve">
+		<value>Имя бакета Supabase обязательно</value>
+		<comment>Ошибка, когда имя бакета Supabase пусто</comment>
+	</data>
+	<data name="SupabasePublicUrlRequired" xml:space="preserve">
+		<value>Публичный URL Supabase обязателен</value>
+		<comment>Ошибка, когда публичный URL Supabase пуст</comment>
+	</data>
+	<data name="BookIdRequired" xml:space="preserve">
+    <value>ID книги обязателен</value>
+    <comment>Ошибка, когда ID книги пуст</comment>
+  </data>
+	<data name="UserNotFound" xml:space="preserve">
+    <value>Пользователь {0} не найден</value>
+    <comment>Ошибка, когда пользователь не найден</comment>
+  </data>
+	<data name="BookNotFound" xml:space="preserve">
+    <value>Книга {0} не найдена</value>
+    <comment>Ошибка, когда книга не найдена</comment>
+  </data>
+	<data name="UserBlocked" xml:space="preserve">
+    <value>Пользователь заблокирован</value>
+    <comment>Ошибка, когда пользователь заблокирован</comment>
+  </data>
+	<data name="InvalidPassword" xml:space="preserve">
+    <value>Неверный пароль</value>
+    <comment>Ошибка, когда пароль неверный</comment>
+  </data>
+	<data name="EmptyString" xml:space="preserve">
+    <value>{0} не может быть пустым</value>
+    <comment>Ошибка, когда строковое поле пустое</comment>
+  </data>
+	<data name="RefreshTokenNotFound" xml:space="preserve">
+    <value>Токен обновления не найден</value>
+    <comment>Ошибка, когда токен обновления не найден</comment>
+  </data>
+	<data name="EmailAlreadyRegistered" xml:space="preserve">
+    <value>Email {0} уже зарегистрирован</value>
+    <comment>Ошибка, когда email уже занят</comment>
+  </data>
+	<data name="UsernameAlreadyTaken" xml:space="preserve">
+    <value>Имя пользователя {0} уже занято</value>
+    <comment>Ошибка, когда имя пользователя уже занято</comment>
+  </data>
+	<data name="BookQueryServiceRequired" xml:space="preserve">
+    <value>Сервис запросов книг обязателен</value>
+    <comment>Ошибка, когда сервис запросов книг отсутствует</comment>
+  </data>
+	<data name="FilterRequired" xml:space="preserve">
+    <value>Фильтр обязателен</value>
+    <comment>Ошибка, когда фильтр отсутствует</comment>
+  </data>
+	<data name="UserQueryServiceRequired" xml:space="preserve">
+		<value>Требуется сервис запросов пользователей</value>
+		<comment>Ошибка, когда сервис запросов пользователей пуст</comment>
+	</data>
+	<data name="TagQueryServiceRequired" xml:space="preserve">
+		<value>Требуется сервис запросов тегов</value>
+		<comment>Ошибка, когда сервис запросов тегов пуст</comment>
+	</data>
+	<data name="AuthServiceRequired" xml:space="preserve">
+		<value>Требуется сервис аутентификации</value>
+		<comment>Ошибка, когда сервис аутентификации пуст</comment>
+	</data>
+	<data name="TagServiceRequired" xml:space="preserve">
+		<value>Требуется сервис тегов</value>
+		<comment>Ошибка, когда сервис тегов пуст</comment>
+	</data>
+	<data name="BookAccessServiceRequired" xml:space="preserve">
+		<value>Требуется сервис доступа к книгам</value>
+		<comment>Ошибка, когда сервис доступа к книгам пуст</comment>
+	</data>
+	<data name="ImageServiceRequired" xml:space="preserve">
+		<value>Требуется сервис изображений</value>
+		<comment>Ошибка, когда сервис изображений пуст</comment>
+	</data>
+	<data name="CoverImageRequired" xml:space="preserve">
+		<value>Требуется изображение обложки</value>
+		<comment>Ошибка, когда изображение обложки пусто</comment>
+	</data>
+	<data name="CoverImageEmpty" xml:space="preserve">
+		<value>Файл обложки не может быть пустым</value>
+		<comment>Ошибка, когда файл обложки пуст</comment>
+	</data>
+	<data name="CoverImageTooLarge" xml:space="preserve">
+		<value>Размер обложки превышает максимальный размер в {0} МБ</value>
+		<comment>Ошибка, когда обложка превышает максимальный размер</comment>
+	</data>
+	<data name="InvalidGuid" xml:space="preserve">
+		<value>Недопустимое значение GUID</value>
+		<comment>Ошибка для недопустимого значения GUID</comment>
+	</data>
+	<data name="BookAccessDenied" xml:space="preserve">
+		<value>Доступ к книге запрещен</value>
+		<comment>Ошибка для несанкционированного доступа к книге</comment>
+	</data>
+	<data name="TagAlreadyExists" xml:space="preserve">
+		<value>Тег уже существует</value>
+		<comment>Ошибка, когда тег уже существует</comment>
+	</data>
+	<data name="RegistrationFailed" xml:space="preserve">
+		<value>Регистрация не удалась</value>
+		<comment>Ошибка, когда регистрация не удалась</comment>
+	</data>
+	<data name="JwtIssuerRequired" xml:space="preserve">
+		<value>Требуется эмитент JWT</value>
+		<comment>Ошибка, когда эмитент JWT пуст</comment>
+	</data>
+	<data name="JwtAudienceRequired" xml:space="preserve">
+		<value>Требуется аудитория JWT</value>
+		<comment>Ошибка, когда аудитория JWT пуста</comment>
+	</data>
+	<data name="JwtKeyRequired" xml:space="preserve">
+		<value>Требуется ключ JWT</value>
+		<comment>Ошибка, когда ключ JWT пуст</comment>
+	</data>
+	<data name="FailedToBlockUser" xml:space="preserve">
+		<value>Не удалось заблокировать пользователя</value>
+		<comment>Ошибка, когда блокировка пользователя не удалась</comment>
+	</data>
+	<data name="FailedToCreateRole" xml:space="preserve">
+		<value>Не удалось создать роль</value>
+		<comment>Ошибка, когда создание роли не удалось</comment>
+	</data>
+	<data name="FailedToAssignRole" xml:space="preserve">
+		<value>Не удалось назначить роль</value>
+		<comment>Ошибка, когда назначение роли не удалось</comment>
+	</data>
+	<data name="FailedToDeleteUser" xml:space="preserve">
+		<value>Не удалось удалить пользователя</value>
+		<comment>Ошибка, когда удаление пользователя не удалось</comment>
+	</data>
+	<data name="FailedToUploadFile" xml:space="preserve">
+    <value>Не удалось загрузить файл {0}</value>
+    <comment>Ошибка при неудачной загрузке файла</comment>
+</data>
+	<data name="FailedToDeleteFile" xml:space="preserve">
+    <value>Не удалось удалить файл {0}</value>
+    <comment>Ошибка при неудачном удалении файла</comment>
+</data>
+	<data name="FailedToGenerateSignedUrl" xml:space="preserve">
+      <value>Не удалось сгенерировать подписанный URL для файла {0}</value>
+      <comment>Ошибка при неудачной генерации подписанного URL</comment>
 </root>

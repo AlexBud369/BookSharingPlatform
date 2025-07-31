@@ -10,13 +10,14 @@ public static class DomainConstants
         public const int DefaultPageNumber = 1;
         public const int DefaultPageSize = 10;
         public const int MaxPageSize = 100;
-        public const string SortByTitle = "title";
-        public const string SortByCreatedAt = "createdAt";
+        public const int SearchQueryMaxLength = 200;
     }
 
     public static class Tag
     {
         public const int NameMaxLength = 50;
+        public const int MinPageNumber = 1;
+        public const int MaxPageSize = 100;
     }
 
     public static class User
@@ -25,16 +26,14 @@ public static class DomainConstants
         public const int UsernameMaxLength = 50;
         public const int PasswordMinLength = 6;
         public const int RefreshTokenMaxLength = 500;
-
-        public static class Roles
-        {
-            public const string User = "User";
-            public const string Admin = "Admin";
-        }
+        public const int MinPageNumber = 1;
+        public const int MaxPageSize = 100;
     }
 
     public static class BookCover
     {
         public const int UrlMaxLength = 500;
+        public static readonly string[] AllowedImageExtensions = { ".jpg", ".jpeg", ".png" };
+        public const long MaxFileSizeBytes = 5 * 1024 * 1024;
     }
 }

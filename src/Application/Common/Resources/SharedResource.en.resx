@@ -243,4 +243,176 @@
 		<value>Refresh token must not exceed 500 characters</value>
 		<comment>Error for refresh token exceeding max length</comment>
 	</data>
+	<data name="FileStreamRequired" xml:space="preserve">
+		<value>File stream is required</value>
+		<comment>Error when file stream is null</comment>
+	</data>
+	<data name="FileNameRequired" xml:space="preserve">
+		<value>File name is required</value>
+		<comment>Error when file name is empty</comment>
+	</data>
+	<data name="InvalidExtensionError" xml:space="preserve">
+		<value>Invalid file extension {0}. Allowed: {1}</value>
+		<comment>Error for invalid file extension</comment>
+	</data>
+	<data name="BucketNotFound" xml:space="preserve">
+		<value>Bucket {0} does not exist</value>
+		<comment>Error when bucket does not exist</comment>
+	</data>
+	<data name="SupabaseUrlRequired" xml:space="preserve">
+		<value>Supabase URL is required</value>
+		<comment>Error when Supabase URL is empty</comment>
+	</data>
+	<data name="SupabasePublicKeyRequired" xml:space="preserve">
+		<value>Supabase public key is required</value>
+		<comment>Error when Supabase public key is empty</comment>
+	</data>
+	<data name="SupabaseSecretKeyRequired" xml:space="preserve">
+		<value>Supabase secret key is required</value>
+		<comment>Error when Supabase secret key is empty</comment>
+	</data>
+	<data name="SupabaseBucketNameRequired" xml:space="preserve">
+		<value>Supabase bucket name is required</value>
+		<comment>Error when Supabase bucket name is empty</comment>
+	</data>
+	<data name="SupabasePublicUrlRequired" xml:space="preserve">
+		<value>Supabase public URL is required</value>
+		<comment>Error when Supabase public URL is empty</comment>
+	</data>
+	<data name="BookIdRequired" xml:space="preserve">
+		<value>Book ID is required</value>
+		<comment>Error when book ID is empty</comment>
+	</data>
+	<data name="UserNotFound" xml:space="preserve">
+		<value>User {0} not found</value>
+		<comment>Error when user is not found</comment>
+	</data>
+	<data name="BookNotFound" xml:space="preserve">
+		<value>Book {0} not found</value>
+		<comment>Error when book is not found</comment>
+	</data>
+	<data name="UserBlocked" xml:space="preserve">
+		<value>User is blocked</value>
+		<comment>Error when user is blocked</comment>
+	</data>
+	<data name="InvalidPassword" xml:space="preserve">
+		<value>Invalid password</value>
+		<comment>Error when password is incorrect</comment>
+	</data>
+	<data name="EmptyString" xml:space="preserve">
+		<value>{0} cannot be empty</value>
+		<comment>Error when a string field is empty</comment>
+	</data>
+	<data name="RefreshTokenNotFound" xml:space="preserve">
+		<value>Refresh token not found</value>
+		<comment>Error when refresh token is not found</comment>
+    </data>
+	<data name="EmailAlreadyRegistered" xml:space="preserve">
+		<value>Email {0} is already registered</value>
+		<comment>Error when email is already taken</comment>
+	</data>
+	<data name="UsernameAlreadyTaken" xml:space="preserve">
+		<value>Username {0} is already taken</value>
+		<comment>Error when username is already taken</comment>
+	</data>
+	<data name="BookQueryServiceRequired" xml:space="preserve">
+    <value>Book query service is required</value>
+    <comment>Error when book query service is null</comment>
+  </data>
+	<data name="FilterRequired" xml:space="preserve">
+    <value>Filter is required</value>
+    <comment>Error when filter is null</comment>
+  </data>
+	<data name="UserQueryServiceRequired" xml:space="preserve">
+		<value>User query service is required</value>
+		<comment>Error when user query service is null</comment>
+	</data>
+	<data name="TagQueryServiceRequired" xml:space="preserve">
+		<value>Tag query service is required</value>
+		<comment>Error when tag query service is null</comment>
+	</data>
+	<data name="AuthServiceRequired" xml:space="preserve">
+		<value>Authentication service is required</value>
+		<comment>Error when authentication service is null</comment>
+	</data>
+	<data name="TagServiceRequired" xml:space="preserve">
+		<value>Tag service is required</value>
+		<comment>Error when tag service is null</comment>
+	</data>
+	<data name="BookAccessServiceRequired" xml:space="preserve">
+		<value>Book access service is required</value>
+		<comment>Error when book access service is null</comment>
+	</data>
+	<data name="ImageServiceRequired" xml:space="preserve">
+		<value>Image service is required</value>
+		<comment>Error when image service is null</comment>
+	</data>
+	<data name="CoverImageRequired" xml:space="preserve">
+		<value>Cover image is required</value>
+		<comment>Error when cover image is null</comment>
+	</data>
+	<data name="CoverImageEmpty" xml:space="preserve">
+		<value>Cover image file cannot be empty</value>
+		<comment>Error when cover image file is empty</comment>
+	</data>
+	<data name="CoverImageTooLarge" xml:space="preserve">
+		<value>Cover image exceeds maximum size of {0} MB</value>
+		<comment>Error for cover image exceeding max size</comment>
+	</data>
+	<data name="InvalidGuid" xml:space="preserve">
+		<value>Invalid GUID value</value>
+		<comment>Error for invalid GUID value</comment>
+	</data>
+	<data name="BookAccessDenied" xml:space="preserve">
+		<value>Access to the book is denied</value>
+		<comment>Error for unauthorized book access</comment>
+	</data>
+	<data name="TagAlreadyExists" xml:space="preserve">
+		<value>Tag already exists</value>
+		<comment>Error when tag already exists</comment>
+	</data>
+	<data name="RegistrationFailed" xml:space="preserve">
+		<value>Registration failed</value>
+		<comment>Error when registration fails</comment>
+	</data>
+	<data name="JwtIssuerRequired" xml:space="preserve">
+		<value>JWT issuer is required</value>
+		<comment>Error when JWT issuer is empty</comment>
+	</data>
+	<data name="JwtAudienceRequired" xml:space="preserve">
+		<value>JWT audience is required</value>
+		<comment>Error when JWT audience is empty</comment>
+	</data>
+	<data name="JwtKeyRequired" xml:space="preserve">
+		<value>JWT key is required</value>
+		<comment>Error when JWT key is empty</comment>
+	</data>
+	<data name="FailedToBlockUser" xml:space="preserve">
+		<value>Failed to block user</value>
+		<comment>Error when blocking user fails</comment>
+	</data>
+	<data name="FailedToCreateRole" xml:space="preserve">
+		<value>Failed to create role</value>
+		<comment>Error when role creation fails</comment>
+	</data>
+	<data name="FailedToAssignRole" xml:space="preserve">
+		<value>Failed to assign role</value>
+		<comment>Error when role assignment fails</comment>
+	</data>
+	<data name="FailedToDeleteUser" xml:space="preserve">
+		<value>Failed to delete user</value>
+		<comment>Error when user deletion fails</comment>
+	</data>
+	<data name="FailedToUploadFile" xml:space="preserve">
+    <value>Failed to upload file {0}</value>
+    <comment>Error when file upload fails</comment>
+</data>
+	<data name="FailedToDeleteFile" xml:space="preserve">
+    <value>Failed to delete file {0}</value>
+    <comment>Error when file deletion fails</comment>
+</data>
+	<data name="FailedToGenerateSignedUrl" xml:space="preserve">
+      <value>Failed to generate signed URL for file {0}</value>
+      <comment>Error when generating signed URL fails</comment>
+  </data>
 </root>
