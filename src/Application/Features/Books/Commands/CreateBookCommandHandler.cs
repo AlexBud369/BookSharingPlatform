@@ -26,11 +26,6 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookD
         IStringLocalizer<SharedResources> localizer,
         ITagService tagService)
     {
-        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(tagService, nameof(tagService), localizer.GetString(SharedResources.TagServiceRequired));
-
         _context = context;
         _mapper = mapper;
         _localizer = localizer;
@@ -51,7 +46,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookD
         var book = _mapper.Map<Book>(request.Book);
         book.CreatedByUserId = request.UserId;
 
-        await _tagService.AddTagsToBookAsync(book, request.Book.Tags, cancellationToken);
+        await _tagService.AddTagsToBookAsync(book, request.Book.Tags.Select(t => t.ToString()), cancellationToken);
 
         _context.Books.Add(book);
         await _context.SaveChangesAsync(cancellationToken);
