@@ -7,5 +7,5 @@ public class ApplicationRole : IdentityRole<Guid>
 
     public ApplicationRole(string roleName) : base(roleName) { }
 
-    private ApplicationRole() { }
+    public ApplicationRole() { }
 }

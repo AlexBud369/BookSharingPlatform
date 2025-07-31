@@ -18,7 +18,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto
         IStringLocalizer<SharedResources> localizer,
         IUserQueryService userQueryService)
     {
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.Get Mint.GetString(SharedResources.LocalizerRequired));
+        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
         Guard.AgainstNull(userQueryService, nameof(userQueryService), localizer.GetString(SharedResources.UserQueryServiceRequired));
 
         _localizer = localizer;

@@ -19,9 +19,6 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumer
         IStringLocalizer<SharedResources> localizer,
         IUserQueryService userQueryService)
     {
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(userQueryService, nameof(userQueryService), localizer.GetString(SharedResources.UserQueryServiceRequired));
-
         _localizer = localizer;
         _userQueryService = userQueryService;
         Guard.Initialize(_localizer);
