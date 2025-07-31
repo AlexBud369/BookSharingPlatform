@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -26,26 +27,13 @@ public class BookQueryService : IBookQueryService
         AppDbContext context,
         IMapper mapper)
     {
-        Guard.AgainstNull(
-            localizer,
-            nameof(localizer),
-            localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(
-            context,
-            nameof(context),
-            localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(
-            mapper,
-            nameof(mapper),
-            localizer.GetString(SharedResources.MapperRequired));
-
         _localizer = localizer;
         _context = context;
         _mapper = mapper;
         Guard.Initialize(_localizer);
     }
 
-    public async Task<PagedResult<BookDto>> GetBooksAsync(
+    public async Task<PagedResponseDto<BookDto>> GetBooksAsync(
         int pageNumber,
         int pageSize,
         string? searchTerm,
@@ -85,7 +73,7 @@ public class BookQueryService : IBookQueryService
         }
 
         if (tagIds != null && tagIds.Any()) {
-            query = query.Where(b => b.Tags.Any(t => tagIds.Contains(t.Id)));
+            query = query.Where(b => b.Tags.Any(t => tagIds.Contains(t.TagId)));
         }
 
         if (createdByUserId.HasValue) {
@@ -126,16 +114,16 @@ public class BookQueryService : IBookQueryService
             .ToListAsync(cancellationToken);
     }
 
-    private PagedResult<BookDto> CreatePagedResult(
+    private PagedResponseDto<BookDto> CreatePagedResult(
         List<Book> items,
         int totalCount,
         int pageNumber,
         int pageSize)
     {
-        return new PagedResult<BookDto>
+        return new PagedResponseDto<BookDto>
         {
             Items = _mapper.Map<List<BookDto>>(items),
-            TotalCount = totalCount,
+            TotalItems = totalCount,
             PageNumber = pageNumber,
             PageSize = pageSize
         };
@@ -143,6 +131,8 @@ public class BookQueryService : IBookQueryService
 
     public async Task<BookDto> GetBookByIdAsync(Guid bookId, CancellationToken cancellationToken)
     {
+        Guard.AgainstEmptyGuid(bookId, nameof(bookId), SharedResources.BookIdRequired);
+
         var book = await _context.Books
             .Include(b => b.Tags)
             .AsNoTracking()

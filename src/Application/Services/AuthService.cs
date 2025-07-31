@@ -26,10 +26,6 @@ public class AuthService : IAuthService
         IConfiguration configuration,
         IStringLocalizer<SharedResources> localizer)
     {
-        Guard.AgainstNull(userManager, nameof(userManager), localizer.GetString(SharedResources.UserManagerRequired));
-        Guard.AgainstNull(configuration, nameof(configuration), localizer.GetString(SharedResources.ConfigurationRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-
         _userManager = userManager;
         _configuration = configuration;
         _localizer = localizer;
@@ -59,11 +55,10 @@ public class AuthService : IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public Task<RefreshToken> GenerateRefreshTokenAsync(string userId, CancellationToken cancellationToken)
+    public Task<RefreshToken> GenerateRefreshTokenAsync(Guid userId, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyString(userId, nameof(userId), _localizer.GetString(SharedResources.UserIdRequired));
-        Guard.AgainstEmptyGuid(Guid.Parse(userId), nameof(userId), _localizer.GetString(SharedResources.UserIdRequired));
-
+       
         return Task.FromResult(new RefreshToken
         {
             Token = Guid.NewGuid().ToString(),
@@ -83,7 +78,7 @@ public class AuthService : IAuthService
         var result = await _userManager.CreateAsync(user, password);
         if (!result.Succeeded) {
             var errors = string.Join("; ", result.Errors.Select(e => e.Description));
-            Guard.Against(true, nameof(user), _localizer.GetString(SharedResources.RegistrationFailed), errors);
+            Guard.AgainstFalse(true, nameof(user), _localizer.GetString(SharedResources.RegistrationFailed), errors);
         }
         await _userManager.AddToRoleAsync(user, role);
     }

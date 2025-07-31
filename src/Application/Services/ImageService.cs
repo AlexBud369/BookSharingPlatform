@@ -19,9 +19,6 @@ public class ImageService : IImageService
         IFileStorageService storageService,
         IStringLocalizer<SharedResources> localizer)
     {
-        Guard.AgainstNull(storageService, nameof(storageService), localizer.GetString(SharedResources.FileStorageServiceRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-
         _storageService = storageService;
         _localizer = localizer;
         Guard.Initialize(_localizer);
@@ -40,12 +37,11 @@ public class ImageService : IImageService
         Guard.AgainstEmptyString(fileName, nameof(fileName), _localizer.GetString(SharedResources.FileNameRequired));
 
         var extension = Path.GetExtension(fileName).ToLowerInvariant();
-        Guard.Against(!DomainConstants.BookCover.AllowedImageExtensions.Contains(extension), nameof(fileName), _localizer.GetString(SharedResources.InvalidFileExtension), string.Join(", ", DomainConstants.BookCover.AllowedImageExtensions));
+        Guard.AgainstFalse(!DomainConstants.BookCover.AllowedImageExtensions.Contains(extension), nameof(fileName), _localizer.GetString(SharedResources.InvalidFileExtension), string.Join(", ", DomainConstants.BookCover.AllowedImageExtensions));
 
         var uniqueFileName = $"{book.Id}_{Guid.NewGuid()}{extension}";
 
-        if (deleteOldCover && !string.IsNullOrEmpty(book.CoverImageUrl))
-        {
+        if (deleteOldCover && !string.IsNullOrEmpty(book.CoverImageUrl)) {
             await DeleteBookCoverAsync(book, cancellationToken);
         }
 
@@ -59,8 +55,7 @@ public class ImageService : IImageService
         Guard.AgainstNull(book, nameof(book), _localizer.GetString(SharedResources.BookNotFound));
         Guard.AgainstEmptyGuid(book.Id, nameof(book.Id), _localizer.GetString(SharedResources.BookIdRequired));
 
-        if (!string.IsNullOrEmpty(book.CoverImageUrl))
-        {
+        if (!string.IsNullOrEmpty(book.CoverImageUrl)) {
             var fileName = Path.GetFileName(new Uri(book.CoverImageUrl).LocalPath);
             await _storageService.DeleteFileAsync(fileName, cancellationToken);
             book.CoverImageUrl = null;
