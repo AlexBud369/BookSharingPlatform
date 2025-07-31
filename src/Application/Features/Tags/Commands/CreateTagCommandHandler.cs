@@ -24,10 +24,6 @@ public class CreateTagCommandHandler : IRequestHandler<CreateTagCommand, TagDto>
         IMapper mapper,
         IStringLocalizer<SharedResources> localizer)
     {
-        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-
         _context = context;
         _mapper = mapper;
         _localizer = localizer;

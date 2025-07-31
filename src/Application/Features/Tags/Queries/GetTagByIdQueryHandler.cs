@@ -19,9 +19,6 @@ public class GetTagByIdQueryHandler : IRequestHandler<GetTagByIdQuery, TagDto>
         IStringLocalizer<SharedResources> localizer,
         ITagQueryService tagQueryService)
     {
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(tagQueryService, nameof(tagQueryService), localizer.GetString(SharedResources.TagQueryServiceRequired));
-
         _localizer = localizer;
         _tagQueryService = tagQueryService;
         Guard.Initialize(_localizer);
