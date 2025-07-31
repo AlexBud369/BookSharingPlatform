@@ -24,11 +24,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserDto>
         IStringLocalizer<SharedResources> localizer,
         IAuthService authService)
     {
-        Guard.AgainstNull(userManager, nameof(userManager), localizer.GetString(SharedResources.UserManagerRequired));
-        Guard.AgainstNull(mapper, nameof(mapper), localizer.GetString(SharedResources.MapperRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-        Guard.AgainstNull(authService, nameof(authService), localizer.GetString(SharedResources.AuthServiceRequired));
-
         _userManager = userManager;
         _mapper = mapper;
         _localizer = localizer;

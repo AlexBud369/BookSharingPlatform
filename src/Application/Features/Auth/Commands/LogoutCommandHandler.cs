@@ -15,15 +15,6 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
 
     public LogoutCommandHandler(AppDbContext context, IStringLocalizer<SharedResources> localizer)
     {
-        Guard.AgainstNull(
-            context, 
-            nameof(context), 
-            localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(
-            localizer, 
-            nameof(localizer),
-            localizer.GetString(SharedResources.LocalizerRequired));
-
         _context = context;
         _localizer = localizer;
         Guard.Initialize(_localizer);
