@@ -21,9 +21,6 @@ public class TagService : ITagService
         AppDbContext context,
         IStringLocalizer<SharedResources> localizer)
     {
-        Guard.AgainstNull(context, nameof(context), localizer.GetString(SharedResources.DbContextRequired));
-        Guard.AgainstNull(localizer, nameof(localizer), localizer.GetString(SharedResources.LocalizerRequired));
-
         _context = context;
         _localizer = localizer;
         Guard.Initialize(_localizer);
@@ -36,13 +33,11 @@ public class TagService : ITagService
         Guard.AgainstNull(tagNames, nameof(tagNames), _localizer.GetString(SharedResources.TagsRequired));
 
         var tagNamesList = tagNames.ToList();
-        if (!tagNamesList.Any())
-        {
+        if (!tagNamesList.Any()) {
             return;
         }
 
-        foreach (var tagName in tagNamesList)
-        {
+        foreach (var tagName in tagNamesList) {
             Guard.AgainstEmptyString(tagName, nameof(tagName), _localizer.GetString(SharedResources.TagNameRequired));
         }
 
