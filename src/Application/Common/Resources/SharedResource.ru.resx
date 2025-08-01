@@ -414,4 +414,38 @@
 	<data name="FailedToGenerateSignedUrl" xml:space="preserve">
       <value>Не удалось сгенерировать подписанный URL для файла {0}</value>
       <comment>Ошибка при неудачной генерации подписанного URL</comment>
+	</data>
+	<data name="RegistrationSuccessful" xml:space="preserve">
+        <value>Регистрация успешно завершена.</value>
+     </data>
+	<data name="LoginSuccessful" xml:space="preserve">
+        <value>Вход выполнен успешно.</value>
+      </data>
+	<data name="LogoutSuccessful" xml:space="preserve">
+        <value>Выход выполнен успешно.</value>
+      </data>
+	<data name="InvalidCredentials" xml:space="preserve">
+        <value>Неверный email или пароль.</value>
+      </data>
+	<data name="RefreshTokenInvalid" xml:space="preserve">
+        <value>Недействительный или истёкший refresh-токен.</value>
+      </data>
+	<data name="RefreshTokenNotFound" xml:space="preserve">
+        <value>Refresh-токен не найден.</value>
+      </data>
+	<data name="EmptyString" xml:space="preserve">
+        <value>Значение не может быть пустым.</value>
+      </data>
+	<data name="UserNotFound" xml:space="preserve">
+        <value>Пользователь не найден.</value>
+      </data>
+	<data name="UserBlocked" xml:space="preserve">
+        <value>Пользователь заблокирован.</value>
+      </data>
+	<data name="RefreshTokenRequired" xml:space="preserve">
+        <value>Требуется refresh-токен.</value>
+     </data>
+	<data name="EmptyString" xml:space="preserve">
+    <value>Значение не может быть пустым.</value>
+  </data>
 </root>

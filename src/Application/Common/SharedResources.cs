@@ -94,4 +94,10 @@ public class SharedResources
     public const string FailedToUploadFile = "FailedToUploadFile";
     public const string FailedToDeleteFile = "FailedToDeleteFile";
     public const string FailedToGenerateSignedUrl = "FailedToGenerateSignedUrl";
+    public const string RegistrationSuccessful = "RegistrationSuccessful";
+    public const string LoginSuccessful = "LoginSuccessful";
+    public const string LogoutSuccessful = "LogoutSuccessful";
+    public const string InvalidCredentials = "InvalidCredentials";
+    public const string RefreshTokenInvalid = "RefreshTokenInvalid";
+    public const string InvalidExpirationTime = "InvalidExpirationTime";
 }
