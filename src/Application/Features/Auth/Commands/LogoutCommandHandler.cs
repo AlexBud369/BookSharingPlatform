@@ -8,7 +8,7 @@ using System;
 
 namespace Application.Features.Auth.Commands;
 
-public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
+public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Unit>
 {
     private readonly AppDbContext _context;
     private readonly IStringLocalizer<SharedResources> _localizer;
@@ -20,7 +20,7 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
         Guard.Initialize(_localizer);
     }
 
-    public async Task Handle(LogoutCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = await _context.RefreshTokens
             .FirstOrDefaultAsync(
@@ -35,5 +35,7 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
 
         refreshToken.IsRevoked = true;
         await _context.SaveChangesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 }
