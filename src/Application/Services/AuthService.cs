@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Common;
+using Application.DTOs;
+using Application.DTOs.User;
 using Application.Interfaces;
+using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
@@ -20,15 +27,21 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly IMapper _mapper;
+    private readonly AppDbContext _context;
 
     public AuthService(
         UserManager<ApplicationUser> userManager,
         IConfiguration configuration,
-        IStringLocalizer<SharedResources> localizer)
+        IStringLocalizer<SharedResources> localizer,
+        IMapper mapper,
+        AppDbContext context)
     {
         _userManager = userManager;
         _configuration = configuration;
         _localizer = localizer;
+        _mapper = mapper;
+        _context = context;
         Guard.Initialize(_localizer);
     }
 
@@ -57,8 +70,8 @@ public class AuthService : IAuthService
 
     public Task<RefreshToken> GenerateRefreshTokenAsync(Guid userId, CancellationToken cancellationToken)
     {
-        Guard.AgainstEmptyString(userId, nameof(userId), _localizer.GetString(SharedResources.UserIdRequired));
-       
+        Guard.AgainstEmptyGuid(userId, nameof(userId), _localizer.GetString(SharedResources.UserIdRequired));
+
         return Task.FromResult(new RefreshToken
         {
             Token = Guid.NewGuid().ToString(),
@@ -66,6 +79,55 @@ public class AuthService : IAuthService
             ExpiresAt = DateTime.UtcNow.AddDays(7),
             IsRevoked = false
         });
+    }
+
+    public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto, CancellationToken cancellationToken)
+    {
+        Guard.AgainstEmptyString(refreshTokenDto.Token, nameof(refreshTokenDto.Token), _localizer.GetString(SharedResources.RefreshTokenRequired));
+
+        var refreshToken = await _context.RefreshTokens
+            .Include(rt => rt.User)
+            .FirstOrDefaultAsync(rt => rt.Token == refreshTokenDto.Token && !rt.IsRevoked && rt.ExpiresAt > DateTime.UtcNow, cancellationToken);
+
+        Guard.AgainstNull(refreshToken, nameof(refreshTokenDto.Token), _localizer.GetString(SharedResources.RefreshTokenNotFound));
+
+        Guard.AgainstUnauthorized(!refreshToken.User.IsBlocked, _localizer.GetString(SharedResources.UserBlocked));
+
+        refreshToken.IsRevoked = true;
+        _context.RefreshTokens.Update(refreshToken);
+
+        var newRefreshToken = await GenerateRefreshTokenAsync(refreshToken.UserId, cancellationToken);
+        _context.RefreshTokens.Add(newRefreshToken);
+
+        var newJwtToken = await GenerateJwtTokenAsync(refreshToken.User, cancellationToken);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        var roles = await _userManager.GetRolesAsync(refreshToken.User);
+        var userDto = _mapper.Map<UserDto>(refreshToken.User, opts => opts.Items["Role"] = roles.FirstOrDefault() ?? UserRole.User.ToString());
+
+        return new AuthResponseDto
+        {
+            AccessToken = newJwtToken,
+            RefreshToken = newRefreshToken.Token,
+            User = userDto
+        };
+    }
+
+    public async Task RevokeRefreshTokenAsync(string refreshToken, Guid userId, CancellationToken cancellationToken)
+    {
+        Guard.AgainstEmptyString(refreshToken, nameof(refreshToken), _localizer.GetString(SharedResources.RefreshTokenRequired));
+        Guard.AgainstEmptyGuid(userId, nameof(userId), _localizer.GetString(SharedResources.UserIdRequired));
+
+        var token = await _context.RefreshTokens
+            .FirstOrDefaultAsync(rt => rt.Token == refreshToken && rt.UserId == userId && !rt.IsRevoked, cancellationToken);
+
+        Guard.AgainstNull(token, nameof(refreshToken), _localizer.GetString(SharedResources.RefreshTokenNotFound));
+
+        token.IsRevoked = true;
+        _context.RefreshTokens.Update(token);
+
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task CreateUserAsync(ApplicationUser user, string password, string role, CancellationToken cancellationToken)
@@ -76,7 +138,8 @@ public class AuthService : IAuthService
         Guard.AgainstEmptyString(role, nameof(role), _localizer.GetString(SharedResources.RoleRequired));
 
         var result = await _userManager.CreateAsync(user, password);
-        if (!result.Succeeded) {
+        if (!result.Succeeded)
+        {
             var errors = string.Join("; ", result.Errors.Select(e => e.Description));
             Guard.AgainstFalse(true, nameof(user), _localizer.GetString(SharedResources.RegistrationFailed), errors);
         }
