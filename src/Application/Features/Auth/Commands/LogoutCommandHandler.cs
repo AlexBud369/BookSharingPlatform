@@ -1,40 +1,32 @@
 ﻿using Application.Common;
-using Domain.Entities;
-using Infrastructure.Data;
+using Application.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands;
 
 public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Unit>
 {
-    private readonly AppDbContext _context;
+    private readonly IAuthService _authService;
     private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public LogoutCommandHandler(AppDbContext context, IStringLocalizer<SharedResources> localizer)
+    public LogoutCommandHandler(
+        IAuthService authService,
+        IStringLocalizer<SharedResources> localizer)
     {
-        _context = context;
+        _authService = authService;
         _localizer = localizer;
         Guard.Initialize(_localizer);
     }
 
     public async Task<Unit> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
-        var refreshToken = await _context.RefreshTokens
-            .FirstOrDefaultAsync(
-                rt => rt.UserId == request.UserId
-                && rt.Token == request.RefreshToken
-                && !rt.IsRevoked, cancellationToken);
+        Guard.AgainstEmptyString(request.RefreshToken, nameof(request.RefreshToken), _localizer.GetString(SharedResources.RefreshTokenRequired));
+        Guard.AgainstEmptyGuid(request.UserId, nameof(request.UserId), _localizer.GetString(SharedResources.UserIdRequired));
 
-        Guard.AgainstNull(
-            refreshToken,
-            nameof(request.RefreshToken),
-            _localizer.GetString(SharedResources.RefreshTokenNotFound));
-
-        refreshToken.IsRevoked = true;
-        await _context.SaveChangesAsync(cancellationToken);
+        await _authService.RevokeRefreshTokenAsync(request.RefreshToken, request.UserId, cancellationToken);
 
         return Unit.Value;
     }
