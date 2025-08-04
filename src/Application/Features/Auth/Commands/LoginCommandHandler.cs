@@ -5,6 +5,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Infrastructure.Data;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -50,10 +51,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
         Guard.AgainstUnauthorized(!user.IsBlocked, _localizer.GetString(SharedResources.UserBlocked));
 
         var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
-        Guard.AgainstFalse(!passwordValid, nameof(request.Password), _localizer.GetString(SharedResources.InvalidPassword));
+        Guard.AgainstFalse(passwordValid, nameof(request.Password), _localizer.GetString(SharedResources.InvalidPassword));
 
         var tokenString = await _authService.GenerateJwtTokenAsync(user, cancellationToken);
-        var refreshToken = await _authService.GenerateRefreshTokenAsync(user.Id.ToString(), cancellationToken);
+        var refreshToken = await _authService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
+
         _context.RefreshTokens.Add(refreshToken);
         await _context.SaveChangesAsync(cancellationToken);
 
