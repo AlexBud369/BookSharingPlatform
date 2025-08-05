@@ -60,7 +60,7 @@
 		<comment>Ошибка для неверного пароля</comment>
 	</data>
 	<data name="UnauthorizedAccess" xml:space="preserve">
-		<value>Только владелец книги или администратор может выполнить это действие</value>
+		<value>Только владелец книги или администратор могут выполнить это действие</value>
 		<comment>Ошибка для несанкционированного доступа к книге</comment>
 	</data>
 	<data name="AdminOnlyAccess" xml:space="preserve">
@@ -77,7 +77,7 @@
 	</data>
 	<data name="EmailRequired" xml:space="preserve">
 		<value>Email обязателен</value>
-		<comment>Ошибка, когда email пустой</comment>
+		<comment>Ошибка, когда email пуст</comment>
 	</data>
 	<data name="InvalidEmailFormat" xml:space="preserve">
 		<value>Неверный формат email</value>
@@ -89,7 +89,7 @@
 	</data>
 	<data name="PasswordRequired" xml:space="preserve">
 		<value>Пароль обязателен</value>
-		<comment>Ошибка, когда пароль пустой</comment>
+		<comment>Ошибка, когда пароль пуст</comment>
 	</data>
 	<data name="PasswordTooShort" xml:space="preserve">
 		<value>Пароль должен содержать не менее 6 символов</value>
@@ -105,19 +105,19 @@
 	</data>
 	<data name="UsernameRequired" xml:space="preserve">
 		<value>Имя пользователя обязательно</value>
-		<comment>Ошибка, когда имя пользователя пустое</comment>
+		<comment>Ошибка, когда имя пользователя пусто</comment>
 	</data>
 	<data name="UsernameTooLong" xml:space="preserve">
 		<value>Имя пользователя не должно превышать 50 символов</value>
 		<comment>Ошибка для имени пользователя, превышающего максимальную длину</comment>
 	</data>
 	<data name="InvalidUsernameFormat" xml:space="preserve">
-		<value>Имя пользователя может содержать только буквы, цифры и подчеркивания</value>
+		<value>Имя пользователя может содержать только буквы, цифры и подчёркивания</value>
 		<comment>Ошибка для неверного формата имени пользователя</comment>
 	</data>
 	<data name="UserIdRequired" xml:space="preserve">
 		<value>ID пользователя обязателен</value>
-		<comment>Ошибка, когда ID пользователя пустой</comment>
+		<comment>Ошибка, когда ID пользователя пуст</comment>
 	</data>
 	<data name="BookDataRequired" xml:space="preserve">
 		<value>Данные книги обязательны</value>
@@ -125,7 +125,7 @@
 	</data>
 	<data name="TitleRequired" xml:space="preserve">
 		<value>Название обязательно</value>
-		<comment>Ошибка, когда название книги пустое</comment>
+		<comment>Ошибка, когда название книги пусто</comment>
 	</data>
 	<data name="TitleTooLong" xml:space="preserve">
 		<value>Название не должно превышать 200 символов</value>
@@ -133,7 +133,7 @@
 	</data>
 	<data name="AuthorRequired" xml:space="preserve">
 		<value>Автор обязателен</value>
-		<comment>Ошибка, когда автор книги пустой</comment>
+		<comment>Ошибка, когда автор книги пуст</comment>
 	</data>
 	<data name="AuthorTooLong" xml:space="preserve">
 		<value>Автор не должен превышать 100 символов</value>
@@ -148,12 +148,12 @@
 		<comment>Ошибка, когда теги книги отсутствуют</comment>
 	</data>
 	<data name="InvalidTagIds" xml:space="preserve">
-		<value>Все ID тегов должны быть действительными GUID</value>
-		<comment>Ошибка для недействительных ID тегов</comment>
+		<value>Все ID тегов должны быть валидными GUID</value>
+		<comment>Ошибка для невалидных ID тегов</comment>
 	</data>
 	<data name="BookIdRequired" xml:space="preserve">
 		<value>ID книги обязателен</value>
-		<comment>Ошибка, когда ID книги пустой</comment>
+		<comment>Ошибка, когда ID книги пуст</comment>
 	</data>
 	<data name="FilterRequired" xml:space="preserve">
 		<value>Фильтр обязателен</value>
@@ -161,11 +161,11 @@
 	</data>
 	<data name="InvalidPageNumber" xml:space="preserve">
 		<value>Номер страницы должен быть больше или равен 1</value>
-		<comment>Ошибка для недействительного номера страницы</comment>
+		<comment>Ошибка для невалидного номера страницы</comment>
 	</data>
 	<data name="InvalidPageSize" xml:space="preserve">
 		<value>Размер страницы должен быть от 1 до 100</value>
-		<comment>Ошибка для недействительного размера страницы</comment>
+		<comment>Ошибка для невалидного размера страницы</comment>
 	</data>
 	<data name="SearchQueryTooLong" xml:space="preserve">
 		<value>Поисковый запрос не должен превышать 200 символов</value>
@@ -173,27 +173,27 @@
 	</data>
 	<data name="InvalidSortBy" xml:space="preserve">
 		<value>SortBy должен быть 'title' или 'createdAt'</value>
-		<comment>Ошибка для недействительного значения сортировки</comment>
+		<comment>Ошибка для невалидного значения сортировки</comment>
 	</data>
 	<data name="AtLeastOneFieldRequired" xml:space="preserve">
-		<value>Для обновления должно быть указано хотя бы одно поле</value>
-		<comment>Ошибка, когда для обновления не указано ни одного поля</comment>
+		<value>Для обновления должно быть предоставлено хотя бы одно поле</value>
+		<comment>Ошибка, когда не предоставлено ни одного поля для обновления</comment>
 	</data>
 	<data name="CoverImageUrlRequired" xml:space="preserve">
 		<value>URL обложки обязателен</value>
-		<comment>Ошибка, когда URL обложки пустой</comment>
+		<comment>Ошибка, когда URL обложки пуст</comment>
 	</data>
 	<data name="CoverImageUrlTooLong" xml:space="preserve">
 		<value>URL обложки не должен превышать 500 символов</value>
 		<comment>Ошибка для URL обложки, превышающего максимальную длину</comment>
 	</data>
 	<data name="InvalidCoverImageUrl" xml:space="preserve">
-		<value>URL обложки должен быть действительным</value>
-		<comment>Ошибка для недействительного формата URL обложки</comment>
+		<value>URL обложки должен быть валидным</value>
+		<comment>Ошибка для невалидного формата URL обложки</comment>
 	</data>
 	<data name="TagNameRequired" xml:space="preserve">
 		<value>Имя тега обязательно</value>
-		<comment>Ошибка, когда имя тега пустое</comment>
+		<comment>Ошибка, когда имя тега пусто</comment>
 	</data>
 	<data name="TagNameTooLong" xml:space="preserve">
 		<value>Имя тега не должно превышать 50 символов</value>
@@ -201,23 +201,23 @@
 	</data>
 	<data name="InvalidTagNameFormat" xml:space="preserve">
 		<value>Имя тега может содержать только буквы, цифры, пробелы и дефисы</value>
-		<comment>Ошибка для недействительного формата имени тега</comment>
+		<comment>Ошибка для невалидного формата имени тега</comment>
 	</data>
 	<data name="AdminIdRequired" xml:space="preserve">
 		<value>ID администратора обязателен</value>
-		<comment>Ошибка, когда ID администратора пустой</comment>
+		<comment>Ошибка, когда ID администратора пуст</comment>
 	</data>
 	<data name="RoleRequired" xml:space="preserve">
 		<value>Роль обязательна</value>
-		<comment>Ошибка, когда роль пустая</comment>
+		<comment>Ошибка, когда роль пуста</comment>
 	</data>
 	<data name="InvalidRole" xml:space="preserve">
-		<value>Роль должна быть 'User' или 'Admin'</value>
-		<comment>Ошибка для недействительного значения роли</comment>
+		<value>Роль должна быть одной из: {0}</value>
+		<comment>Ошибка для невалидного значения роли, ожидает список допустимых ролей</comment>
 	</data>
 	<data name="RefreshTokenRequired" xml:space="preserve">
 		<value>Токен обновления обязателен</value>
-		<comment>Ошибка, когда токен обновления пустой</comment>
+		<comment>Ошибка, когда токен обновления пуст</comment>
 	</data>
 	<data name="RefreshTokenTooLong" xml:space="preserve">
 		<value>Токен обновления не должен превышать 500 символов</value>
@@ -264,20 +264,20 @@
 		<comment>Ошибка, когда сервис изображений отсутствует</comment>
 	</data>
 	<data name="CoverImageRequired" xml:space="preserve">
-		<value>Изображение обложки обязательно</value>
-		<comment>Ошибка, когда изображение обложки отсутствует</comment>
+		<value>Обложка обязательна</value>
+		<comment>Ошибка, когда обложка отсутствует</comment>
 	</data>
 	<data name="CoverImageEmpty" xml:space="preserve">
-		<value>Файл изображения обложки не может быть пустым</value>
-		<comment>Ошибка, когда файл изображения обложки пустой</comment>
+		<value>Файл обложки не может быть пустым</value>
+		<comment>Ошибка, когда файл обложки пуст</comment>
 	</data>
 	<data name="CoverImageTooLarge" xml:space="preserve">
-		<value>Изображение обложки превышает максимальный размер {0} МБ</value>
-		<comment>Ошибка для изображения обложки, превышающего максимальный размер</comment>
+		<value>Обложка превышает максимальный размер {0} МБ</value>
+		<comment>Ошибка для обложки, превышающей максимальный размер</comment>
 	</data>
 	<data name="InvalidGuid" xml:space="preserve">
-		<value>Недействительный GUID</value>
-		<comment>Ошибка для недействительного значения GUID</comment>
+		<value>Неверное значение GUID</value>
+		<comment>Ошибка для невалидного значения GUID</comment>
 	</data>
 	<data name="BookAccessDenied" xml:space="preserve">
 		<value>Доступ к книге запрещён</value>
@@ -285,7 +285,7 @@
 	</data>
 	<data name="TagIdRequired" xml:space="preserve">
 		<value>ID тега обязателен</value>
-		<comment>Ошибка, когда ID тега пустой</comment>
+		<comment>Ошибка, когда ID тега пуст</comment>
 	</data>
 	<data name="TagAlreadyExists" xml:space="preserve">
 		<value>Тег уже существует</value>
@@ -297,15 +297,15 @@
 	</data>
 	<data name="JwtIssuerRequired" xml:space="preserve">
 		<value>Издатель JWT обязателен</value>
-		<comment>Ошибка, когда издатель JWT пустой</comment>
+		<comment>Ошибка, когда издатель JWT пуст</comment>
 	</data>
 	<data name="JwtAudienceRequired" xml:space="preserve">
 		<value>Аудитория JWT обязательна</value>
-		<comment>Ошибка, когда аудитория JWT пустая</comment>
+		<comment>Ошибка, когда аудитория JWT пуста</comment>
 	</data>
 	<data name="JwtKeyRequired" xml:space="preserve">
 		<value>Ключ JWT обязателен</value>
-		<comment>Ошибка, когда ключ JWT пустой</comment>
+		<comment>Ошибка, когда ключ JWT пуст</comment>
 	</data>
 	<data name="FailedToBlockUser" xml:space="preserve">
 		<value>Не удалось заблокировать пользователя</value>
@@ -332,8 +332,8 @@
 		<comment>Ошибка, когда удаление файла не удалось</comment>
 	</data>
 	<data name="FailedToGenerateSignedUrl" xml:space="preserve">
-		<value>Не удалось сгенерировать подписанный URL для файла {0}</value>
-		<comment>Ошибка, когда генерация подписанного URL не удалась</comment>
+		<value>Не удалось сгенерировать подписанную URL для файла {0}</value>
+		<comment>Ошибка, когда генерация подписанной URL не удалась</comment>
 	</data>
 	<data name="RegistrationSuccessful" xml:space="preserve">
 		<value>Регистрация успешно завершена</value>
@@ -352,15 +352,27 @@
 		<comment>Ошибка для неверных учетных данных</comment>
 	</data>
 	<data name="RefreshTokenInvalid" xml:space="preserve">
-		<value>Недействительный или истёкший токен обновления</value>
-		<comment>Ошибка для недействительного или истёкшего токена обновления</comment>
+		<value>Неверный или истёкший токен обновления</value>
+		<comment>Ошибка для невалидного или истёкшего токена обновления</comment>
 	</data>
 	<data name="InvalidExpirationTime" xml:space="preserve">
 		<value>Время истечения должно быть больше нуля</value>
-		<comment>Ошибка для недействительного времени истечения</comment>
+		<comment>Ошибка для невалидного времени истечения</comment>
+	</data>
+	<data name="TagCannotBeDeleted" xml:space="preserve">
+		<value>Тег с ID {0} не может быть удалён, так как связан с книгами</value>
+		<comment>Ошибка, когда тег не может быть удалён из-за связанных книг</comment>
 	</data>
 	<data name="FailedToUpdateUser" xml:space="preserve">
 		<value>Не удалось обновить пользователя: {0}</value>
 		<comment>Ошибка, когда обновление пользователя не удалось</comment>
+	</data>
+	<data name="UserDataRequired" xml:space="preserve">
+		<value>Данные пользователя обязательны</value>
+		<comment>Ошибка, когда данные пользователя отсутствуют</comment>
+	</data>
+	<data name="InvalidFileExtension" xml:space="preserve">
+		<value>Расширение файла должно быть одним из: {0}</value>
+		<comment>Ошибка для невалидного расширения файла</comment>
 	</data>
 </root>

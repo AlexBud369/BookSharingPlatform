@@ -212,8 +212,8 @@
 		<comment>Error when role is empty</comment>
 	</data>
 	<data name="InvalidRole" xml:space="preserve">
-		<value>Role must be either 'User' or 'Admin'</value>
-		<comment>Error for invalid role value</comment>
+		<value>Role must be one of: {0}</value>
+		<comment>Error for invalid role value, expects list of allowed roles</comment>
 	</data>
 	<data name="RefreshTokenRequired" xml:space="preserve">
 		<value>Refresh token is required</value>
@@ -359,8 +359,20 @@
 		<value>Expiration time must be greater than zero</value>
 		<comment>Error for invalid expiration time</comment>
 	</data>
+	<data name="TagCannotBeDeleted" xml:space="preserve">
+		<value>Tag with ID {0} cannot be deleted because it is associated with books</value>
+		<comment>Error when tag cannot be deleted due to associated books</comment>
+	</data>
 	<data name="FailedToUpdateUser" xml:space="preserve">
 		<value>Failed to update user: {0}</value>
 		<comment>Error when user update fails</comment>
+	</data>
+	<data name="UserDataRequired" xml:space="preserve">
+		<value>User data is required</value>
+		<comment>Error when user data is null</comment>
+	</data>
+	<data name="InvalidFileExtension" xml:space="preserve">
+		<value>File extension must be one of: {0}</value>
+		<comment>Error for invalid file extension</comment>
 	</data>
 </root>
