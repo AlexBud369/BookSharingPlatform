@@ -46,7 +46,8 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BookD
         var book = _mapper.Map<Book>(request.Book);
         book.CreatedByUserId = request.UserId;
 
-        await _tagService.AddTagsToBookAsync(book, request.Book.Tags.Select(t => t.ToString()), cancellationToken);
+        var tagNames = await _tagService.GetTagNamesByIdsAsync(request.Book.Tags, cancellationToken);
+        await _tagService.AddTagsToBookAsync(book, tagNames, cancellationToken);
 
         _context.Books.Add(book);
         await _context.SaveChangesAsync(cancellationToken);

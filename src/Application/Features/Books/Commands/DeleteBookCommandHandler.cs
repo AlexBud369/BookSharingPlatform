@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Books.Commands;
 
-public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand>
+public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, Unit>
 {
     private readonly AppDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -33,7 +33,7 @@ public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand>
         Guard.Initialize(_localizer);
     }
 
-    public async Task Handle(DeleteBookCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(request.Id, nameof(request.Id), _localizer.GetString(SharedResources.BookIdRequired));
         Guard.AgainstEmptyGuid(request.UserId, nameof(request.UserId), _localizer.GetString(SharedResources.UserIdRequired));
@@ -50,5 +50,7 @@ public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand>
 
         _context.Books.Remove(book);
         await _context.SaveChangesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 }
