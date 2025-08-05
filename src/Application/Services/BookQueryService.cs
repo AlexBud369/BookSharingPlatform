@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -9,6 +8,7 @@ using Application.Common.Enums;
 using Application.DTOs;
 using Application.DTOs.Book;
 using Application.Interfaces;
+using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,7 @@ public class BookQueryService : IBookQueryService
         int pageNumber,
         int pageSize,
         string? searchTerm,
-         IEnumerable<Guid>? tagIds,
+        IEnumerable<Guid>? tagIds,
         Guid? createdByUserId,
         string? sortBy,
         bool sortDescending,
@@ -83,9 +83,17 @@ public class BookQueryService : IBookQueryService
         return query;
     }
 
-    private IQueryable<Book> ApplySorting(IQueryable<Book> query, BookSortBy sortBy, bool sortDescending)
+    private IQueryable<Book> ApplySorting(IQueryable<Book> query, string? sortBy, bool sortDescending)
     {
-        return sortBy switch
+        BookSortBy sortByEnum;
+        try {
+            sortByEnum = string.IsNullOrEmpty(sortBy) ? BookSortBy.CreatedAt : Enum.Parse<BookSortBy>(sortBy, true);
+        }
+        catch {
+            sortByEnum = BookSortBy.CreatedAt; // Default sorting
+        }
+
+        return sortByEnum switch
         {
             BookSortBy.Title => sortDescending
                 ? query.OrderByDescending(b => b.Title)
@@ -131,7 +139,7 @@ public class BookQueryService : IBookQueryService
 
     public async Task<BookDto> GetBookByIdAsync(Guid bookId, CancellationToken cancellationToken)
     {
-        Guard.AgainstEmptyGuid(bookId, nameof(bookId), SharedResources.BookIdRequired);
+        Guard.AgainstEmptyGuid(bookId, nameof(bookId), _localizer.GetString(SharedResources.BookIdRequired));
 
         var book = await _context.Books
             .Include(b => b.Tags)
