@@ -3,6 +3,7 @@ using Amazon.S3.Model;
 using Amazon.S3.Util;
 using Application.Common;
 using Application.Common.Resources;
+using Application.Interfaces;
 using Infrastructure.Configuration; 
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
