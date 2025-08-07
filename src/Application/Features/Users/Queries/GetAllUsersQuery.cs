@@ -6,8 +6,8 @@ namespace Application.Features.Users.Queries;
 
 public class GetAllUsersQuery : IRequest<IEnumerable<UserDto>>
 {
-    public int PageNumber { get; set; } = DomainConstants.Book.DefaultPageNumber;
-    public int PageSize { get; set; } = DomainConstants.Book.DefaultPageSize;
+    public int PageNumber { get; set; } = DomainConstants.User.DefaultPageNumber;
+    public int PageSize { get; set; } = DomainConstants.User.DefaultPageSize;
     public string? Email { get; set; }
     public string? UserName { get; set; }
     public bool? IsBlocked { get; set; }
