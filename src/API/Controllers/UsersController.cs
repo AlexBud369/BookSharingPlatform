@@ -20,6 +20,7 @@ public class UsersController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly IValidator<UserUpdateDto> _updateValidator;
+    private readonly IValidator<UpdateUserCommand> _updateUserCommandValidator;
     private readonly IValidator<ChangeRoleRequestDto> _changeRoleValidator;
     private readonly IValidator<GetAllUsersQuery> _getAllUsersValidator;
     private readonly IValidator<GetUserByIdQuery> _getUserByIdValidator;
@@ -31,6 +32,7 @@ public class UsersController : ControllerBase
         IMediator mediator,
         IStringLocalizer<SharedResources> localizer,
         IValidator<UserUpdateDto> updateValidator,
+        IValidator<UpdateUserCommand> updateUserCommandValidator,
         IValidator<ChangeRoleRequestDto> changeRoleValidator,
         IValidator<GetAllUsersQuery> getAllUsersValidator,
         IValidator<GetUserByIdQuery> getUserByIdValidator,
@@ -41,6 +43,7 @@ public class UsersController : ControllerBase
         _mediator = mediator;
         _localizer = localizer;
         _updateValidator = updateValidator;
+        _updateUserCommandValidator = updateUserCommandValidator;
         _changeRoleValidator = changeRoleValidator;
         _getAllUsersValidator = getAllUsersValidator;
         _getUserByIdValidator = getUserByIdValidator;
@@ -132,6 +135,11 @@ public class UsersController : ControllerBase
             RequestingUserId = userId,
             UserUpdateDto = userUpdateDto
         };
+
+        var commandValidationResult = await _updateUserCommandValidator.ValidateAsync(command, cancellationToken);
+        if (!commandValidationResult.IsValid) {
+            return BadRequest(commandValidationResult.Errors);
+        }
 
         var result = await _mediator.Send(command, cancellationToken);
         return Ok(result);

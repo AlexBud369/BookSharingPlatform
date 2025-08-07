@@ -45,7 +45,6 @@ public class FileController : ControllerBase
         [FromQuery] Guid bookId,
         CancellationToken cancellationToken)
     {
-        Guard.Initialize(_localizer); 
         Guard.AgainstEmptyString(fileName, nameof(fileName), _localizer.GetString(SharedResources.FileNameRequired));
         Guard.AgainstEmptyGuid(bookId, nameof(bookId), _localizer.GetString(SharedResources.BookIdRequired));
 
