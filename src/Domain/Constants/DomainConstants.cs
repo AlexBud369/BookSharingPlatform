@@ -32,6 +32,7 @@ public static class DomainConstants
         public const int PasswordMinLength = 6;
         public const int RefreshTokenMaxLength = 500;
         public const int MinPageNumber = 1;
+        public const int DefaultPageNumber = 1;
         public const int DefaultPageSize = 10;
         public const int MaxPageSize = 100;
         public static readonly string[] AllowedRoles = Enum.GetNames<UserRole>();
