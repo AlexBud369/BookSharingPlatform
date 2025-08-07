@@ -8,7 +8,7 @@ using Application.Common;
 using Application.DTOs.User;
 using Application.Interfaces;
 using Domain.Entities;
-using Infrastructure.Data;
+using Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 

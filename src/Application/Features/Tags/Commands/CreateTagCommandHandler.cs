@@ -3,7 +3,7 @@ using Application.DTOs.Tag;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Data;
+using Persistence.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;

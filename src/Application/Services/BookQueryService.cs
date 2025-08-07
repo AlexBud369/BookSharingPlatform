@@ -10,7 +10,7 @@ using Application.DTOs.Book;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Data;
+using Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 

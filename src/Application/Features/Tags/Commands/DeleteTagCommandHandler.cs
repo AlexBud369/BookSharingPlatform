@@ -1,6 +1,5 @@
 ﻿using Application.Common;
-using Application.Interfaces;
-using Infrastructure.Data;
+using Persistence.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
