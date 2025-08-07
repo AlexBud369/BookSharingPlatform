@@ -6,7 +6,7 @@ using Domain.Entities;
 using Application.DTOs.Book;
 using Application.DTOs;
 
-namespace Application.Services;
+namespace Application.Interfaces;
 
 public interface IBookQueryService
 {

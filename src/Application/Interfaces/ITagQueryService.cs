@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Application.DTOs.Tag;
 
 
-namespace Application.Services;
+namespace Application.Interfaces;
 
 public interface ITagQueryService
 {
