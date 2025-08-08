@@ -1,5 +1,4 @@
 ﻿using Application.Common;
-using Application.Common.Resources;
 using Application.DTOs.User;
 using Application.Interfaces;
 using Domain.Entities;

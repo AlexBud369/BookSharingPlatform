@@ -21,12 +21,12 @@ public class TagService : ITagService
         Guard.Initialize(_localizer);
     }
 
-    public async Task AddTagsToBookAsync(Book book, IEnumerable<string> tagNames, CancellationToken cancellationToken)
+    public async Task AddTagsToBookAsync(Book book, IEnumerable<string>? tagNames, CancellationToken cancellationToken)
     {
         ValidateInputs(book, tagNames);
 
-        var tagNamesList = tagNames.ToList();
-        if (!tagNamesList.Any()) {
+        var tagNamesList = tagNames?.ToList() ?? new List<string>();
+        if (tagNamesList.Count == 0) {
             return;
         }
 
@@ -37,7 +37,7 @@ public class TagService : ITagService
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    private void ValidateInputs(Book book, IEnumerable<string> tagNames)
+    private void ValidateInputs(Book book, IEnumerable<string>? tagNames)
     {
         Guard.AgainstNull(book, nameof(book), _localizer.GetString(SharedResources.BookNotFound));
         Guard.AgainstEmptyGuid(book.Id, nameof(book.Id), _localizer.GetString(SharedResources.BookIdRequired));
@@ -72,10 +72,10 @@ public class TagService : ITagService
     private async Task AddBookTagsAsync(Guid bookId, List<Tag> tags, CancellationToken cancellationToken)
     {
         var bookTagEntries = tags.Select(tag => new Dictionary<string, object>
-        {
-            { "BookId", bookId },
-            { "TagId", tag.TagId }
-        }).ToList();
+          {
+              { "BookId", bookId },
+              { "TagId", tag.TagId }
+          }).ToList();
 
         foreach (var entry in bookTagEntries) {
             await _context.Set<Dictionary<string, object>>("BookTag").AddAsync(entry, cancellationToken);

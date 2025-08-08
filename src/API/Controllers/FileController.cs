@@ -1,7 +1,7 @@
 using Application.Common;
 using Application.Interfaces;
 using Domain.Entities;
-using Infrastructure.Data;
+using Persistence.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,11 +49,13 @@ public class FileController : ControllerBase
         Guard.AgainstEmptyGuid(bookId, nameof(bookId), _localizer.GetString(SharedResources.BookIdRequired));
 
         var user = await _userManager.GetUserAsync(User);
-        Guard.AgainstNull(user, nameof(user), _localizer.GetString(SharedResources.UserNotFound), user.Id.ToString());
+        Guard.AgainstNull(user, nameof(user), _localizer.GetString(SharedResources.UserNotFound), user!.Id.ToString());
 
         var book = await _context.Books
             .FirstOrDefaultAsync(b => b.Id == bookId, cancellationToken);
-        Guard.AgainstNull(book, nameof(bookId), _localizer.GetString(SharedResources.BookNotFound), bookId.ToString());
+        if (book == null) {
+            throw new ApplicationException(_localizer.GetString(SharedResources.BookNotFound, bookId.ToString()));
+        }
 
         await _bookAccessService.ValidateBookAccessAsync(book, user.Id, false, cancellationToken);
 
