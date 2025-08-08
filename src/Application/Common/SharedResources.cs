@@ -85,6 +85,7 @@ public class SharedResources
     public const string FailedToCreateRole = "FailedToCreateRole";
     public const string FailedToAssignRole = "FailedToAssignRole";
     public const string FailedToDeleteUser = "FailedToDeleteUser";
+    public const string FailedToUpdateUser = "FailedToUpdateUser";
     public const string FailedToUploadFile = "FailedToUploadFile";
     public const string FailedToDeleteFile = "FailedToDeleteFile";
     public const string FailedToGenerateSignedUrl = "FailedToGenerateSignedUrl";
