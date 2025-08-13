@@ -1,0 +1,10 @@
+export const MAX_TITLE_LENGTH = 200;
+export const MAX_AUTHOR_LENGTH = 100;
+export const MAX_DESCRIPTION_LENGTH = 1500;
+export const MAX_USERNAME_LENGTH = 50;
+export const MAX_EMAIL_LENGTH = 100;
+export const MIN_PASSWORD_LENGTH = 6;
+export const TAGS_PAGE_SIZE = 100;
+export const BOOKS_PAGE_SIZE = 10;
+export const USERS_PAGE_SIZE = 10;
+export const BOOK_CARD_IMAGE_HEIGHT = '12rem'; 
