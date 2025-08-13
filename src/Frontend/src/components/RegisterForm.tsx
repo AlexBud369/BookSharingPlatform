@@ -8,18 +8,19 @@ import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from './Button';
+import { MAX_USERNAME_LENGTH, MAX_EMAIL_LENGTH, MIN_PASSWORD_LENGTH } from '../constants';
 
 const schema = yup.object({
   username: yup
     .string()
     .required('UsernameRequired')
-    .max(50, 'UsernameTooLong')
+    .max(MAX_USERNAME_LENGTH, 'UsernameTooLong')
     .matches(/^[a-zA-Z0-9_]+$/, 'InvalidUsernameFormat'),
-  email: yup.string().required('EmailRequired').email('InvalidEmailFormat').max(100, 'EmailTooLong'),
+  email: yup.string().required('EmailRequired').email('InvalidEmailFormat').max(MAX_EMAIL_LENGTH, 'EmailTooLong'),
   password: yup
     .string()
     .required('PasswordRequired')
-    .min(6, 'PasswordTooShort')
+    .min(MIN_PASSWORD_LENGTH, 'PasswordTooShort')
     .matches(/[A-Z]/, 'PasswordRequiresUppercase')
     .matches(/[0-9]/, 'PasswordRequiresNumber'),
 });
@@ -44,34 +45,37 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 max-w-md md:max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md"
+    >
       <div>
-        <label className="block text-sm font-medium">{t('Username')}</label>
+        <label className="block text-sm font-semibold text-gray-800">{t('Username')}</label>
         <input
           {...register('username')}
           placeholder={t('Username')}
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {errors.username && <p className="text-red-500">{t(errors.username.message!)}</p>}
+        {errors.username && <p className="text-red-600 mt-1">{t(errors.username.message!)}</p>}
       </div>
       <div>
-        <label className="block text-sm font-medium">{t('Email')}</label>
+        <label className="block text-sm font-semibold text-gray-800">{t('Email')}</label>
         <input
           {...register('email')}
           placeholder={t('Email')}
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {errors.email && <p className="text-red-500">{t(errors.email.message!)}</p>}
+        {errors.email && <p className="text-red-600 mt-1">{t(errors.email.message!)}</p>}
       </div>
       <div>
-        <label className="block text-sm font-medium">{t('Password')}</label>
+        <label className="block text-sm font-semibold text-gray-800">{t('Password')}</label>
         <input
           {...register('password')}
           placeholder={t('Password')}
           type="password"
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {errors.password && <p className="text-red-500">{t(errors.password.message!)}</p>}
+        {errors.password && <p className="text-red-600 mt-1">{t(errors.password.message!)}</p>}
       </div>
       <Button type="submit" variant="primary">
         {t('Register')}
