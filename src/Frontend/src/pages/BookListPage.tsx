@@ -55,12 +55,12 @@ export default function BookListPage() {
           type="text"
           placeholder={t('SearchBooks')}
           onChange={(e) => handleSearch(e.target.value)}
-          className="w-full sm:w-1/3 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full sm:w-1/4 p-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         <select
           multiple
           onChange={(e) => handleTagFilter(Array.from(e.target.selectedOptions, (option) => option.value))}
-          className="w-full sm:w-1/3 p-3 border rounded-lg"
+          className="w-full sm:w-1/4 p-2 border rounded-lg text-sm"
         >
           {tags.map((tag) => (
             <option key={tag.id} value={tag.id}>
@@ -68,10 +68,10 @@ export default function BookListPage() {
             </option>
           ))}
         </select>
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <select
             onChange={(e) => handleSort(e.target.value as 'title' | 'createdAt', filter.sortDescending)}
-            className="p-3 border rounded-lg"
+            className="p-2 border rounded-lg text-sm"
           >
             <option value="title">{t('SortByTitle')}</option>
             <option value="createdAt">{t('SortByCreatedAt')}</option>
@@ -79,12 +79,13 @@ export default function BookListPage() {
           <Button
             variant="primary"
             onClick={() => handleSort(filter.sortBy as 'title' | 'createdAt', !filter.sortDescending)}
+            className="px-3 py-1.5 text-sm"
           >
             {filter.sortDescending ? t('SortAsc') : t('SortDesc')}
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {books.items.map((book) => (
           <BookCard key={book.id} book={book} onClick={() => navigate(`/books/${book.id}`)} />
         ))}
@@ -94,6 +95,7 @@ export default function BookListPage() {
           variant="primary"
           disabled={books.pageNumber === 1}
           onClick={() => handlePageChange(books.pageNumber - 1)}
+          className="px-3 py-1.5 text-sm"
         >
           {t('Previous')}
         </Button>
@@ -104,6 +106,7 @@ export default function BookListPage() {
           variant="primary"
           disabled={books.pageNumber === books.totalPages}
           onClick={() => handlePageChange(books.pageNumber + 1)}
+          className="px-3 py-1.5 text-sm"
         >
           {t('Next')}
         </Button>
