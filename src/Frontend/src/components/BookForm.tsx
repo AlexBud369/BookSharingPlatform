@@ -95,14 +95,14 @@ export default function BookForm({ initialData, bookId, onSubmit }: BookFormProp
   return (
     <form
       onSubmit={handleSubmit(onSubmitForm)}
-      className="space-y-6 max-w-md md:max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md"
+      className="space-y-4 max-w-md sm:max-w-lg md:max-w-2xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md"
     >
       <div>
         <label className="block text-sm font-semibold text-gray-800">{t('Title')}</label>
         <input
           {...register('title')}
           placeholder={t('Title')}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         {errors.title && <p className="text-red-600 mt-1">{t(errors.title.message!)}</p>}
       </div>
@@ -111,7 +111,7 @@ export default function BookForm({ initialData, bookId, onSubmit }: BookFormProp
         <input
           {...register('author')}
           placeholder={t('Author')}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         {errors.author && <p className="text-red-600 mt-1">{t(errors.author.message!)}</p>}
       </div>
@@ -120,7 +120,7 @@ export default function BookForm({ initialData, bookId, onSubmit }: BookFormProp
         <textarea
           {...register('description')}
           placeholder={t('Description')}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         {errors.description && <p className="text-red-600 mt-1">{t(errors.description.message!)}</p>}
       </div>
@@ -141,7 +141,7 @@ export default function BookForm({ initialData, bookId, onSubmit }: BookFormProp
                 field.onChange(selected.map((option: SelectOption) => option.value))
               }
               onCreateOption={isAdmin ? handleCreateTag : undefined}
-              className="w-full"
+              className="w-full text-sm sm:text-base"
               placeholder={t('Tags')}
               isDisabled={!isAdmin && tags.length === 0}
               formatCreateLabel={(inputValue: string) => `${t('CreateTag')} "${inputValue}"`}
@@ -156,11 +156,11 @@ export default function BookForm({ initialData, bookId, onSubmit }: BookFormProp
           type="file"
           accept="image/*"
           {...register('coverImage')}
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base"
         />
         {errors.coverImage && <p className="text-red-600 mt-1">{t(errors.coverImage.message!)}</p>}
       </div>
-      <Button type="submit" variant="primary">
+      <Button type="submit" variant="primary" className="px-3 py-1.5 text-sm sm:text-base">
         {bookId ? t('EditBook') : t('CreateBook')}
       </Button>
     </form>
