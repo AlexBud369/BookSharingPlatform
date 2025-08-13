@@ -22,54 +22,51 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-blue-700 text-gray-100 p-6 shadow-md">
-      <nav className="container mx-auto flex justify-between items-center">
-        <div className="flex gap-6">
-          <Link to="/" className="hover:text-blue-200 transition-colors text-lg font-medium">
+    <header className="bg-blue-700 text-gray-100 p-4 shadow-md">
+      <nav className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link to="/" className="hover:text-blue-200 transition-colors text-base font-medium">
             {t('Home')}
           </Link>
-          <Link to="/books" className="hover:text-blue-200 transition-colors text-lg font-medium">
+          <Link to="/books" className="hover:text-blue-200 transition-colors text-base font-medium">
             {t('Books')}
           </Link>
           {user && (
-            <Link to="/profile" className="hover:text-blue-200 transition-colors text-lg font-medium">
+            <Link to="/profile" className="hover:text-blue-200 transition-colors text-base font-medium">
               {t('Profile')}
             </Link>
           )}
           {user?.role === 'Admin' && (
-            <Link to="/admin" className="hover:text-blue-200 transition-colors text-lg font-medium">
+            <Link to="/admin" className="hover:text-blue-200 transition-colors text-base font-medium">
               {t('Admin')}
             </Link>
           )}
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-3 items-center">
           <button
             onClick={() => i18n.changeLanguage('en')}
-            className={`px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md ${
-              i18n.language === 'en' ? 'bg-blue-900 text-white' : 'bg-blue-600 text-gray-100'
+            className={`px-2 py-1 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md ${
+              i18n.language === 'en' ? 'bg-blue-900 text-gray-100' : 'bg-blue-600 text-gray-100'
             }`}
           >
             EN
           </button>
           <button
             onClick={() => i18n.changeLanguage('ru')}
-            className={`px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md ${
-              i18n.language === 'ru' ? 'bg-blue-900 text-white' : 'bg-blue-600 text-gray-100'
+            className={`px-2 py-1 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md ${
+              i18n.language === 'ru' ? 'bg-blue-900 text-gray-100' : 'bg-blue-600 text-gray-100'
             }`}
           >
             RU
           </button>
           {user ? (
-            <Button onClick={handleLogout} variant="danger">
+            <Button onClick={handleLogout} variant="danger" className="px-3 py-1.5 text-sm">
               {t('Logout')}
             </Button>
           ) : (
-            <Link
-              to="/login"
-              className="px-6 py-3 bg-blue-600 text-gray-100 rounded-lg font-semibold text-sm hover:bg-blue-700 transition-all shadow-md"
-            >
+            <Button variant="primary" onClick={() => navigate('/login')} className="px-3 py-1.5 text-sm">
               {t('Login')}
-            </Link>
+            </Button>
           )}
         </div>
       </nav>
