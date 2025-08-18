@@ -3,11 +3,10 @@ using Application.Features.Auth.Commands;
 using Domain.Constants;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System;
 
 namespace Application.Validators.Auth;
 
-public class LogoutCommandValidator : AbstractValidator<LogoutCommand>
+public class LogoutCommandValidator : AbstractValidator<Logout.Command>
 {
     public LogoutCommandValidator(IStringLocalizer<SharedResources> localizer)
     {

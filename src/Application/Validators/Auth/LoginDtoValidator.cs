@@ -17,6 +17,7 @@ public class LoginDtoValidator : AbstractValidator<LoginDto>
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage(localizer.GetString(SharedResources.PasswordRequired))
-            .MinimumLength(DomainConstants.User.PasswordMinLength).WithMessage(localizer.GetString(SharedResources.PasswordTooShort));
+            .MinimumLength(DomainConstants.User.PasswordMinLength).WithMessage(localizer.GetString(SharedResources.PasswordTooShort))
+            .MaximumLength(DomainConstants.User.PasswordMaxLength).WithMessage(localizer.GetString(SharedResources.MaxLength));
     }
 }

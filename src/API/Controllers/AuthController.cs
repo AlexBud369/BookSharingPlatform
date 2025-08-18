@@ -2,6 +2,8 @@ using Application.Common;
 using Application.DTOs;
 using Application.DTOs.User;
 using Application.Features.Auth.Commands;
+using Domain.Constants;
+using Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,19 +21,22 @@ public class AuthController : ControllerBase
     private readonly IValidator<RegisterDto> _registerValidator;
     private readonly IValidator<LoginDto> _loginValidator;
     private readonly IValidator<RefreshTokenDto> _refreshTokenValidator;
+    private readonly IValidator<Logout.Command> _logoutValidator;
 
     public AuthController(
         IMediator mediator,
         IStringLocalizer<SharedResources> localizer,
         IValidator<RegisterDto> registerValidator,
         IValidator<LoginDto> loginValidator,
-        IValidator<RefreshTokenDto> refreshTokenValidator)
+        IValidator<RefreshTokenDto> refreshTokenValidator,
+        IValidator<Logout.Command> logoutValidator)
     {
         _mediator = mediator;
         _localizer = localizer;
         _registerValidator = registerValidator;
         _loginValidator = loginValidator;
         _refreshTokenValidator = refreshTokenValidator;
+        _logoutValidator = logoutValidator;
     }
 
     [HttpPost("register")]
@@ -42,7 +47,7 @@ public class AuthController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var command = new RegisterCommand
+        var command = new Register.Command
         {
             UserName = registerDto.Username,
             Email = registerDto.Email,
@@ -62,13 +67,14 @@ public class AuthController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var command = new LoginCommand
+        var command = new Login.Command
         {
             Email = loginDto.Email,
             Password = loginDto.Password
         };
 
         var result = await _mediator.Send(command, cancellationToken);
+
         return Ok(result);
     }
 
@@ -80,12 +86,13 @@ public class AuthController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var command = new RefreshTokenCommand
+        var command = new RenewToken.Command
         {
             RefreshToken = refreshTokenDto.Token
         };
 
         var result = await _mediator.Send(command, cancellationToken);
+
         return Ok(result);
     }
 
@@ -93,19 +100,32 @@ public class AuthController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
-        var userId = User.FindFirst("sub")?.Value;
-        if (string.IsNullOrEmpty(userId)) {
-            return Unauthorized(_localizer.GetString(SharedResources.UnauthorizedAccess));
-        }
+        var userId = GetCurrentUserId();
+        var refreshToken = Request.Headers[DomainConstants.Headers.RefreshToken].ToString();
 
-        var command = new LogoutCommand
+        var command = new Logout.Command
         {
-            UserId = Guid.Parse(userId),
-            RefreshToken = Request.Headers["Refresh-Token"].ToString()
+            UserId = userId,
+            RefreshToken = refreshToken
         };
+
+        var validationResult = await _logoutValidator.ValidateAsync(command, cancellationToken);
+        if (!validationResult.IsValid) {
+            return BadRequest(validationResult.Errors);
+        }
 
         await _mediator.Send(command, cancellationToken);
 
         return Ok();
+    }
+
+    private Guid GetCurrentUserId()
+    {
+        var userIdString = User.FindFirst(DomainConstants.Jwt.ClaimSub)?.Value;
+        if (string.IsNullOrEmpty(userIdString)) {
+            throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess));
+        }
+
+        return Guid.Parse(userIdString);
     }
 }
