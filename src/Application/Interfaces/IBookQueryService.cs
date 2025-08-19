@@ -20,4 +20,6 @@ public interface IBookQueryService
         bool sortDescending,
         CancellationToken cancellationToken);
     Task<BookDto> GetBookByIdAsync(Guid bookId, CancellationToken cancellationToken);
+    Task<IQueryable<Book>> GetBooksQueryAsync(BookFilterDto filter, CancellationToken cancellationToken);
+
 }
