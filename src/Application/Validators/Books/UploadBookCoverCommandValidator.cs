@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Application.Validators.Books;
 
-public class UploadBookCoverCommandValidator : AbstractValidator<UploadBookCoverCommand>
+public class UploadBookCoverCommandValidator : AbstractValidator<UploadBookCover.Command>
 {
     public UploadBookCoverCommandValidator(IStringLocalizer<SharedResources> localizer)
     {

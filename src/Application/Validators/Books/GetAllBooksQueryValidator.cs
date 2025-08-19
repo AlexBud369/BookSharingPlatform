@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Books;
 
-public class GetAllBooksQueryValidator : AbstractValidator<GetAllBooksQuery>
+public class GetAllBooksQueryValidator : AbstractValidator<GetAllBooks.Query>
 {
     public GetAllBooksQueryValidator(IStringLocalizer<SharedResources> localizer)
     {

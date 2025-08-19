@@ -7,7 +7,7 @@ using System;
 
 namespace Application.Validators.Books;
 
-public class CreateBookCommandValidator : AbstractValidator<CreateBookCommand>
+public class CreateBookCommandValidator : AbstractValidator<CreateBook.Command>
 {
     public CreateBookCommandValidator(IStringLocalizer<SharedResources> localizer)
     {
