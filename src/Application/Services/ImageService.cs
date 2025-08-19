@@ -1,11 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Common;
+﻿using Application.Common;
 using Application.Interfaces;
 using Domain.Constants;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Services;
@@ -37,7 +34,11 @@ public class ImageService : IImageService
         Guard.AgainstEmptyString(fileName, nameof(fileName), _localizer.GetString(SharedResources.FileNameRequired));
 
         var extension = Path.GetExtension(fileName).ToLowerInvariant();
-        Guard.AgainstFalse(!DomainConstants.BookCover.AllowedImageExtensions.Contains(extension), nameof(fileName), _localizer.GetString(SharedResources.InvalidFileExtension), string.Join(", ", DomainConstants.BookCover.AllowedImageExtensions));
+        Guard.AgainstFalse(
+            DomainConstants.BookCover.AllowedImageExtensions.Contains(extension),
+            nameof(fileName),
+            _localizer.GetString(SharedResources.InvalidFileExtension),
+            string.Join(", ", DomainConstants.BookCover.AllowedImageExtensions));
 
         var uniqueFileName = $"{book.Id}_{Guid.NewGuid()}{extension}";
 
@@ -60,5 +61,29 @@ public class ImageService : IImageService
             await _storageService.DeleteFileAsync(fileName, cancellationToken);
             book.CoverImageUrl = null;
         }
+    }
+
+    public async Task<string> UploadImageAsync(IFormFile file, CancellationToken cancellationToken)
+    {
+        Guard.AgainstNull(file, nameof(file), _localizer.GetString(SharedResources.CoverImageRequired));
+        Guard.AgainstFalse(file.Length > 0, nameof(file), _localizer.GetString(SharedResources.CoverImageEmpty));
+        Guard.AgainstFalse(
+            file.Length <= DomainConstants.BookCover.MaxFileSizeBytes,
+            nameof(file),
+            _localizer.GetString(SharedResources.CoverImageTooLarge, DomainConstants.BookCover.MaxFileSizeBytes / 1024 / 1024));
+
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        Guard.AgainstFalse(
+            DomainConstants.BookCover.AllowedImageExtensions.Contains(extension),
+            nameof(file),
+            _localizer.GetString(SharedResources.InvalidFileExtension),
+            string.Join(", ", DomainConstants.BookCover.AllowedImageExtensions));
+
+        var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+        using var stream = file.OpenReadStream();
+        var imageUrl = await _storageService.UploadFileAsync(stream, uniqueFileName, cancellationToken);
+        Guard.AgainstNull(imageUrl, nameof(imageUrl), _localizer.GetString(SharedResources.CoverImageUploadFailed));
+        
+        return imageUrl;
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.Threading;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using Domain.Entities;
 
 namespace Application.Interfaces;
 
@@ -13,4 +14,5 @@ public interface IImageService
         CancellationToken cancellationToken,
          bool deleteOldCover = true);
     Task DeleteBookCoverAsync(Book book, CancellationToken cancellationToken);
+    Task<string> UploadImageAsync(IFormFile file, CancellationToken cancellationToken);
 }
