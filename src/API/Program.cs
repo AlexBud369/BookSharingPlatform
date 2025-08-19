@@ -14,6 +14,7 @@ using Application.Interfaces;
 using Application.Services;
 using Application.Validators.Auth;
 using Application.Validators.Books;
+using Application.Validators.Files;
 using Application.Validators.Tags;
 using Application.Validators.Users;
 using AutoMapper;
@@ -56,7 +57,8 @@ builder.Services.AddAuthentication(options =>
 .AddJwtBearer(options =>
 {
     var jwtKey = builder.Configuration["Jwt:Key"];
-    if (string.IsNullOrEmpty(jwtKey)) {
+    if (string.IsNullOrEmpty(jwtKey))
+    {
         throw new InvalidOperationException("Jwt:Key is not configured in appsettings.json");
     }
     options.TokenValidationParameters = new TokenValidationParameters
@@ -75,9 +77,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly, typeof(Application.Features.Books.Commands.CreateBookCommand).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly, typeof(CreateBook).Assembly));
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(Application.DTOs.Book.BookCreateDto).Assembly);
+builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(BookCreateDto).Assembly);
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Application/Common/Resources");
 
@@ -109,27 +111,26 @@ builder.Services.AddScoped<ISignedUrlService, SignedUrlService>();
 builder.Services.AddScoped<IValidator<BookCreateDto>, BookCreateDtoValidator>();
 builder.Services.AddScoped<IValidator<BookUpdateDto>, BookUpdateDtoValidator>();
 builder.Services.AddScoped<IValidator<BookFilterDto>, BookFilterDtoValidator>();
-builder.Services.AddScoped<IValidator<UploadBookCoverCommand>, UploadBookCoverCommandValidator>();
-builder.Services.AddScoped<IValidator<CreateBookCommand>, CreateBookCommandValidator>();
-builder.Services.AddScoped<IValidator<UpdateBookCommand>, UpdateBookCommandValidator>();
-builder.Services.AddScoped<IValidator<DeleteBookCommand>, DeleteBookCommandValidator>();
-builder.Services.AddScoped<IValidator<GetAllBooksQuery>, GetAllBooksQueryValidator>();
-builder.Services.AddScoped<IValidator<GetBookByIdQuery>, GetBookByIdQueryValidator>();
+builder.Services.AddScoped<IValidator<CreateBook.Command>, CreateBookCommandValidator>();
+builder.Services.AddScoped<IValidator<UpdateBook.Command>, UpdateBookCommandValidator>();
+builder.Services.AddScoped<IValidator<DeleteBook.Command>, DeleteBookCommandValidator>();
+builder.Services.AddScoped<IValidator<GetAllBooks.Query>, GetAllBooksQueryValidator>();
+builder.Services.AddScoped<IValidator<GetBookById.Query>, GetBookByIdQueryValidator>();
 builder.Services.AddScoped<IValidator<UserUpdateDto>, UserUpdateDtoValidator>();
-builder.Services.AddScoped<IValidator<UpdateUserCommand>, UpdateUserCommandValidator>();
-builder.Services.AddScoped<IValidator<ChangeRoleRequestDto>, ChangeRoleRequestValidator>();
-builder.Services.AddScoped<IValidator<GetAllUsersQuery>, GetAllUsersQueryValidator>();
-builder.Services.AddScoped<IValidator<GetUserByIdQuery>, GetUserByIdQueryValidator>();
-builder.Services.AddScoped<IValidator<DeleteUserCommand>, DeleteUserCommandValidator>();
-builder.Services.AddScoped<IValidator<BlockUserCommand>, BlockUserCommandValidator>();
-builder.Services.AddScoped<IValidator<ChangeRoleCommand>, ChangeRoleCommandValidator>();
-builder.Services.AddScoped<IValidator<CreateTagCommand>, CreateTagCommandValidator>();
-builder.Services.AddScoped<IValidator<DeleteTagCommand>, DeleteTagCommandValidator>();
-builder.Services.AddScoped<IValidator<GetAllTagsQuery>, GetAllTagsQueryValidator>();
-builder.Services.AddScoped<IValidator<GetTagByIdQuery>, GetTagByIdQueryValidator>();
+builder.Services.AddScoped<IValidator<UpdateUser>, UpdateUserValidator>();
+builder.Services.AddScoped<IValidator<GetAllUsers.Query>, GetAllUsersValidator>();
+builder.Services.AddScoped<IValidator<GetUserById.Query>, GetUserByIdValidator>();
+builder.Services.AddScoped<IValidator<DeleteUser>, DeleteUserValidator>();
+builder.Services.AddScoped<IValidator<BlockUser.Command>, BlockUserValidator>();
+builder.Services.AddScoped<IValidator<ChangeRole>, ChangeRoleValidator>();
+builder.Services.AddScoped<IValidator<CreateTag>, CreateTagValidator>();
+builder.Services.AddScoped<IValidator<DeleteTag>, DeleteTagCommandValidator>();
+builder.Services.AddScoped<IValidator<GetAllTags>, GetAllTagsValidator>();
+builder.Services.AddScoped<IValidator<GetTagById>, GetTagByIdQueryValidator>();
 builder.Services.AddScoped<IValidator<RegisterDto>, RegisterDtoValidator>();
 builder.Services.AddScoped<IValidator<LoginDto>, LoginDtoValidator>();
 builder.Services.AddScoped<IValidator<RefreshTokenDto>, RefreshTokenDtoValidator>();
+builder.Services.AddScoped<IValidator<DeleteBookCover.Command>, DeleteBookCoverValidator>();
 
 var app = builder.Build();
 
