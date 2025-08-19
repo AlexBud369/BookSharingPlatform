@@ -375,4 +375,13 @@
 		<value>Расширение файла должно быть одним из: {0}</value>
 		<comment>Ошибка для невалидного расширения файла</comment>
 	</data>
+	<data name="CoverImageUploadFailed" xml:space="preserve">
+		<value>Не удалось загрузить обложку</value>
+	</data>
+	<data name="JwtTokenGenerationFailed" xml:space="preserve">
+		<value>Не удалось сгенерировать JWT-токен</value>
+	</data>
+	<data name="UserUpdateRequired" xml:space="preserve">
+		<value>Данные для обновления пользователя обязательны</value>
+	</data>
 </root>

@@ -14,6 +14,7 @@ public static class DomainConstants
         public const int DefaultPageSize = 10;
         public const int MaxPageSize = 100;
         public const int SearchQueryMaxLength = 200;
+        public const int DefaultSignedUrlExpirationSeconds = 3600;
     }
 
     public static class Tag
@@ -30,6 +31,7 @@ public static class DomainConstants
         public const int EmailMaxLength = 100;
         public const int UsernameMaxLength = 50;
         public const int PasswordMinLength = 6;
+        public const int PasswordMaxLength = 100;
         public const int RefreshTokenMaxLength = 500;
         public const int MinPageNumber = 1;
         public const int DefaultPageNumber = 1;
@@ -43,5 +45,25 @@ public static class DomainConstants
         public const int UrlMaxLength = 500;
         public static readonly string[] AllowedImageExtensions = { ".jpg", ".jpeg", ".png" };
         public const long MaxFileSizeBytes = 5 * 1024 * 1024;
+    }
+
+    public static class Jwt
+    {
+        public const string ClaimSub = "sub";
+        public const string JwtIssuerKey = "Jwt:Issuer";
+        public const string JwtAudienceKey = "Jwt:Audience";
+        public const string JwtKey = "Jwt:Key";
+        public const double JwtTokenLifetimeHours = 1;
+        public const double JwtRefreshTokenLifetimeDays = 7;
+    }
+
+    public static class Headers
+    {
+        public const string RefreshToken = "Refresh-Token";
+    }
+
+    public static class Mapper
+    {
+        public const string RoleKey = "Role";
     }
 }

@@ -97,4 +97,7 @@ public class SharedResources
     public const string InvalidExpirationTime = "InvalidExpirationTime";
     public const string TagCannotBeDeleted = "TagCannotBeDeleted";
     public const string InvalidFileExtension = "InvalidFileExtension";
+    public const string CoverImageUploadFailed = "CoverImageUploadFailed";
+    public const string JwtTokenGenerationFailed = "JwtTokenGenerationFailed";
+    public const string UserUpdateRequired = " UserUpdateRequired";
 }

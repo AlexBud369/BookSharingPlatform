@@ -375,4 +375,13 @@
 		<value>File extension must be one of: {0}</value>
 		<comment>Error for invalid file extension</comment>
 	</data>
+	<data name="CoverImageUploadFailed" xml:space="preserve">
+    <value>Failed to upload cover image</value>
+  </data>
+	<data name="JwtTokenGenerationFailed" xml:space="preserve">
+    <value>Failed to generate JWT token</value>
+  </data>
+	<data name="UserUpdateRequired" xml:space="preserve">
+		<value>User update data is required</value>
+	</data>
 </root>
