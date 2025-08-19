@@ -6,9 +6,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Users;
 
-public class GetAllUsersQueryValidator : AbstractValidator<GetAllUsersQuery>
+public class GetAllUsersValidator : AbstractValidator<GetAllUsers.Query>
 {
-    public GetAllUsersQueryValidator(IStringLocalizer<SharedResources> localizer)
+    public GetAllUsersValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(DomainConstants.User.DefaultPageNumber).WithMessage(localizer.GetString(SharedResources.InvalidPageNumber));

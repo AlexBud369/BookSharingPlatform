@@ -5,9 +5,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Users;
 
-public class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
+public class GetUserByIdValidator : AbstractValidator<GetUserById.Query>
 {
-    public GetUserByIdQueryValidator(IStringLocalizer<SharedResources> localizer)
+    public GetUserByIdValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.Id)
             .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.UserIdRequired));

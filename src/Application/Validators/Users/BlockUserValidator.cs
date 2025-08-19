@@ -5,9 +5,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Users;
 
-public class BlockUserCommandValidator : AbstractValidator<BlockUserCommand>
+public class BlockUserValidator : AbstractValidator<BlockUser>
 {
-    public BlockUserCommandValidator(IStringLocalizer<SharedResources> localizer)
+    public BlockUserValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.UserId)
             .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.UserIdRequired));

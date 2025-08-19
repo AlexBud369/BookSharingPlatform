@@ -5,9 +5,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Users;
 
-public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
+public class UpdateUserValidator : AbstractValidator<UpdateUser>
 {
-    public UpdateUserCommandValidator(IStringLocalizer<SharedResources> localizer)
+    public UpdateUserValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.UserId)
             .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.UserIdRequired));
@@ -16,6 +16,6 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
             .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.UserIdRequired));
 
         RuleFor(x => x.UserUpdateDto)
-            .NotNull().WithMessage(localizer.GetString(SharedResources.UserDataRequired));
+            .NotNull().WithMessage(localizer.GetString(SharedResources.UserUpdateRequired));
     }
 }

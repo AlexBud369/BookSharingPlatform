@@ -5,9 +5,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Users;
 
-public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
+public class DeleteUserValidator : AbstractValidator<DeleteUser>
 {
-    public DeleteUserCommandValidator(IStringLocalizer<SharedResources> localizer)
+    public DeleteUserValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.UserId)
             .NotEqual(Guid.Empty).WithMessage(localizer.GetString(SharedResources.UserIdRequired));
