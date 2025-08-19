@@ -75,4 +75,12 @@ public static class Guard
             throw new ApplicationException(message);
         }
     }
+
+    public static void AgainstMaxLength(string value, int maxLength, string paramName, string resourceKey, params object[] args)
+    {
+        if (value != null && value.Length > maxLength) {
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
+        }
+    }
 }
