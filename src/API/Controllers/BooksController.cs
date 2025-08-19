@@ -2,6 +2,8 @@ using Application.Common;
 using Application.DTOs.Book;
 using Application.Features.Books.Commands;
 using Application.Features.Books.Queries;
+using Domain.Constants;
+using Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +21,7 @@ public class BooksController : ControllerBase
     private readonly IValidator<BookCreateDto> _createValidator;
     private readonly IValidator<BookUpdateDto> _updateValidator;
     private readonly IValidator<BookFilterDto> _filterValidator;
-    private readonly IValidator<UploadBookCoverCommand> _uploadCoverValidator;
+    private readonly IValidator<UploadBookCover.Command> _uploadCoverValidator;
 
     public BooksController(
         IMediator mediator,
@@ -27,7 +29,7 @@ public class BooksController : ControllerBase
         IValidator<BookCreateDto> createValidator,
         IValidator<BookUpdateDto> updateValidator,
         IValidator<BookFilterDto> filterValidator,
-        IValidator<UploadBookCoverCommand> uploadCoverValidator)
+        IValidator<UploadBookCover.Command> uploadCoverValidator)
     {
         _mediator = mediator;
         _localizer = localizer;
@@ -46,7 +48,7 @@ public class BooksController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var query = new GetAllBooksQuery
+        var query = new GetAllBooks.Query
         {
             Filter = filterDto
         };
@@ -60,7 +62,7 @@ public class BooksController : ControllerBase
     public async Task<IActionResult> GetBook(Guid id, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(id, nameof(id), _localizer.GetString(SharedResources.BookIdRequired));
-        var query = new GetBookByIdQuery
+        var query = new GetBookById.Query
         {
             Id = id
         };
@@ -78,8 +80,8 @@ public class BooksController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var userId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
-        var command = new CreateBookCommand
+        var userId = Guid.Parse(User.FindFirst(DomainConstants.Jwt.ClaimSub)?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var command = new CreateBook.Command
         {
             Book = createDto,
             UserId = userId
@@ -100,8 +102,8 @@ public class BooksController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var userId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
-        var command = new UpdateBookCommand
+        var userId = Guid.Parse(User.FindFirst(DomainConstants.Jwt.ClaimSub)?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var command = new UpdateBook.Command
         {
             Id = id,
             Book = updateDto,
@@ -113,13 +115,13 @@ public class BooksController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(Guid id, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(id, nameof(id), _localizer.GetString(SharedResources.BookIdRequired));
-        var userId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
-        var command = new DeleteBookCommand
+        var userId = Guid.Parse(User.FindFirst(DomainConstants.Jwt.ClaimSub)?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var command = new DeleteBook.Command
         {
             Id = id,
             UserId = userId
@@ -135,8 +137,8 @@ public class BooksController : ControllerBase
     public async Task<IActionResult> UploadBookCover(Guid id, [FromForm] IFormFile coverImage, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(id, nameof(id), _localizer.GetString(SharedResources.BookIdRequired));
-        var userId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
-        var command = new UploadBookCoverCommand
+        var userId = Guid.Parse(User.FindFirst(DomainConstants.Jwt.ClaimSub)?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var command = new UploadBookCover.Command
         {
             Id = id,
             UserId = userId,

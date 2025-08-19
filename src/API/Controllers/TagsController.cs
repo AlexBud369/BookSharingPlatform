@@ -3,6 +3,7 @@ using Application.DTOs.Tag;
 using Application.Features.Tags.Commands;
 using Application.Features.Tags.Queries;
 using Domain.Constants;
+using Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -79,7 +80,7 @@ public class TagsController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPost]
     public async Task<IActionResult> CreateTag([FromBody] TagCreateDto createDto, CancellationToken cancellationToken)
     {
@@ -94,7 +95,7 @@ public class TagsController : ControllerBase
         return CreatedAtAction(nameof(GetTag), new { id = result.Id }, result);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTag(Guid id, CancellationToken cancellationToken)
     {
