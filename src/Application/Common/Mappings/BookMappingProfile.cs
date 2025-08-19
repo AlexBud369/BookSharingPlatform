@@ -21,9 +21,9 @@ public class BookMappingProfile : Profile
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
             .ForMember(dest => dest.CreatedByUserId, opt => opt.Ignore())
-            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
             .ForMember(dest => dest.CoverImageUrl, opt => opt.Ignore())
             .ForMember(dest => dest.Tags, opt => opt.Ignore());
 
