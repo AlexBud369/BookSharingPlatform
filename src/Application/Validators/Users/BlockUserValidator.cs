@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Users;
 
-public class BlockUserValidator : AbstractValidator<BlockUser>
+public class BlockUserValidator : AbstractValidator<BlockUser.Command>
 {
     public BlockUserValidator(IStringLocalizer<SharedResources> localizer)
     {
