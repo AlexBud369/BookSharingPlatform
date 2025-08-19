@@ -2,6 +2,7 @@ using Application.Common;
 using Application.DTOs.User;
 using Application.Features.Users.Commands;
 using Application.Features.Users.Queries;
+using Domain.Constants;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -86,7 +87,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUser(Guid id, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(id, nameof(id), _localizer.GetString(SharedResources.UserIdRequired));
-        var userId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var userId = GetCurrentUserId();
         var isAdmin = User.IsInRole("Admin");
 
         if (id != userId && !isAdmin) {
@@ -107,7 +108,7 @@ public class UsersController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetCurrentUser(CancellationToken cancellationToken)
     {
-        var userId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var userId = GetCurrentUserId();
         var query = new GetUserByIdQuery { Id = userId };
         var validationResult = await _getUserByIdValidator.ValidateAsync(query, cancellationToken);
         if (!validationResult.IsValid) {
@@ -128,7 +129,7 @@ public class UsersController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var userId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var userId = GetCurrentUserId();
         var command = new UpdateUserCommand
         {
             UserId = id,
@@ -150,7 +151,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> DeleteUser(Guid id, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(id, nameof(id), _localizer.GetString(SharedResources.UserIdRequired));
-        var adminId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var adminId = GetCurrentUserId();
         var command = new DeleteUserCommand { UserId = id, AdminId = adminId };
         var validationResult = await _deleteUserValidator.ValidateAsync(command, cancellationToken);
         if (!validationResult.IsValid) {
@@ -158,7 +159,6 @@ public class UsersController : ControllerBase
         }
 
         await _mediator.Send(command, cancellationToken);
-
         return NoContent();
     }
 
@@ -167,7 +167,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> BlockUser(Guid id, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyGuid(id, nameof(id), _localizer.GetString(SharedResources.UserIdRequired));
-        var adminId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var adminId = GetCurrentUserId();
         var command = new BlockUserCommand { UserId = id, AdminId = adminId };
         var validationResult = await _blockUserValidator.ValidateAsync(command, cancellationToken);
         if (!validationResult.IsValid) {
@@ -175,7 +175,6 @@ public class UsersController : ControllerBase
         }
 
         await _mediator.Send(command, cancellationToken);
-
         return Ok();
     }
 
@@ -192,7 +191,7 @@ public class UsersController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var adminId = Guid.Parse(User.FindFirst("sub")?.Value ?? throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess)));
+        var adminId = GetCurrentUserId();
         var command = new ChangeRoleCommand { UserId = id, AdminId = adminId, Role = roleRequest.Role };
         var commandValidationResult = await _changeRoleCommandValidator.ValidateAsync(command, cancellationToken);
         if (!commandValidationResult.IsValid) {
@@ -200,7 +199,15 @@ public class UsersController : ControllerBase
         }
 
         await _mediator.Send(command, cancellationToken);
-
         return Ok();
+    }
+
+    private Guid GetCurrentUserId()
+    {
+        var userIdString = User.FindFirst(DomainConstants.Jwt.ClaimSub)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId)) {
+            throw new ApplicationException(_localizer.GetString(SharedResources.UnauthorizedAccess));
+        }
+        return userId;
     }
 }
