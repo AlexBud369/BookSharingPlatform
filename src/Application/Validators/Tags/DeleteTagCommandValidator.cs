@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Tags;
 
-public class DeleteTagCommandValidator : AbstractValidator<DeleteTagCommand>
+public class DeleteTagCommandValidator : AbstractValidator<DeleteTag>
 {
     public DeleteTagCommandValidator(IStringLocalizer<SharedResources> localizer)
     {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Tags;
 
-public class GetTagByIdQueryValidator : AbstractValidator<GetTagByIdQuery>
+public class GetTagByIdQueryValidator : AbstractValidator<GetTagById>
 {
     public GetTagByIdQueryValidator(IStringLocalizer<SharedResources> localizer)
     {

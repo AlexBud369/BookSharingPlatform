@@ -6,9 +6,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Validators.Tags;
 
-public class CreateTagCommandValidator : AbstractValidator<CreateTagCommand>
+public class CreateTagValidator : AbstractValidator<CreateTag>
 {
-    public CreateTagCommandValidator(IStringLocalizer<SharedResources> localizer)
+    public CreateTagValidator(IStringLocalizer<SharedResources> localizer)
     {
         RuleFor(x => x.TagName)
             .NotEmpty().WithMessage(localizer.GetString(SharedResources.TagNameRequired))
