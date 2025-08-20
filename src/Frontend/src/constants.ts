@@ -8,3 +8,6 @@ export const TAGS_PAGE_SIZE = 100;
 export const BOOKS_PAGE_SIZE = 10;
 export const USERS_PAGE_SIZE = 10;
 export const BOOK_CARD_IMAGE_HEIGHT = '12rem'; 
+export const DEFAULT_PAGE_NUMBER = 1;
+export const DEFAULT_TOTAL_ITEMS = 0;
+export const DEFAULT_TOTAL_PAGES = 0;
