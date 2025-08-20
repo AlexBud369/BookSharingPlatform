@@ -3,13 +3,12 @@ import type { BookCreateDto, BookUpdateDto, TagDto } from '../types';
 import { tagApi, bookApi } from '../services/api';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Select, { type MultiValue } from 'react-select';
 import Button from './Button';
 import { useAuthStore } from '../store/authStore';
-import { MAX_TITLE_LENGTH, MAX_AUTHOR_LENGTH, MAX_DESCRIPTION_LENGTH, TAGS_PAGE_SIZE } from '../constants';
+import { MAX_TITLE_LENGTH, MAX_AUTHOR_LENGTH, MAX_DESCRIPTION_LENGTH, TAGS_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from '../constants';
 
 interface SelectOption {
   value: string;
@@ -55,41 +54,32 @@ export default function BookForm({ initialData, bookId, onSubmit }: BookFormProp
   const [tags, setTags] = useState<TagDto[]>([]);
 
   useEffect(() => {
-    tagApi.getTags({ pageNumber: 1, pageSize: TAGS_PAGE_SIZE }).then((res) => setTags(res.items));
+    tagApi.getTags({ pageNumber: DEFAULT_PAGE_NUMBER, pageSize: TAGS_PAGE_SIZE }).then((res) => setTags(res.items));
   }, []);
 
   const handleCreateTag = async (inputValue: string) => {
-    if (!isAdmin) {
-      toast.error(t('AdminOnlyAccess'));
-      return;
-    }
-    try {
-      const newTag = await tagApi.createTag({ tagName: inputValue });
-      setTags((prev) => [...prev, newTag]);
-      toast.success(t('TagCreated'));
-      return newTag.id;
-    } catch (error: any) {
-      toast.error(t(error.response?.data?.errors?.[0] || 'FailedToCreateTag'));
+    if (!isAdmin) return;
+    const newTag = await tagApi.createTag({ tagName: inputValue });
+    setTags((prev) => [...prev, newTag]);
+    return newTag.id;
+  };
+
+  const uploadCoverImage = async (bookId: string, coverImage?: FileList) => {
+    if (bookId && coverImage && coverImage.length > 0) {
+      await bookApi.uploadCover(bookId, coverImage[0]);
     }
   };
 
   const onSubmitForm = async (data: BookCreateDto) => {
-    try {
-      const submitData: BookCreateDto | BookUpdateDto = {
-        title: data.title,
-        author: data.author,
-        description: data.description,
-        tags: data.tags,
-        coverImage: data.coverImage,
-      };
-      if (bookId && data.coverImage && data.coverImage.length > 0) {
-        await bookApi.uploadCover(bookId, data.coverImage[0]);
-      }
-      onSubmit(submitData);
-      toast.success(bookId ? t('BookUpdated') : t('BookCreated'));
-    } catch (error: any) {
-      toast.error(t(error.response?.data?.errors?.[0] || 'UnknownError'));
-    }
+    const submitData: BookCreateDto | BookUpdateDto = {
+      title: data.title,
+      author: data.author,
+      description: data.description,
+      tags: data.tags,
+      coverImage: data.coverImage,
+    };
+    await uploadCoverImage(bookId!, data.coverImage);
+    onSubmit(submitData);
   };
 
   return (

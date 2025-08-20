@@ -76,10 +76,17 @@ button:not(.custom-button):focus-visible {
   a:hover {
     color: #1e40af;
   }
+
+  .nav-link {
+    color: #f2f7f5;
+  }
+
+
   button:not(.custom-button) {
     background-color: #e5e7eb;
     color: #1f2937;
   }
+
   button:not(.custom-button):hover {
     background-color: #d1d5db;
   }

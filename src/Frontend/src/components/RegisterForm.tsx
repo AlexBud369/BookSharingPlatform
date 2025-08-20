@@ -4,11 +4,10 @@ import { authApi } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import Button from './Button';
 import { MAX_USERNAME_LENGTH, MAX_EMAIL_LENGTH, MIN_PASSWORD_LENGTH } from '../constants';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 const schema = yup.object({
   username: yup
@@ -33,28 +32,23 @@ export default function RegisterForm() {
   const { setAuth } = useAuthStore();
   const navigate = useNavigate();
 
-  const onSubmit = async (data: RegisterDto) => {
-    try {
-      const response = await authApi.register(data);
-      setAuth(response);
-      toast.success(t('RegistrationSuccessful'));
-      navigate('/');
-    } catch (error: any) {
-      toast.error(t(error.response?.data?.errors?.[0] || 'RegistrationFailed'));
-    }
+  const performRegister = async (data: RegisterDto) => {
+    const response = await authApi.register(data);
+    setAuth(response);
+    navigate('/');
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 max-w-md md:max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md"
+      onSubmit={handleSubmit(performRegister)}
+      className="space-y-6 max-w-md md:max-w-lg mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md"
     >
       <div>
         <label className="block text-sm font-semibold text-gray-800">{t('Username')}</label>
         <input
           {...register('username')}
           placeholder={t('Username')}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         {errors.username && <p className="text-red-600 mt-1">{t(errors.username.message!)}</p>}
       </div>
@@ -63,7 +57,7 @@ export default function RegisterForm() {
         <input
           {...register('email')}
           placeholder={t('Email')}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         {errors.email && <p className="text-red-600 mt-1">{t(errors.email.message!)}</p>}
       </div>
@@ -73,11 +67,11 @@ export default function RegisterForm() {
           {...register('password')}
           placeholder={t('Password')}
           type="password"
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         {errors.password && <p className="text-red-600 mt-1">{t(errors.password.message!)}</p>}
       </div>
-      <Button type="submit" variant="primary">
+      <Button type="submit" variant="primary" className="px-3 py-1.5 text-sm sm:text-base">
         {t('Register')}
       </Button>
     </form>
