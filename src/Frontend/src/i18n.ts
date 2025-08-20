@@ -9,7 +9,6 @@ i18n
     resources: {
       en: {
         translation: {
-          // Общие UI-элементы
           Home: 'Home',
           Books: 'Books',
           Profile: 'Profile',
@@ -45,7 +44,10 @@ i18n
           By: 'by',
           AdminOnlyAccess: 'Access denied. Admin only.',
 
-          // Сообщения об успехе
+          Username: 'Username',
+          Email: 'Email',
+          Password: 'Password',
+
           BookCreated: 'Book created successfully',
           BookUpdated: 'Book updated successfully',
           BookDeleted: 'Book deleted successfully',
@@ -55,7 +57,6 @@ i18n
           LogoutSuccessful: 'Logout successful',
           UserBlocked: 'User blocked successfully',
 
-          // Сообщения об ошибках
           UnknownError: 'An unexpected error occurred',
           FailedToLoadBooks: 'Failed to load books',
           FailedToLoadUsers: 'Failed to load users',
@@ -89,7 +90,6 @@ i18n
       },
       ru: {
         translation: {
-          // Общие UI-элементы
           Home: 'Главная',
           Books: 'Книги',
           Profile: 'Профиль',
@@ -125,7 +125,10 @@ i18n
           By: 'от',
           AdminOnlyAccess: 'Доступ запрещен. Только для администраторов.',
 
-          // Сообщения об успехе
+          Username: 'Имя пользователя',
+          Email: 'Электронная почта',
+          Password: 'Пароль',
+
           BookCreated: 'Книга успешно создана',
           BookUpdated: 'Книга успешно обновлена',
           BookDeleted: 'Книга успешно удалена',
@@ -135,7 +138,6 @@ i18n
           LogoutSuccessful: 'Выход выполнен успешно',
           UserBlocked: 'Пользователь успешно заблокирован',
 
-          // Сообщения об ошибках (совместимы с SharedResources.ru.resx)
           UnknownError: 'Произошла неизвестная ошибка',
           FailedToLoadBooks: 'Не удалось загрузить книги',
           FailedToLoadUsers: 'Не удалось загрузить пользователей',

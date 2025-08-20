@@ -4,33 +4,22 @@ import { bookApi } from '../services/api';
 import BookCard from '../components/BookCard';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import { BOOKS_PAGE_SIZE } from '../constants';
+import { BOOKS_PAGE_SIZE, DEFAULT_PAGE_NUMBER, DEFAULT_TOTAL_ITEMS, DEFAULT_TOTAL_PAGES } from '../constants';
 
 export default function HomePage() {
   const { t } = useTranslation();
   const [books, setBooks] = useState<PagedResponseDto<BookDto>>({
     items: [],
-    pageNumber: 1,
+    pageNumber: DEFAULT_PAGE_NUMBER,
     pageSize: BOOKS_PAGE_SIZE,
-    totalItems: 0,
-    totalPages: 0,
+    totalItems: DEFAULT_TOTAL_ITEMS,
+    totalPages: DEFAULT_TOTAL_PAGES,
   });
-  const [errorShown, setErrorShown] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setErrorShown(false);
-    bookApi
-      .getBooks({ pageNumber: 1, pageSize: BOOKS_PAGE_SIZE, sortDescending: true })
-      .then(setBooks)
-      .catch(() => {
-        if (!errorShown) {
-          toast.error(t('FailedToLoadBooks'));
-          setErrorShown(true);
-        }
-      });
-  }, [t]);
+    bookApi.getBooks({ pageNumber: DEFAULT_PAGE_NUMBER, pageSize: BOOKS_PAGE_SIZE, sortDescending: true }).then(setBooks);
+  }, []);
 
   return (
     <div className="container mx-auto p-4 sm:p-6">

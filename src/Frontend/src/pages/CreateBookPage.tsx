@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { bookApi } from '../services/api';
 import BookForm from '../components/BookForm';
 import type { BookCreateDto, BookUpdateDto } from '../types';
@@ -9,22 +8,29 @@ export default function CreateBookPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleSubmit = async (data: BookCreateDto) => {
-    try {
-      const newBook = await bookApi.createBook({ ...data, tagIds: data.tags });
-      if (data.coverImage) {
-        await bookApi.uploadCover(newBook.id, data.coverImage[0]);
-      }
-      toast.success(t('BookCreated'));
-      navigate('/books');
-    } catch (error: any) {
-      toast.error(t(error.response?.data?.errors?.[0] || 'UnknownError'));
+  const createBook = async (data: BookCreateDto) => {
+    return await bookApi.createBook({ ...data, tagIds: data.tags });
+  };
+
+  const uploadCoverImage = async (bookId: string, coverImage?: FileList) => {
+    if (coverImage && coverImage.length > 0) {
+      await bookApi.uploadCover(bookId, coverImage[0]);
     }
   };
 
+  const navigateToBooks = () => {
+    navigate('/books');
+  };
+
+  const handleSubmit = async (data: BookCreateDto) => {
+    const newBook = await createBook(data);
+    await uploadCoverImage(newBook.id, data.coverImage);
+    navigateToBooks();
+  };
+
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">{t('CreateBook')}</h1>
+    <div className="container mx-auto p-4 sm:p-6">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">{t('CreateBook')}</h1>
       <BookForm onSubmit={handleSubmit as (data: BookCreateDto | BookUpdateDto) => void} />
     </div>
   );
