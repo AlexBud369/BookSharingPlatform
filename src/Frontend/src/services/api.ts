@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import { t } from 'i18next';
 import type { UserDto } from '../types';
 import { useLoadingStore } from '../store/loadingStore';
 import { useAuthStore } from '../store/authStore';
@@ -21,8 +23,9 @@ api.interceptors.response.use(
     useLoadingStore.getState().setLoading(false);
     return response;
   },
-  async (error) => {
+  async (error: AxiosError<{ errors?: string[] }>) => {
     useLoadingStore.getState().setLoading(false);
+
     if (error.response?.status === 401) {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -31,13 +34,18 @@ api.interceptors.response.use(
           localStorage.setItem('accessToken', data.accessToken);
           localStorage.setItem('refreshToken', data.refreshToken);
           useAuthStore.getState().setAuth(data);
-          error.config.headers.Authorization = `Bearer ${data.accessToken}`;
-          return api.request(error.config);
+          error.config!.headers.Authorization = `Bearer ${data.accessToken}`;
+          return api.request(error.config!);
         }
       } catch {
         useAuthStore.getState().logout();
+        toast.error(t('SessionExpired'));
       }
+    } else {
+      const errorMessage = error.response?.data?.errors?.[0] || 'UnknownError';
+      toast.error(t(errorMessage));
     }
+
     throw error;
   },
 );
@@ -58,7 +66,7 @@ export const userApi = {
   updateUser: (userId: string, data: { username?: string; email?: string; password?: string }) =>
     api.put(`/users/${userId}`, data).then((res) => res.data),
   getCurrentUser: async (): Promise<UserDto> => {
-    const response = await axios.get('/api/users/me');
+    const response = await api.get('/users/me');
     return response.data;
   },
 };
@@ -87,3 +95,5 @@ export const tagApi = {
   createTag: (data: { tagName: string }) =>
     api.post('/tags', data).then((res) => res.data),
 };
+
+export default api;
