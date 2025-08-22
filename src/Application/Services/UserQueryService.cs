@@ -5,6 +5,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -63,12 +64,25 @@ public class UserQueryService : IUserQueryService
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        var userDtos = new List<UserDto>();
-        foreach (var user in users) {
-            var roles = await _userManager.GetRolesAsync(user);
-            var userDto = _mapper.Map<UserDto>(user, opts => opts.Items["Role"] = roles.FirstOrDefault() ?? UserRole.User.ToString());
-            userDtos.Add(userDto);
-        }
+        var userIds = users.Select(u => u.Id).ToList();
+        var userRoles = await _context.UserRoles
+            .Where(ur => userIds.Contains(ur.UserId))
+            .Join(_context.Roles,
+                  ur => ur.RoleId,
+                  r => r.Id,
+                  (ur, r) => new { ur.UserId, RoleName = r.Name })
+            .ToListAsync(cancellationToken);
+
+        var userRolesDict = userRoles
+            .GroupBy(ur => ur.UserId)
+            .ToDictionary(g => g.Key, g => g.Select(x => x.RoleName).ToList());
+
+        var userDtos = users.Select(user =>
+        {
+            var roles = userRolesDict.TryGetValue(user.Id, out var userRoleNames) ? userRoleNames : new List<string>();
+            return _mapper.Map<UserDto>(user, opts => opts.Items[DomainConstants.Mapper.RoleKey] = roles.FirstOrDefault() ?? UserRole.User.ToString());
+        }).ToList();
+
 
         return new PagedResponseDto<UserDto>
         {
@@ -88,6 +102,6 @@ public class UserQueryService : IUserQueryService
         Guard.AgainstNull(user, nameof(userId), _localizer.GetString(SharedResources.UserNotFound), userId.ToString());
 
         var roles = await _userManager.GetRolesAsync(user);
-        return _mapper.Map<UserDto>(user, opts => opts.Items["Role"] = roles.FirstOrDefault() ?? UserRole.User.ToString());
+        return _mapper.Map<UserDto>(user, opts => opts.Items[DomainConstants.Mapper.RoleKey] = roles.FirstOrDefault() ?? UserRole.User.ToString());
     }
 }

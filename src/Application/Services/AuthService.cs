@@ -10,6 +10,7 @@ using Persistence.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Linq.Expressions;
 
 namespace Application.Services;
 
@@ -65,6 +66,7 @@ public class AuthService : IAuthService
         var refreshToken = await ValidateRefreshTokenAsync(refreshTokenDto.Token, cancellationToken);
         await RevokeRefreshTokenAsync(refreshToken, cancellationToken);
         var (newJwtToken, newRefreshToken) = await GenerateNewTokensAsync(refreshToken.UserId, cancellationToken);
+        
         return await MapToAuthResponseAsync(refreshToken.User, newJwtToken, newRefreshToken, cancellationToken);
     }
 
@@ -73,8 +75,13 @@ public class AuthService : IAuthService
         Guard.AgainstEmptyString(refreshToken, nameof(refreshToken), _localizer.GetString(SharedResources.RefreshTokenRequired));
         Guard.AgainstEmptyGuid(userId, nameof(userId), _localizer.GetString(SharedResources.UserIdRequired));
 
+        Expression<Func<RefreshToken, bool>> predicate = rt => rt.Token == refreshToken;
+
+        predicate = predicate.And(rt => rt.UserId == userId);
+        predicate = predicate.And(rt => !rt.IsRevoked);
+
         var token = await _context.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.Token == refreshToken && rt.UserId == userId && !rt.IsRevoked, cancellationToken);
+            .FirstOrDefaultAsync(predicate, cancellationToken);
 
         Guard.AgainstNull(token, nameof(refreshToken), _localizer.GetString(SharedResources.RefreshTokenNotFound));
 
@@ -90,20 +97,28 @@ public class AuthService : IAuthService
         Guard.AgainstEmptyString(password, nameof(password), _localizer.GetString(SharedResources.PasswordRequired));
 
         var result = await _userManager.CreateAsync(user, password);
-        if (!result.Succeeded) {
-            var errors = string.Join("; ", result.Errors.Select(e => e.Description));
-            Guard.AgainstFalse(true, nameof(user), _localizer.GetString(SharedResources.RegistrationFailed), errors);
+        if (result.Succeeded) {
+            await _userManager.AddToRoleAsync(user, role.ToString());
+            return;
         }
-        await _userManager.AddToRoleAsync(user, role.ToString());
+       
+        var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+        Guard.AgainstFalse(true, nameof(user), _localizer.GetString(SharedResources.RegistrationFailed), errors);
+
     }
 
     private async Task<RefreshToken> ValidateRefreshTokenAsync(string token, CancellationToken cancellationToken)
     {
         Guard.AgainstEmptyString(token, nameof(token), _localizer.GetString(SharedResources.RefreshTokenRequired));
 
+        Expression<Func<RefreshToken, bool>> predicate = rt => rt.Token == token;
+
+        predicate = predicate.And(rt => !rt.IsRevoked);
+        predicate = predicate.And(rt => rt.ExpiresAt > DateTime.UtcNow);
+
         var refreshToken = await _context.RefreshTokens
             .Include(rt => rt.User)
-            .FirstOrDefaultAsync(rt => rt.Token == token && !rt.IsRevoked && rt.ExpiresAt > DateTime.UtcNow, cancellationToken);
+            .FirstOrDefaultAsync(predicate, cancellationToken);
 
         Guard.AgainstNull(refreshToken, nameof(token), _localizer.GetString(SharedResources.RefreshTokenNotFound));
         Guard.AgainstUnauthorized(!refreshToken.User.IsBlocked, _localizer.GetString(SharedResources.UserBlocked));

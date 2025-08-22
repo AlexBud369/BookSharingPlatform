@@ -77,7 +77,7 @@ public class BookQueryService : IBookQueryService
             query = query.Where(b => b.Title.ToLower().Contains(searchLower) ||
                                     b.Author.ToLower().Contains(searchLower));
         }
-
+        
         if (tagIds != null && tagIds.Any()) {
             query = query.Where(b => b.Tags.Any(t => tagIds.Contains(t.TagId)));
         }

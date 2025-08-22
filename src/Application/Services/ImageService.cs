@@ -56,11 +56,13 @@ public class ImageService : IImageService
         Guard.AgainstNull(book, nameof(book), _localizer.GetString(SharedResources.BookNotFound));
         Guard.AgainstEmptyGuid(book.Id, nameof(book.Id), _localizer.GetString(SharedResources.BookIdRequired));
 
-        if (!string.IsNullOrEmpty(book.CoverImageUrl)) {
-            var fileName = Path.GetFileName(new Uri(book.CoverImageUrl).LocalPath);
-            await _storageService.DeleteFileAsync(fileName, cancellationToken);
-            book.CoverImageUrl = null;
+        if (string.IsNullOrEmpty(book.CoverImageUrl)) {
+            return;
         }
+
+        var fileName = Path.GetFileName(new Uri(book.CoverImageUrl).LocalPath);
+        await _storageService.DeleteFileAsync(fileName, cancellationToken);
+        book.CoverImageUrl = null;
     }
 
     public async Task<string> UploadImageAsync(IFormFile file, CancellationToken cancellationToken)

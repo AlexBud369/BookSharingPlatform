@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Interfaces;
+using Domain.Constants;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -69,7 +70,7 @@ public class TagService : ITagService
     private async Task ClearExistingBookTagsAsync(Guid bookId, CancellationToken cancellationToken)
     {
         var bookTagEntries = await _context.Set<Dictionary<string, object>>("BookTag")
-            .Where(bt => (Guid)bt["BookId"] == bookId)
+            .Where(bt => (Guid)bt[DomainConstants.Book.BookId] == bookId)
             .ToListAsync(cancellationToken);
         _context.RemoveRange(bookTagEntries);
     }
@@ -91,13 +92,11 @@ public class TagService : ITagService
     {
         var bookTagEntries = tags.Select(tag => new Dictionary<string, object>
         {
-            { "BookId", bookId },
-            { "TagId", tag.TagId }
+            { DomainConstants.Book.BookId, bookId },
+            { DomainConstants.Tag.TagId, tag.TagId }
         }).ToList();
 
-        foreach (var entry in bookTagEntries) {
-            await _context.Set<Dictionary<string, object>>("BookTag").AddAsync(entry, cancellationToken);
-        }
+        await _context.Set<Dictionary<string, object>>("BookTag").AddRangeAsync(bookTagEntries, cancellationToken);
     }
 
     public async Task<IEnumerable<string>> GetTagNamesByIdsAsync(IEnumerable<Guid> tagIds, CancellationToken cancellationToken)

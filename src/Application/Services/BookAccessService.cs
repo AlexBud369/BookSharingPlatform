@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Common;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -51,7 +52,7 @@ public class BookAccessService : IBookAccessService
             return false;
         }
 
-        var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+        var isAdmin = await _userManager.IsInRoleAsync(user, UserRole.Admin.ToString());
         return book.CreatedByUserId == userId || isAdmin;
     }
 
@@ -70,7 +71,7 @@ public class BookAccessService : IBookAccessService
             return false;
         }
 
-        var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+        var isAdmin = await _userManager.IsInRoleAsync(user, UserRole.Admin.ToString());
         return book.CreatedByUserId == userId || isAdmin;
     }
 }
