@@ -15,6 +15,7 @@ public static class DomainConstants
         public const int MaxPageSize = 100;
         public const int SearchQueryMaxLength = 200;
         public const int DefaultSignedUrlExpirationSeconds = 3600;
+        public const string BookId = "BookId";
     }
 
     public static class Tag
@@ -24,6 +25,7 @@ public static class DomainConstants
         public const int DefaultPageNumber = 1;
         public const int DefaultPageSize = 10;
         public const int MaxPageSize = 100;
+        public const string TagId = "TagId";
     }
 
     public static class User
