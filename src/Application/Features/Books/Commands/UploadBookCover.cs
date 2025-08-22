@@ -51,7 +51,7 @@ public static class UploadBookCover
 
             await ValidateAccessAsync(book, request.UserId, cancellationToken);
             var imageUrl = await UploadCoverImageAsync(request.CoverImage, cancellationToken);
-            UpdateBookCover(book, imageUrl);
+            book.CoverImageUrl = imageUrl;
             await SaveChangesAsync(cancellationToken);
 
             return MapToDto(book);
@@ -84,11 +84,6 @@ public static class UploadBookCover
             Guard.AgainstNull(imageUrl, nameof(imageUrl), _localizer.GetString(SharedResources.CoverImageUploadFailed));
             
             return imageUrl;
-        }
-
-        private void UpdateBookCover(Book book, string imageUrl)
-        {
-            book.CoverImageUrl = imageUrl;
         }
 
         private async Task SaveChangesAsync(CancellationToken cancellationToken)

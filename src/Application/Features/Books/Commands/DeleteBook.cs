@@ -37,7 +37,10 @@ public static class DeleteBook
         {
             ValidateRequest(request);
             var book = await GetBookAsync(request.Id, cancellationToken);
-            await ValidateAccessAsync(book, request.UserId, cancellationToken);
+            if (!await _bookAccessService.CanDeleteBookAsync(request.UserId, book.Id, cancellationToken)){
+                Guard.AgainstFalse(false, nameof(request.UserId), _localizer.GetString(SharedResources.UnauthorizedAccess));
+            }
+
             await DeleteBookAsync(book, cancellationToken);
         }
 
@@ -51,14 +54,8 @@ public static class DeleteBook
         {
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == bookId, cancellationToken);
             Guard.AgainstNull(book, nameof(bookId), _localizer.GetString(SharedResources.BookNotFound));
-           
-            return book;
-        }
 
-        private async Task ValidateAccessAsync(Book book, Guid userId, CancellationToken cancellationToken)
-        {
-            var hasAccess = await _bookAccessService.CanDeleteBookAsync(userId, book.Id, cancellationToken);
-            Guard.AgainstFalse(hasAccess, nameof(userId), _localizer.GetString(SharedResources.UnauthorizedAccess));
+            return book;
         }
 
         private async Task DeleteBookAsync(Book book, CancellationToken cancellationToken)
