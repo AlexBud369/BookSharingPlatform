@@ -1,17 +1,19 @@
-export interface BookCreateDto {
+export interface BookDtoBase {
   title: string;
   author: string;
   description?: string;
-  tags: string[]; 
+  tags: string[];
   coverImage?: FileList;
 }
 
+export interface BookCreateDto extends BookDtoBase {}
+
 export interface BookDto {
-  id: string; 
+  id: string;
   title: string;
   author: string;
   description?: string;
-  coverImageUrl?: string; 
+  coverImageUrl?: string;
   createdByUserId: string;
   createdAt: string;
   tags: TagDto[];
@@ -27,13 +29,7 @@ export interface BookFilterDto {
   pageSize: number;
 }
 
-export interface BookUpdateDto {
-  title?: string;
-  author?: string;
-  description?: string;
-  coverImage?:FileList;
-  tags?: string[];
-}
+export interface BookUpdateDto extends BookDtoBase {}
 
 export interface TagCreateDto {
   tagName: string;

@@ -1,5 +1,5 @@
 import { useForm, Controller } from 'react-hook-form';
-import type { BookCreateDto, BookUpdateDto, TagDto } from '../types';
+import type { BookCreateDto, BookUpdateDto, TagDto, BookDtoBase } from '../types';
 import { tagApi, bookApi } from '../services/api';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -71,7 +71,7 @@ export default function BookForm({ initialData, bookId, onSubmit }: BookFormProp
   };
 
   const onSubmitForm = async (data: BookCreateDto) => {
-    const submitData: BookCreateDto | BookUpdateDto = {
+    const submitData: BookDtoBase = {
       title: data.title,
       author: data.author,
       description: data.description,
