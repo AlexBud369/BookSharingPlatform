@@ -3,9 +3,9 @@ using Application.DTOs;
 using Application.DTOs.User;
 using Application.Interfaces;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Entities;
 using Domain.Enums;
-using Domain.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -64,25 +64,7 @@ public class UserQueryService : IUserQueryService
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        var userIds = users.Select(u => u.Id).ToList();
-        var userRoles = await _context.UserRoles
-            .Where(ur => userIds.Contains(ur.UserId))
-            .Join(_context.Roles,
-                  ur => ur.RoleId,
-                  r => r.Id,
-                  (ur, r) => new { ur.UserId, RoleName = r.Name })
-            .ToListAsync(cancellationToken);
-
-        var userRolesDict = userRoles
-            .GroupBy(ur => ur.UserId)
-            .ToDictionary(g => g.Key, g => g.Select(x => x.RoleName).ToList());
-
-        var userDtos = users.Select(user =>
-        {
-            var roles = userRolesDict.TryGetValue(user.Id, out var userRoleNames) ? userRoleNames : new List<string>();
-            return _mapper.Map<UserDto>(user, opts => opts.Items[DomainConstants.Mapper.RoleKey] = roles.FirstOrDefault() ?? UserRole.User.ToString());
-        }).ToList();
-
+        var userDtos = _mapper.Map<List<UserDto>>(users);
 
         return new PagedResponseDto<UserDto>
         {
