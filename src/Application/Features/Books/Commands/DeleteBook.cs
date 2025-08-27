@@ -37,10 +37,8 @@ public static class DeleteBook
         {
             ValidateRequest(request);
             var book = await GetBookAsync(request.Id, cancellationToken);
-            if (!await _bookAccessService.CanDeleteBookAsync(request.UserId, book.Id, cancellationToken)){
-                Guard.AgainstFalse(false, nameof(request.UserId), _localizer.GetString(SharedResources.UnauthorizedAccess));
-            }
-
+            var canDelete = await _bookAccessService.CanDeleteBookAsync(request.UserId, book.Id, cancellationToken);
+            Guard.AgainstFalse(canDelete, nameof(request.UserId), _localizer.GetString(SharedResources.UnauthorizedAccess));
             await DeleteBookAsync(book, cancellationToken);
         }
 
