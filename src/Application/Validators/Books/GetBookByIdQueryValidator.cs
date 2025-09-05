@@ -6,7 +6,7 @@ using System;
 
 namespace Application.Validators.Books;
 
-public class GetBookByIdQueryValidator : AbstractValidator<GetBookByIdQuery>
+public class GetBookByIdQueryValidator : AbstractValidator<GetBookById.Query>
 {
     public GetBookByIdQueryValidator(IStringLocalizer<SharedResources> localizer)
     {

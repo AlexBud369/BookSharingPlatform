@@ -15,58 +15,72 @@ public static class Guard
     public static void AgainstNull<T>(T value, string paramName, string resourceKey, params object[] args)
     {
         if (value == null) {
-            throw new ApplicationException(string.Format(_localizer![resourceKey], args));
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
         }
     }
 
     public static void AgainstEmptyString(string value, string paramName, string resourceKey, params object[] args)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ApplicationException(string.Format(_localizer![resourceKey], args));
+        if (string.IsNullOrWhiteSpace(value)) {
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
         }
     }
 
     public static void AgainstEmptyGuid(Guid value, string paramName, string resourceKey, params object[] args)
     {
         if (value == Guid.Empty) {
-            throw new ApplicationException(string.Format(_localizer![resourceKey], args));
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
         }
     }
 
     public static void AgainstInvalidPageNumber(int pageNumber, string paramName, string resourceKey, params object[] args)
     {
-        if (pageNumber < 1)
-        {
-            throw new ApplicationException(string.Format(_localizer![resourceKey], args));
+        if (pageNumber < 1) {
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
         }
     }
 
     public static void AgainstInvalidPageSize(int pageSize, string paramName, string resourceKey, params object[] args)
     {
         if (pageSize < 1 || pageSize > DomainConstants.Book.MaxPageSize) {
-            throw new ApplicationException(string.Format(_localizer![resourceKey], args));
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
         }
     }
 
     public static void AgainstFalse(bool condition, string paramName, string resourceKey, params object[] args)
     {
         if (!condition) {
-            throw new ApplicationException(string.Format(_localizer![resourceKey], args));
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
         }
     }
 
     public static void AgainstUnauthorized(bool condition, string resourceKey)
     {
         if (!condition) {
-            throw new ApplicationException(_localizer![resourceKey]);
+            var message = _localizer != null ? _localizer[resourceKey].Value : resourceKey;
+            throw new ApplicationException(message);
         }
     }
 
     public static void AgainstNonAdmin(bool isAdmin, string resourceKey)
     {
         if (!isAdmin) {
-            throw new ApplicationException(_localizer![resourceKey]);
+            var message = _localizer != null ? _localizer[resourceKey].Value : resourceKey;
+            throw new ApplicationException(message);
+        }
+    }
+
+    public static void AgainstMaxLength(string value, int maxLength, string paramName, string resourceKey, params object[] args)
+    {
+        if (value != null && value.Length > maxLength) {
+            var message = _localizer != null ? _localizer[resourceKey, args].Value : string.Format(resourceKey, args);
+            throw new ApplicationException(message);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,6 @@ public class BookFilterDto
     public Guid? CreatedByUserId { get; set; }
     public string? SortBy { get; set; }
     public bool SortDescending { get; set; }
-    public int PageNumber { get; set; } = 1;
-    public int PageSize { get; set; } = 10;
+    public int PageNumber { get; set; } = DomainConstants.Book.DefaultPageNumber;
+    public int PageSize { get; set; } = DomainConstants.Book.DefaultPageSize;
 }

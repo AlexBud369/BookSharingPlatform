@@ -1,18 +1,13 @@
-﻿using System;
-using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Common;
+﻿using Application.Common;
 using Application.Common.Enums;
 using Application.DTOs;
 using Application.DTOs.Book;
 using Application.Interfaces;
+using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Persistence.Data;
 
 namespace Application.Services;
 
@@ -37,7 +32,7 @@ public class BookQueryService : IBookQueryService
         int pageNumber,
         int pageSize,
         string? searchTerm,
-         IEnumerable<Guid>? tagIds,
+        IEnumerable<Guid>? tagIds,
         Guid? createdByUserId,
         string? sortBy,
         bool sortDescending,
@@ -47,10 +42,21 @@ public class BookQueryService : IBookQueryService
         query = ApplyFilters(query, searchTerm, tagIds, createdByUserId);
         query = ApplySorting(query, sortBy, sortDescending);
 
-        var totalCount = await GetTotalCountAsync(query, cancellationToken);
+        var totalItems = await GetTotalCountAsync(query, cancellationToken);
         var items = await GetPagedItemsAsync(query, pageNumber, pageSize, cancellationToken);
 
-        return CreatePagedResult(items, totalCount, pageNumber, pageSize);
+        return CreatePagedResult(items, totalItems, pageNumber, pageSize);
+    }
+
+    public async Task<IQueryable<Book>> GetBooksQueryAsync(BookFilterDto filter, CancellationToken cancellationToken)
+    {
+        Guard.AgainstNull(filter, nameof(filter), _localizer.GetString(SharedResources.FilterRequired));
+
+        var query = BuildBaseQuery();
+        query = ApplyFilters(query, filter.SearchQuery, filter.TagIds, filter.CreatedByUserId);
+        query = ApplySorting(query, filter.SortBy, filter.SortDescending);
+
+        return query;
     }
 
     private IQueryable<Book> BuildBaseQuery()
@@ -71,7 +77,7 @@ public class BookQueryService : IBookQueryService
             query = query.Where(b => b.Title.ToLower().Contains(searchLower) ||
                                     b.Author.ToLower().Contains(searchLower));
         }
-
+        
         if (tagIds != null && tagIds.Any()) {
             query = query.Where(b => b.Tags.Any(t => tagIds.Contains(t.TagId)));
         }
@@ -83,9 +89,17 @@ public class BookQueryService : IBookQueryService
         return query;
     }
 
-    private IQueryable<Book> ApplySorting(IQueryable<Book> query, BookSortBy sortBy, bool sortDescending)
+    private IQueryable<Book> ApplySorting(IQueryable<Book> query, string? sortBy, bool sortDescending)
     {
-        return sortBy switch
+        BookSortBy sortByEnum;
+        try {
+            sortByEnum = string.IsNullOrEmpty(sortBy) ? BookSortBy.CreatedAt : Enum.Parse<BookSortBy>(sortBy, true);
+        } 
+        catch {
+            sortByEnum = BookSortBy.CreatedAt; 
+        }
+
+        return sortByEnum switch
         {
             BookSortBy.Title => sortDescending
                 ? query.OrderByDescending(b => b.Title)
@@ -116,14 +130,14 @@ public class BookQueryService : IBookQueryService
 
     private PagedResponseDto<BookDto> CreatePagedResult(
         List<Book> items,
-        int totalCount,
+        int totalItems,
         int pageNumber,
         int pageSize)
     {
         return new PagedResponseDto<BookDto>
         {
             Items = _mapper.Map<List<BookDto>>(items),
-            TotalItems = totalCount,
+            TotalItems = totalItems,
             PageNumber = pageNumber,
             PageSize = pageSize
         };
@@ -131,7 +145,7 @@ public class BookQueryService : IBookQueryService
 
     public async Task<BookDto> GetBookByIdAsync(Guid bookId, CancellationToken cancellationToken)
     {
-        Guard.AgainstEmptyGuid(bookId, nameof(bookId), SharedResources.BookIdRequired);
+        Guard.AgainstEmptyGuid(bookId, nameof(bookId), _localizer.GetString(SharedResources.BookIdRequired));
 
         var book = await _context.Books
             .Include(b => b.Tags)

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Common;
+﻿namespace Application.Common;
 
 public class SharedResources
 {
     public const string FileStreamRequired = "FileStreamRequired";
     public const string FileNameRequired = "FileNameRequired";
-    public const string InvalidExtensionError = "InvalidExtensionError";
     public const string BucketNotFound = "BucketNotFound";
     public const string ConfigurationRequired = "ConfigurationRequired";
     public const string LoggerRequired = "LoggerRequired";
@@ -41,6 +34,7 @@ public class SharedResources
     public const string UsernameTooLong = "UsernameTooLong";
     public const string InvalidUsernameFormat = "InvalidUsernameFormat";
     public const string UserIdRequired = "UserIdRequired";
+    public const string UserDataRequired = "UserDataRequired";
     public const string BookDataRequired = "BookDataRequired";
     public const string TitleRequired = "TitleRequired";
     public const string TitleTooLong = "TitleTooLong";
@@ -91,7 +85,19 @@ public class SharedResources
     public const string FailedToCreateRole = "FailedToCreateRole";
     public const string FailedToAssignRole = "FailedToAssignRole";
     public const string FailedToDeleteUser = "FailedToDeleteUser";
+    public const string FailedToUpdateUser = "FailedToUpdateUser";
     public const string FailedToUploadFile = "FailedToUploadFile";
     public const string FailedToDeleteFile = "FailedToDeleteFile";
     public const string FailedToGenerateSignedUrl = "FailedToGenerateSignedUrl";
+    public const string RegistrationSuccessful = "RegistrationSuccessful";
+    public const string LoginSuccessful = "LoginSuccessful";
+    public const string LogoutSuccessful = "LogoutSuccessful";
+    public const string InvalidCredentials = "InvalidCredentials";
+    public const string RefreshTokenInvalid = "RefreshTokenInvalid";
+    public const string InvalidExpirationTime = "InvalidExpirationTime";
+    public const string TagCannotBeDeleted = "TagCannotBeDeleted";
+    public const string InvalidFileExtension = "InvalidFileExtension";
+    public const string CoverImageUploadFailed = "CoverImageUploadFailed";
+    public const string JwtTokenGenerationFailed = "JwtTokenGenerationFailed";
+    public const string UserUpdateRequired = " UserUpdateRequired";
 }

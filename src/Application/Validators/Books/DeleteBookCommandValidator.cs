@@ -6,7 +6,7 @@ using System;
 
 namespace Application.Validators.Books;
 
-public class DeleteBookCommandValidator : AbstractValidator<DeleteBookCommand>
+public class DeleteBookCommandValidator : AbstractValidator<DeleteBook.Command>
 {
     public DeleteBookCommandValidator(IStringLocalizer<SharedResources> localizer)
     {

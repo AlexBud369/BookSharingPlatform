@@ -1,5 +1,4 @@
 using Application.Common;
-using Application.Common.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using System;

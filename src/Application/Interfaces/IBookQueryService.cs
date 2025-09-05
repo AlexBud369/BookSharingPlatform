@@ -6,7 +6,7 @@ using Domain.Entities;
 using Application.DTOs.Book;
 using Application.DTOs;
 
-namespace Application.Services;
+namespace Application.Interfaces;
 
 public interface IBookQueryService
 {
@@ -20,4 +20,6 @@ public interface IBookQueryService
         bool sortDescending,
         CancellationToken cancellationToken);
     Task<BookDto> GetBookByIdAsync(Guid bookId, CancellationToken cancellationToken);
+    Task<IQueryable<Book>> GetBooksQueryAsync(BookFilterDto filter, CancellationToken cancellationToken);
+
 }
